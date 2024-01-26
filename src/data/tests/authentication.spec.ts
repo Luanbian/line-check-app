@@ -60,4 +60,7 @@ describe('Authentication', () => {
     const account = await sut.auth(authMock())
     expect(account).toEqual(httpResponse)
   })
+  test('test', async () => {
+    expect(true).toBe(true)
+  })
 })
