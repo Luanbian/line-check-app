@@ -3,6 +3,6 @@ import { type httpPostParams } from '../../data/protocols/http/http.post.client.
 
 export class HttpClientAdapter {
   async post (params: httpPostParams): Promise<void> {
-    await axios(params.url)
+    await axios.post(params.url, params.body)
   }
 }
