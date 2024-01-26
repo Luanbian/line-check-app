@@ -5,6 +5,7 @@ import { faker } from '@faker-js/faker'
 import { authMock } from './mocks/authentication.mock'
 import { InvalidCredentialsError } from '../../core/exceptions/invalid.credentials.error'
 import { HttpStatusCode } from '../../@types/http.response'
+import { UnexpectedError } from '../../core/exceptions/unexpected.error'
 
 interface SutTypes {
   sut: Authentication
@@ -40,5 +41,13 @@ describe('Authentication', () => {
     }
     const promise = sut.auth(authMock())
     await expect(promise).rejects.toThrow(new InvalidCredentialsError())
+  })
+  test('should throw UnexpectedError if HttpPostClient return 400', async () => {
+    const { sut, httpPostClientMock } = makeSut()
+    httpPostClientMock.response = {
+      statusCode: HttpStatusCode.badRequest
+    }
+    const promise = sut.auth(authMock())
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })
