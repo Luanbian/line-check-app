@@ -4,7 +4,9 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "test": "vitest",
-    "coverage": "vitest run --coverage",
+    "test:watch": "npm test -- --watch",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
