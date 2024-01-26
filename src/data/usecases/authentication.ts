@@ -7,6 +7,8 @@ export class Authentication {
   ) {}
 
   async auth (): Promise<void> {
-    await this.HttpPostClient.post(this.url)
+    await this.HttpPostClient.post({
+      url: this.url
+    })
   }
 }
