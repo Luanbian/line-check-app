@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '../../@types/http.response'
 import { InvalidCredentialsError } from '../../core/exceptions/invalid.credentials.error'
+import { UnexpectedError } from '../../core/exceptions/unexpected.error'
 import { type IHttpPostClient } from '../protocols/http/http.post.client.protocol'
 import { type authParamns } from '../protocols/usecases/authentication.protocol'
 
@@ -15,8 +16,9 @@ export class Authentication {
       body: params
     })
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.unathorized :
-        throw new InvalidCredentialsError()
+      case HttpStatusCode.ok: break
+      case HttpStatusCode.unathorized: throw new InvalidCredentialsError()
+      default: throw new UnexpectedError()
     }
   }
 }
