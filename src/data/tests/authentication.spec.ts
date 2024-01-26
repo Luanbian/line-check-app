@@ -58,6 +58,6 @@ describe('Authentication', () => {
       body: httpResponse
     }
     const account = await sut.auth(authMock())
-    expect(account).toEqual(httpResponse.accessToken)
+    expect(account).toEqual(httpResponse)
   })
 })

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "vitest --exit",
-    "test:staged": "git diff --cached --name-only | grep '.*\\.tsx\\?$' | xargs vitest --exit",
+    "test": "vitest --run",
+    "test:staged": "npm test --changed",
     "test:watch": "npm test -- --watch",
-    "test:ci": "npm test -- --coverage --exit",
+    "test:ci": "npm test -- --coverage",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
