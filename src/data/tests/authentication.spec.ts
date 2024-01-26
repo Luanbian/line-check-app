@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 import { Authentication } from '../usecases/authentication'
 import { HttpPostClientMock } from './mocks/http.post.client.mock'
 import { faker } from '@faker-js/faker'
-import { authMock } from './mocks/authentication.mock'
+import { accountMock, authMock } from './mocks/authentication.mock'
 import { InvalidCredentialsError } from '../../core/exceptions/invalid.credentials.error'
 import { HttpStatusCode } from '../../@types/http.response'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
@@ -49,5 +49,15 @@ describe('Authentication', () => {
     }
     const promise = sut.auth(authMock())
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+  test('should return an account if HttpPostClient return 200', async () => {
+    const { sut, httpPostClientMock } = makeSut()
+    const httpResponse = accountMock()
+    httpPostClientMock.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResponse
+    }
+    const account = await sut.auth(authMock())
+    expect(account).toEqual(httpResponse)
   })
 })
