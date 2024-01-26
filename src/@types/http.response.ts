@@ -8,5 +8,5 @@ export enum HttpStatusCode {
 
 export interface HttpResponse {
   statusCode: HttpStatusCode
-  body: unknown
+  body?: unknown
 }

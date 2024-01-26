@@ -3,6 +3,8 @@ import { Authentication } from '../usecases/authentication'
 import { HttpPostClientMock } from './mocks/http.post.client.mock'
 import { faker } from '@faker-js/faker'
 import { authMock } from './mocks/authentication.mock'
+import { InvalidCredentialsError } from '../../core/exceptions/invalid.credentials.error'
+import { HttpStatusCode } from '../../@types/http.response'
 
 interface SutTypes {
   sut: Authentication
@@ -30,5 +32,13 @@ describe('Authentication', () => {
     const authenticationParamns = authMock()
     await sut.auth(authenticationParamns)
     expect(httpPostClientMock.body).toEqual(authenticationParamns)
+  })
+  test('should throw InvalidCredentialsError if HttpPostClient return 401', async () => {
+    const { sut, httpPostClientMock } = makeSut()
+    httpPostClientMock.response = {
+      statusCode: HttpStatusCode.unathorized
+    }
+    const promise = sut.auth(authMock())
+    await expect(promise).rejects.toThrow(new InvalidCredentialsError())
   })
 })
