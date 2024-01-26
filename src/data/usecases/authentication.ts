@@ -1,4 +1,5 @@
 import { type IHttpPostClient } from '../protocols/http/http.post.client.protocol'
+import { type authParamns } from '../protocols/usecases/authentication.protocol'
 
 export class Authentication {
   constructor (
@@ -6,9 +7,10 @@ export class Authentication {
     private readonly HttpPostClient: IHttpPostClient
   ) {}
 
-  async auth (): Promise<void> {
+  async auth (params: authParamns): Promise<void> {
     await this.HttpPostClient.post({
-      url: this.url
+      url: this.url,
+      body: params
     })
   }
 }
