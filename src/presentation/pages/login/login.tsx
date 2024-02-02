@@ -15,7 +15,7 @@ interface Inputs {
   password: string
 }
 
-export default function LoginPage (): React.JSX.Element {
+export default function Login (): React.JSX.Element {
   const navigation = useNavigation()
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
@@ -33,9 +33,16 @@ export default function LoginPage (): React.JSX.Element {
   return (
     <View>
       <Text>Login page</Text>
-      <TextInput placeholder='email' onChangeText={text => { setValue('email', text) }}/>
+      <TextInput
+        placeholder='email'
+        onChangeText={text => { setValue('email', text) }}
+      />
       {(errors.email != null) && <Text>{errors.email.message}</Text>}
-      <TextInput placeholder='senha' onChangeText={text => { setValue('password', text) }} secureTextEntry />
+      <TextInput
+        placeholder='senha'
+        onChangeText={text => { setValue('password', text) }}
+        secureTextEntry
+      />
       {(errors.password != null) && <Text>{errors.password.message}</Text>}
       <Button title='Enviar' onPress={handleSubmit(onSubmit)}/>
     </View>

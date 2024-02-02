@@ -28,6 +28,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@faker-js/faker": "^8.4.0",
+    "@testing-library/react-native": "^12.4.3",
     "@types/axios": "^0.14.0",
     "@types/react": "~18.2.45",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
@@ -40,7 +41,7 @@
     "eslint-plugin-react": "^7.33.2",
     "husky": "^9.0.6",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.1"
+    "vitest": "^1.2.2"
   },
   "private": true
 }
