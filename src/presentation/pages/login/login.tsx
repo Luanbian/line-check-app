@@ -3,6 +3,7 @@ import { Text, View, TextInput, Button } from 'react-native'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigation } from '@react-navigation/native'
 
 const fieldsValidationSchema = object({
   email: string().email('email inválido').required('O email é obrigatório'),
@@ -14,12 +15,14 @@ interface Inputs {
   password: string
 }
 
-export default function Login (): React.JSX.Element {
+export default function LoginPage (): React.JSX.Element {
+  const navigation = useNavigation()
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data.email, data.password)
+    navigation.navigate('Home' as never)
   }
 
   useEffect(() => {

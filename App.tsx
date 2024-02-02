@@ -1,11 +1,8 @@
 import React from 'react'
-import Login from './src/presentation/pages/login/login'
-import { NavigationContainer } from '@react-navigation/native'
+import Router from './src/presentation/components/router/router'
 
 export default function App (): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Login/>
-    </NavigationContainer>
+    <Router/>
   )
 }
