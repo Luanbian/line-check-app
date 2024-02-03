@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest --passWithNoTests --watch --silent --runInBand",
     "test:verbose": "jest --passWithNoTests",
-    "test:staged": "git diff --cached --name-only | grep '\\.ts$' | xargs jest",
+    "test:staged": "git diff --cached --name-only | findstr /R '\\.ts$ \\tsx$' | xargs jest",
     "test:ci": "npm test -- --coverage",
     "start": "expo start",
     "android": "expo start --android",
