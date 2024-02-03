@@ -3,9 +3,9 @@ import { InvalidCredentialsError } from '../../core/exceptions/invalid.credentia
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
 import { type accountProps } from '../../domain/entities/account'
 import { type IHttpPostClient } from '../protocols/http/http.post.client.protocol'
-import { type authParamns } from '../protocols/usecases/authentication.protocol'
+import { type IAuthentication, type authParamns } from '../protocols/usecases/authentication.protocol'
 
-export class Authentication {
+export class Authentication implements IAuthentication {
   constructor (
     private readonly url: string,
     private readonly HttpPostClient: IHttpPostClient
