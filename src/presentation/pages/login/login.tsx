@@ -4,18 +4,23 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
+import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
 
 const fieldsValidationSchema = object({
   email: string().email('email inválido').required('O email é obrigatório'),
   password: string().required('A senha é obrigatória')
 })
 
+interface Props {
+  authentication: IAuthentication
+}
+
 interface Inputs {
   email: string
   password: string
 }
 
-export default function Login (): React.JSX.Element {
+export default function Login ({ authentication }: Props): React.JSX.Element {
   const navigation = useNavigation()
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
