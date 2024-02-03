@@ -32,19 +32,21 @@ export default function Login (): React.JSX.Element {
 
   return (
     <View>
-      <Text>Login page</Text>
+      <Text testID='title'>Login page</Text>
       <TextInput
+        testID='emailField'
         placeholder='email'
         onChangeText={text => { setValue('email', text) }}
       />
       {(errors.email != null) && <Text>{errors.email.message}</Text>}
       <TextInput
+        testID='passwordField'
         placeholder='senha'
         onChangeText={text => { setValue('password', text) }}
         secureTextEntry
       />
       {(errors.password != null) && <Text>{errors.password.message}</Text>}
-      <Button title='Enviar' onPress={handleSubmit(onSubmit)}/>
+      <Button testID='submitButton' title='Enviar' onPress={handleSubmit(onSubmit)}/>
     </View>
   )
 }
