@@ -1,5 +1,5 @@
 import React from 'react'
-import { type RenderResult, render, cleanup } from '@testing-library/react-native'
+import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing-library/react-native'
 import Login from '../login/login'
 
 interface SutTypes {
@@ -29,10 +29,43 @@ describe('login page', () => {
     const errorEmail = sut.queryByTestId('error-email')
     const errorPassword = sut.queryByTestId('error-password')
     expect(title.props.children).toBe('Login page')
-    expect(email).toBeDefined()
-    expect(password).toBeDefined()
-    expect(submit).toBeDefined()
+    expect(email).not.toBeNull()
+    expect(password).not.toBeNull()
+    expect(submit).not.toBeNull()
     expect(errorEmail).toBeNull()
     expect(errorPassword).toBeNull()
+  })
+  test('should return error message if email field are empty', async () => {
+    const { sut } = makeSut()
+    const email = sut.getByTestId('emailField')
+    fireEvent.changeText(email, '')
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    await waitFor(() => {
+      const errorEmail = sut.queryByTestId('error-email')
+      expect(errorEmail.props.children).toBe('O email é obrigatório')
+    })
+  })
+  test('should return error message if email field are invalid format', async () => {
+    const { sut } = makeSut()
+    const email = sut.getByTestId('emailField')
+    fireEvent.changeText(email, 'invalid_email')
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    await waitFor(() => {
+      const errorEmail = sut.queryByTestId('error-email')
+      expect(errorEmail.props.children).toBe('email inválido')
+    })
+  })
+  test('should return error message if password field are empty', async () => {
+    const { sut } = makeSut()
+    const password = sut.getByTestId('passwordField')
+    fireEvent.changeText(password, '')
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    await waitFor(() => {
+      const errorpassword = sut.queryByTestId('error-password')
+      expect(errorpassword.props.children).toBe('A senha é obrigatória')
+    })
   })
 })
