@@ -1,35 +1,33 @@
-import { describe, expect, test, vi } from 'vitest'
 import { HttpClientAdapter } from '../adapters/http.client.adapter'
-import axios from 'axios'
-import { mockedAxiosResult, requestMock } from './mocks/axios.mock'
+import type axios from 'axios'
+import { mockAxios, mockPostRequest } from './mocks/axios.mock'
 
-vi.mock('axios')
-vi.spyOn(axios, 'post').mockResolvedValue(mockedAxiosResult)
+jest.mock('axios')
 
 interface SutTypes {
   sut: HttpClientAdapter
+  mockedAxios: jest.Mocked<typeof axios>
 }
 
 const makeSut = (): SutTypes => {
   const sut = new HttpClientAdapter()
+  const mockedAxios = mockAxios()
   return {
-    sut
+    sut,
+    mockedAxios
   }
 }
 
 describe('HttpClientAdapter', () => {
   test('should call adapter with correct values', async () => {
-    const { sut } = makeSut()
-    const fakeRequest = requestMock()
+    const { sut, mockedAxios } = makeSut()
+    const fakeRequest = mockPostRequest()
     await sut.post(fakeRequest)
-    expect(axios.post).toHaveBeenCalledWith(fakeRequest.url, fakeRequest.body)
+    expect(mockedAxios.post).toHaveBeenCalledWith(fakeRequest.url, fakeRequest.body)
   })
   test('should return the correct statusCode and body', async () => {
-    const { sut } = makeSut()
-    const response = await sut.post(requestMock())
-    expect(response).toEqual({
-      statusCode: mockedAxiosResult.status,
-      body: mockedAxiosResult.data
-    })
+    const { sut, mockedAxios } = makeSut()
+    const promise = sut.post(mockPostRequest())
+    expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
   })
 })

@@ -1,16 +1,17 @@
 import { faker } from '@faker-js/faker'
+import axios from 'axios'
 import { type httpPostParams } from '../../../data/protocols/http/http.post.client.protocol'
 
-export const mockedAxiosResult = {
-  data: {
-    content: faker.string.uuid
-  },
-  status: faker.number.int
+export const mockAxios = (): jest.Mocked<typeof axios> => {
+  const mockedAxios = axios as jest.Mocked<typeof axios>
+  mockedAxios.post.mockResolvedValue({
+    data: faker.person,
+    status: faker.number
+  })
+  return mockedAxios
 }
 
-export const requestMock = (): httpPostParams => ({
+export const mockPostRequest = (): httpPostParams => ({
   url: faker.internet.url(),
-  body: {
-    any: faker.string.uuid
-  }
+  body: faker.person
 })

@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vitest'
 import { Authentication } from '../usecases/authentication'
 import { HttpPostClientMock } from './mocks/http.post.client.mock'
 import { faker } from '@faker-js/faker'
