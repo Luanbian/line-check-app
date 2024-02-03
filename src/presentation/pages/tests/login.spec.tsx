@@ -1,6 +1,7 @@
 import React from 'react'
 import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing-library/react-native'
 import Login from '../login/login'
+import { faker } from '@faker-js/faker'
 
 interface SutTypes {
   sut: RenderResult
@@ -66,6 +67,21 @@ describe('login page', () => {
     await waitFor(() => {
       const errorpassword = sut.queryByTestId('error-password')
       expect(errorpassword.props.children).toBe('A senha é obrigatória')
+    })
+  })
+  test('should submit the email and password if success', async () => {
+    const { sut } = makeSut()
+    const validEmail = faker.internet.email()
+    const email = sut.getByTestId('emailField')
+    fireEvent.changeText(email, validEmail)
+    const validPassword = faker.internet.password()
+    const password = sut.getByTestId('passwordField')
+    fireEvent.changeText(password, validPassword)
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    const consoleLogSpy = jest.spyOn(console, 'log')
+    await waitFor(() => {
+      expect(consoleLogSpy).toHaveBeenCalledWith(validEmail, validPassword)
     })
   })
 })
