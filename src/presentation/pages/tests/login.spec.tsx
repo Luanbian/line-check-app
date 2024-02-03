@@ -9,8 +9,18 @@ jest.mock('@react-navigation/native', () => ({
 
 describe('login page', () => {
   test('initial state', async () => {
-    const { getByTestId } = render(<Login/>)
+    const { getByTestId, queryByTestId } = render(<Login/>)
     const title = getByTestId('title')
+    const email = getByTestId('emailField')
+    const password = getByTestId('passwordField')
+    const submit = getByTestId('submitButton')
+    const errorEmail = queryByTestId('error-email')
+    const errorPassword = queryByTestId('error-password')
     expect(title.props.children).toBe('Login page')
+    expect(email).toBeDefined()
+    expect(password).toBeDefined()
+    expect(submit).toBeDefined()
+    expect(errorEmail).toBeNull()
+    expect(errorPassword).toBeNull()
   })
 })

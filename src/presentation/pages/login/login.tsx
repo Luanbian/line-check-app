@@ -38,14 +38,14 @@ export default function Login (): React.JSX.Element {
         placeholder='email'
         onChangeText={text => { setValue('email', text) }}
       />
-      {(errors.email != null) && <Text>{errors.email.message}</Text>}
+      {(errors.email != null) && <Text testID='error-email'>{errors.email.message}</Text>}
       <TextInput
         testID='passwordField'
         placeholder='senha'
         onChangeText={text => { setValue('password', text) }}
         secureTextEntry
       />
-      {(errors.password != null) && <Text>{errors.password.message}</Text>}
+      {(errors.password != null) && <Text testID='error-password'>{errors.password.message}</Text>}
       <Button testID='submitButton' title='Enviar' onPress={handleSubmit(onSubmit)}/>
     </View>
   )
