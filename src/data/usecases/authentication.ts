@@ -17,7 +17,7 @@ export class Authentication implements IAuthentication {
       body: params
     })
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.ok: return httpResponse.body as accountProps
+      case HttpStatusCode.ok: return { accessToken: httpResponse.body as string }
       case HttpStatusCode.unathorized: throw new InvalidCredentialsError()
       default: throw new UnexpectedError()
     }
