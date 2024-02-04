@@ -2,9 +2,13 @@ import React from 'react'
 import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing-library/react-native'
 import Login from '../login/login'
 import { faker } from '@faker-js/faker'
+import { type authParamns, type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
+import { type accountProps } from '../../../domain/entities/account'
+import { accountMock } from '../../../data/tests/mocks/authentication.mock'
 
 interface SutTypes {
   sut: RenderResult
+  authenticationMock: IAuthentication
 }
 
 jest.mock('@react-navigation/native', () => ({
@@ -12,10 +16,20 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({ navigate: jest.fn() })
 }))
 
+const makeAuthenticationMock = (): IAuthentication => {
+  class AuthenticationMock implements IAuthentication {
+    public async auth (params: authParamns): Promise<accountProps> {
+      return accountMock()
+    }
+  }
+  return new AuthenticationMock()
+}
+
 const makeSut = (): SutTypes => {
-  const sut = render(<Login/>)
+  const authenticationMock = makeAuthenticationMock()
+  const sut = render(<Login authentication={authenticationMock}/>)
   return {
-    sut
+    sut, authenticationMock
   }
 }
 
@@ -69,8 +83,8 @@ describe('login page', () => {
       expect(errorpassword.props.children).toBe('A senha é obrigatória')
     })
   })
-  test('should submit the email and password if success', async () => {
-    const { sut } = makeSut()
+  test('should call authenticate with email and password', async () => {
+    const { sut, authenticationMock } = makeSut()
     const validEmail = faker.internet.email()
     const email = sut.getByTestId('emailField')
     fireEvent.changeText(email, validEmail)
@@ -79,9 +93,9 @@ describe('login page', () => {
     fireEvent.changeText(password, validPassword)
     const submit = sut.getByTestId('submitButton')
     fireEvent.press(submit)
-    const consoleLogSpy = jest.spyOn(console, 'log')
+    const authSpy = jest.spyOn(authenticationMock, 'auth')
     await waitFor(() => {
-      expect(consoleLogSpy).toHaveBeenCalledWith(validEmail, validPassword)
+      expect(authSpy).toHaveBeenCalledWith({ email: validEmail, password: validPassword })
     })
   })
 })
