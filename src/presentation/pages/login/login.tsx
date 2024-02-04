@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View, TextInput, Button } from 'react-native'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { object, string } from 'yup'
@@ -25,13 +25,16 @@ export default function Login ({ authentication }: Props): React.JSX.Element {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
+  const [errorSubmit, setErrorSubmit] = useState<string | null>(null)
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const { accessToken } = await authentication.auth(data)
-      console.log(accessToken)
+      await authentication.auth(data)
       navigation.navigate('Home' as never)
     } catch (error) {
-      console.error(error)
+      if (error instanceof Error) {
+        setErrorSubmit(error.message)
+      }
     }
   }
 
@@ -57,6 +60,7 @@ export default function Login ({ authentication }: Props): React.JSX.Element {
       />
       {(errors.password != null) && <Text testID='error-password'>{errors.password.message}</Text>}
       <Button testID='submitButton' title='Enviar' onPress={handleSubmit(onSubmit)}/>
+      {(errorSubmit != null) && <Text testID='error-submit'>{errorSubmit}</Text>}
     </View>
   )
 }
