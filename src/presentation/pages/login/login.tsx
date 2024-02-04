@@ -25,9 +25,14 @@ export default function Login ({ authentication }: Props): React.JSX.Element {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data.email, data.password)
-    navigation.navigate('Home' as never)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const { accessToken } = await authentication.auth(data)
+      console.log(accessToken)
+      navigation.navigate('Home' as never)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {
