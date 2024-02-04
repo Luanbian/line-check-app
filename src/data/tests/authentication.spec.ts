@@ -33,21 +33,21 @@ describe('Authentication', () => {
     await sut.auth(authenticationParamns)
     expect(httpPostClientMock.body).toEqual(authenticationParamns)
   })
-  test('should throw InvalidCredentialsError if HttpPostClient return 401', async () => {
+  test('should throw UnexpectedError if HttpPostClient return 401', async () => {
     const { sut, httpPostClientMock } = makeSut()
     httpPostClientMock.response = {
       statusCode: HttpStatusCode.unathorized
     }
     const promise = sut.auth(authMock())
-    await expect(promise).rejects.toThrow(new InvalidCredentialsError())
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
-  test('should throw UnexpectedError if HttpPostClient return 400', async () => {
+  test('should throw InvalidCredentialsError if HttpPostClient return 400', async () => {
     const { sut, httpPostClientMock } = makeSut()
     httpPostClientMock.response = {
       statusCode: HttpStatusCode.badRequest
     }
     const promise = sut.auth(authMock())
-    await expect(promise).rejects.toThrow(new UnexpectedError())
+    await expect(promise).rejects.toThrow(new InvalidCredentialsError())
   })
   test('should return an account if HttpPostClient return 200', async () => {
     const { sut, httpPostClientMock } = makeSut()
