@@ -38,17 +38,19 @@ describe('login page', () => {
   test('initial state', async () => {
     const { sut } = makeSut()
     const title = sut.getByTestId('title')
-    const email = sut.getByTestId('emailField')
-    const password = sut.getByTestId('passwordField')
-    const submit = sut.getByTestId('submitButton')
-    const errorEmail = sut.queryByTestId('error-email')
-    const errorPassword = sut.queryByTestId('error-password')
     expect(title.props.children).toBe('Login page')
+    const email = sut.getByTestId('emailField')
     expect(email).not.toBeNull()
+    const password = sut.getByTestId('passwordField')
     expect(password).not.toBeNull()
+    const submit = sut.getByTestId('submitButton')
     expect(submit).not.toBeNull()
+    const errorEmail = sut.queryByTestId('error-email')
     expect(errorEmail).toBeNull()
+    const errorPassword = sut.queryByTestId('error-password')
     expect(errorPassword).toBeNull()
+    const errorSubmit = sut.queryByTestId('error-submit')
+    expect(errorSubmit).toBeNull()
   })
   test('should return error message if email field are empty', async () => {
     const { sut } = makeSut()
@@ -96,6 +98,26 @@ describe('login page', () => {
     const authSpy = jest.spyOn(authenticationMock, 'auth')
     await waitFor(() => {
       expect(authSpy).toHaveBeenCalledWith({ email: validEmail, password: validPassword })
+    })
+  })
+  test('should return error message if credentials are invalid', async () => {
+    const { sut, authenticationMock } = makeSut()
+    const invalidEmail = faker.internet.email()
+    const email = sut.getByTestId('emailField')
+    fireEvent.changeText(email, invalidEmail)
+    const invalidPassword = faker.internet.password()
+    const password = sut.getByTestId('passwordField')
+    fireEvent.changeText(password, invalidPassword)
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    const authSpy = jest.spyOn(authenticationMock, 'auth').mockRejectedValueOnce(() => {
+      throw new Error('Credenciais inválidas')
+    })
+    await waitFor(() => {
+      expect(authSpy).toHaveBeenCalledWith({
+        email: invalidEmail,
+        password: invalidPassword
+      })
     })
   })
 })
