@@ -1,10 +1,12 @@
 import React from 'react'
 import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing-library/react-native'
+import '@testing-library/jest-native/extend-expect'
 import Login from '../login/login'
 import { faker } from '@faker-js/faker'
 import { type authParamns, type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
 import { type accountProps } from '../../../domain/entities/account'
 import { accountMock } from '../../../data/tests/mocks/authentication.mock'
+import { InvalidCredentialsError } from '../../../core/exceptions/invalid.credentials.error'
 
 interface SutTypes {
   sut: RenderResult
@@ -102,6 +104,8 @@ describe('login page', () => {
   })
   test('should return error message if credentials are invalid', async () => {
     const { sut, authenticationMock } = makeSut()
+    const error = new InvalidCredentialsError()
+    jest.spyOn(authenticationMock, 'auth').mockRejectedValueOnce(error)
     const invalidEmail = faker.internet.email()
     const email = sut.getByTestId('emailField')
     fireEvent.changeText(email, invalidEmail)
@@ -109,15 +113,10 @@ describe('login page', () => {
     const password = sut.getByTestId('passwordField')
     fireEvent.changeText(password, invalidPassword)
     const submit = sut.getByTestId('submitButton')
-    fireEvent.press(submit)
-    const authSpy = jest.spyOn(authenticationMock, 'auth').mockRejectedValueOnce(() => {
-      throw new Error('Credenciais inválidas')
-    })
     await waitFor(() => {
-      expect(authSpy).toHaveBeenCalledWith({
-        email: invalidEmail,
-        password: invalidPassword
-      })
+      fireEvent.press(submit)
+      const errorSubmit = sut.getByTestId('error-submit')
+      expect(errorSubmit).toHaveTextContent(error.message)
     })
   })
 })
