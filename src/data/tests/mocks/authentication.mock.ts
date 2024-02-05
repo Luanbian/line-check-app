@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type authParamns } from '../../protocols/usecases/authentication.protocol'
+import { type IAuthentication, type authParamns } from '../../protocols/usecases/authentication.protocol'
 import { type accountProps } from '../../../domain/entities/account'
 
 export const authMock = (): authParamns => ({
@@ -10,3 +10,12 @@ export const authMock = (): authParamns => ({
 export const accountMock = (): accountProps => ({
   accessToken: faker.string.uuid()
 })
+
+export const makeAuthenticationMock = (): IAuthentication => {
+  class AuthenticationMock implements IAuthentication {
+    public async auth (params: authParamns): Promise<accountProps> {
+      return accountMock()
+    }
+  }
+  return new AuthenticationMock()
+}

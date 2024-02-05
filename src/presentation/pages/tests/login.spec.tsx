@@ -3,9 +3,8 @@ import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing
 import '@testing-library/jest-native/extend-expect'
 import Login from '../login/login'
 import { faker } from '@faker-js/faker'
-import { type authParamns, type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
-import { type accountProps } from '../../../domain/entities/account'
-import { accountMock } from '../../../data/tests/mocks/authentication.mock'
+import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
+import { makeAuthenticationMock } from '../../../data/tests/mocks/authentication.mock'
 import { InvalidCredentialsError } from '../../../core/exceptions/invalid.credentials.error'
 
 interface SutTypes {
@@ -17,15 +16,6 @@ jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useNavigation: () => ({ navigate: jest.fn() })
 }))
-
-const makeAuthenticationMock = (): IAuthentication => {
-  class AuthenticationMock implements IAuthentication {
-    public async auth (params: authParamns): Promise<accountProps> {
-      return accountMock()
-    }
-  }
-  return new AuthenticationMock()
-}
 
 const makeSut = (): SutTypes => {
   const authenticationMock = makeAuthenticationMock()
