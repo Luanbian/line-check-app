@@ -1,6 +1,5 @@
-import { HttpClientAdapter } from '../adapters/http.client.adapter'
-import { type AxiosError } from 'axios'
 import type axios from 'axios'
+import { HttpClientAdapter } from '../adapters/http.client.adapter'
 import { mockAxios, mockPostRequest } from './mocks/axios.mock'
 
 jest.mock('axios')
@@ -24,44 +23,27 @@ describe('HttpClientAdapter', () => {
     const { sut, mockedAxios } = makeSut()
     const fakeRequest = mockPostRequest()
     await sut.post(fakeRequest)
-    expect(mockedAxios.post).toHaveBeenCalledWith(fakeRequest.url, fakeRequest.body)
+    expect(mockedAxios.request).toHaveBeenCalledWith({
+      url: fakeRequest.url,
+      method: 'POST',
+      data: fakeRequest.body
+    })
   })
   test('should return the correct statusCode and body', async () => {
     const { sut, mockedAxios } = makeSut()
-    const promise = sut.post(mockPostRequest())
-    expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    const httpResponse = await sut.post(mockPostRequest())
+    const axiosResponse = await mockedAxios.request.mock.results[0].value
+    expect(httpResponse).toEqual({
+      statusCode: axiosResponse.status,
+      body: axiosResponse.data
+    })
   })
-  test('should return http error if axios return own error', async () => {
+  test('should return catch error', async () => {
     const { sut, mockedAxios } = makeSut()
-    const mockedError: AxiosError = {
-      isAxiosError: true,
-      message: 'Some error message',
-      name: 'Axios error',
-      toJSON: {} as any,
-      response: {
-        config: {
-          headers: {} as any
-        },
-        data: 'Error data',
-        headers: {} as any,
-        status: 400,
-        statusText: 'Erro message text'
-      }
-    }
-    mockedAxios.post.mockRejectedValueOnce(mockedError)
-    try {
-      await sut.post(mockPostRequest())
-    } catch (error) {
-      expect((error as AxiosError).isAxiosError).toBe(true)
-      expect((error as AxiosError).response).toEqual({
-        config: {
-          headers: {} as any
-        },
-        data: 'Error data',
-        headers: {} as any,
-        status: 400,
-        statusText: 'Erro message text'
-      })
-    }
+    mockedAxios.request.mockRejectedValueOnce({
+      response: mockPostRequest()
+    })
+    const promise = sut.post(mockPostRequest())
+    expect(promise).toEqual(mockedAxios.request.mock.results[0].value)
   })
 })

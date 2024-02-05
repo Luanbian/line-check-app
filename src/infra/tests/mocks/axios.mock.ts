@@ -4,7 +4,7 @@ import { type httpPostParams } from '../../../data/protocols/http/http.post.clie
 
 export const mockAxios = (): jest.Mocked<typeof axios> => {
   const mockedAxios = axios as jest.Mocked<typeof axios>
-  mockedAxios.post.mockResolvedValue({
+  mockedAxios.request.mockClear().mockResolvedValue({
     data: faker.person,
     status: faker.number
   })
