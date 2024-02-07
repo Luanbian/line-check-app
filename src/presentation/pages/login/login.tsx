@@ -5,6 +5,7 @@ import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
+import decodeToken from '../../../token/decoded'
 
 const fieldsValidationSchema = object({
   email: string().email('email inválido').required('O email é obrigatório'),
@@ -29,12 +30,21 @@ export default function Login ({ authentication }: Props): React.JSX.Element {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await authentication.auth(data)
-      navigation.navigate('Home' as never)
+      const { accessToken } = await authentication.auth(data)
+      verifyAndRedirect(accessToken)
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)
       }
+    }
+  }
+
+  const verifyAndRedirect = (token: string): void => {
+    const userData = decodeToken(token)
+    if (userData?.toUpperCase().trim() === 'MANAGER') {
+      navigation.navigate('Manager' as never)
+    } else {
+      navigation.navigate('Home' as never)
     }
   }
 
