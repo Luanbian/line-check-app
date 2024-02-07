@@ -6,10 +6,13 @@ import { faker } from '@faker-js/faker'
 import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
 import { makeAuthenticationMock } from '../../../data/tests/mocks/authentication.mock'
 import { InvalidCredentialsError } from '../../../core/exceptions/invalid.credentials.error'
+import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
+import { makeDecodedTokenMock } from '../../../infra/tests/mocks/decoded.mock'
 
 interface SutTypes {
   sut: RenderResult
   authenticationMock: IAuthentication
+  decodedTokenMock: IDecodeToken
 }
 
 jest.mock('@react-navigation/native', () => ({
@@ -19,9 +22,10 @@ jest.mock('@react-navigation/native', () => ({
 
 const makeSut = (): SutTypes => {
   const authenticationMock = makeAuthenticationMock()
-  const sut = render(<Login authentication={authenticationMock}/>)
+  const decodedTokenMock = makeDecodedTokenMock()
+  const sut = render(<Login authentication={authenticationMock} decodeToken={decodedTokenMock}/>)
   return {
-    sut, authenticationMock
+    sut, authenticationMock, decodedTokenMock
   }
 }
 
