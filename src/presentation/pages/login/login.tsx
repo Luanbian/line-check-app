@@ -5,7 +5,7 @@ import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
-import decodeToken from '../../../token/decoded'
+import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
 
 const fieldsValidationSchema = object({
   email: string().email('email inválido').required('O email é obrigatório'),
@@ -14,6 +14,7 @@ const fieldsValidationSchema = object({
 
 interface Props {
   authentication: IAuthentication
+  decodeToken: IDecodeToken
 }
 
 interface Inputs {
@@ -21,7 +22,7 @@ interface Inputs {
   password: string
 }
 
-export default function Login ({ authentication }: Props): React.JSX.Element {
+export default function Login ({ authentication, decodeToken }: Props): React.JSX.Element {
   const navigation = useNavigation()
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
@@ -40,7 +41,7 @@ export default function Login ({ authentication }: Props): React.JSX.Element {
   }
 
   const verifyAndRedirect = (token: string): void => {
-    const userData = decodeToken(token)
+    const userData = decodeToken.decode(token)
     if (userData?.toUpperCase().trim() === 'MANAGER') {
       navigation.navigate('Manager' as never)
     } else {
