@@ -113,4 +113,21 @@ describe('login page', () => {
       expect(errorSubmit).toHaveTextContent(error.message)
     })
   })
+  test('should call decodeToken with correct value', async () => {
+    const { sut, decodedTokenMock, authenticationMock } = makeSut()
+    const accessToken = { accessToken: 'fake_token' }
+    jest.spyOn(authenticationMock, 'auth').mockResolvedValue(accessToken)
+    const decodeSpy = jest.spyOn(decodedTokenMock, 'decode')
+    const validEmail = faker.internet.email()
+    const email = sut.getByTestId('emailField')
+    fireEvent.changeText(email, validEmail)
+    const validPassword = faker.internet.password()
+    const password = sut.getByTestId('passwordField')
+    fireEvent.changeText(password, validPassword)
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    await waitFor(() => {
+      expect(decodeSpy).toHaveBeenCalledWith(accessToken.accessToken)
+    })
+  })
 })
