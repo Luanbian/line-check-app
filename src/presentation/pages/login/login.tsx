@@ -44,8 +44,10 @@ export default function Login ({ authentication, decodeToken }: Props): React.JS
     const userData = decodeToken.decode(token)
     if (userData?.toUpperCase().trim() === 'MANAGER') {
       navigation.navigate('Manager' as never)
-    } else {
+    } else if (userData?.toUpperCase().trim() === 'DRIVER') {
       navigation.navigate('Home' as never)
+    } else {
+      navigation.navigate('Login' as never)
     }
   }
 
