@@ -1,0 +1,23 @@
+import { HttpStatusCode } from '../../@types/http.response'
+import { UnexpectedError } from '../../core/exceptions/unexpected.error'
+import { type workProps } from '../../domain/entities/work'
+import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
+import { type IWorkInfo } from '../protocols/usecases/work.info.protocol'
+
+export class WorkInfo implements IWorkInfo {
+  constructor (
+    private readonly url: string,
+    private readonly HttpGetClient: IHttpClient
+  ) {}
+
+  public async perform (): Promise<workProps[]> {
+    const httpResponse = await this.HttpGetClient.post({
+      url: this.url,
+      method: 'GET'
+    })
+    switch (httpResponse.statusCode) {
+      case HttpStatusCode.ok: return [httpResponse.body as workProps]
+      default: throw new UnexpectedError()
+    }
+  }
+}
