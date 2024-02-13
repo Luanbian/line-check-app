@@ -1,14 +1,14 @@
 import { HttpStatusCode, type HttpResponse } from '../../../@types/http.response'
-import { type httpPostParams, type IHttpPostClient } from '../../protocols/http/http.post.client.protocol'
+import { type httpParams, type IHttpClient } from '../../protocols/http/http.post.client.protocol'
 
-export class HttpPostClientMock implements IHttpPostClient {
+export class HttpPostClientMock implements IHttpClient {
   url?: string
   body?: object
   response: HttpResponse = {
     statusCode: HttpStatusCode.ok
   }
 
-  async post (params: httpPostParams): Promise<HttpResponse> {
+  async post (params: httpParams): Promise<HttpResponse> {
     this.url = params.url
     this.body = params.body
     return await Promise.resolve(this.response)
