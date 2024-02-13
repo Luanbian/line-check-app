@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
+import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 
 const fieldsValidationSchema = object({
   email: string().email('email inválido').required('O email é obrigatório'),
@@ -15,6 +16,7 @@ const fieldsValidationSchema = object({
 interface Props {
   authentication: IAuthentication
   decodeToken: IDecodeToken
+  localStorage: ILocalStorage
 }
 
 interface Inputs {
@@ -22,7 +24,7 @@ interface Inputs {
   password: string
 }
 
-export default function Login ({ authentication, decodeToken }: Props): React.JSX.Element {
+export default function Login ({ authentication, decodeToken, localStorage }: Props): React.JSX.Element {
   const navigation = useNavigation()
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
@@ -33,6 +35,7 @@ export default function Login ({ authentication, decodeToken }: Props): React.JS
     try {
       const { accessToken } = await authentication.auth(data)
       verifyAndRedirect(accessToken)
+      await localStorage.save('token', accessToken)
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)
