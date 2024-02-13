@@ -9,7 +9,8 @@ export class HttpClientAdapter implements IHttpClient {
       axiosResponse = await axios.request({
         url: params.url,
         method: params.method,
-        data: params.body
+        data: params.body,
+        headers: params.headers
       })
     } catch (error) {
       axiosResponse = (error as any).response

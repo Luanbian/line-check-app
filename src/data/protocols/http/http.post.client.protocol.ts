@@ -4,6 +4,7 @@ export interface httpParams {
   url: string
   method: 'POST' | 'GET' | 'PUT' | 'DELETE'
   body?: object
+  headers?: object
 }
 
 export interface IHttpClient {

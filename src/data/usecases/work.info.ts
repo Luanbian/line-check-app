@@ -12,10 +12,12 @@ export class WorkInfo implements IWorkInfo {
   ) {}
 
   public async perform (token: string): Promise<workProps[]> {
-    console.log(token)
     const httpResponse = await this.HttpGetClient.request({
       url: this.url,
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok: return [httpResponse.body as workProps]
