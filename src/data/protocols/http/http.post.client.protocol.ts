@@ -7,5 +7,5 @@ export interface httpParams {
 }
 
 export interface IHttpClient {
-  post: (params: httpParams) => Promise<HttpResponse>
+  request: (params: httpParams) => Promise<HttpResponse>
 }

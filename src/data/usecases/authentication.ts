@@ -12,7 +12,7 @@ export class Authentication implements IAuthentication {
   ) {}
 
   async auth (params: authParamns): Promise<accountProps> {
-    const httpResponse = await this.HttpPostClient.post({
+    const httpResponse = await this.HttpPostClient.request({
       url: this.url,
       method: 'POST',
       body: params

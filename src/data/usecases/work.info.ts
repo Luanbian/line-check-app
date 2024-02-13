@@ -11,7 +11,7 @@ export class WorkInfo implements IWorkInfo {
   ) {}
 
   public async perform (): Promise<workProps[]> {
-    const httpResponse = await this.HttpGetClient.post({
+    const httpResponse = await this.HttpGetClient.request({
       url: this.url,
       method: 'GET'
     })

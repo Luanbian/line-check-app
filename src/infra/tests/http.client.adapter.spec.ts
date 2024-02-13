@@ -22,7 +22,7 @@ describe('HttpClientAdapter', () => {
   test('should call adapter with correct values', async () => {
     const { sut, mockedAxios } = makeSut()
     const fakeRequest = mockPostRequest()
-    await sut.post(fakeRequest)
+    await sut.request(fakeRequest)
     expect(mockedAxios.request).toHaveBeenCalledWith({
       url: fakeRequest.url,
       method: 'POST',
@@ -31,7 +31,7 @@ describe('HttpClientAdapter', () => {
   })
   test('should return the correct statusCode and body', async () => {
     const { sut, mockedAxios } = makeSut()
-    const httpResponse = await sut.post(mockPostRequest())
+    const httpResponse = await sut.request(mockPostRequest())
     const axiosResponse = await mockedAxios.request.mock.results[0].value
     expect(httpResponse).toEqual({
       statusCode: axiosResponse.status,
@@ -43,7 +43,7 @@ describe('HttpClientAdapter', () => {
     mockedAxios.request.mockRejectedValueOnce({
       response: mockPostRequest()
     })
-    const promise = sut.post(mockPostRequest())
+    const promise = sut.request(mockPostRequest())
     expect(promise).toEqual(mockedAxios.request.mock.results[0].value)
   })
 })

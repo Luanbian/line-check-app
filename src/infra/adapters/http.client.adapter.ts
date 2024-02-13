@@ -3,7 +3,7 @@ import { type IHttpClient, type httpParams } from '../../data/protocols/http/htt
 import { type HttpResponse } from '../../@types/http.response'
 
 export class HttpClientAdapter implements IHttpClient {
-  async post (params: httpParams): Promise<HttpResponse> {
+  async request (params: httpParams): Promise<HttpResponse> {
     let axiosResponse: AxiosResponse
     try {
       axiosResponse = await axios.request({
