@@ -10,8 +10,11 @@ interface Props {
 
 export default function Home ({ getWorkInfo, localStorage }: Props): React.JSX.Element {
   const getTest = async (): Promise<void> => {
-    const httpRes = await getWorkInfo.perform()
-    console.log('tsx: ', httpRes)
+    const token = await localStorage.obtain('token')
+    if (token != null) {
+      const httpRes = await getWorkInfo.perform(token)
+      console.log('tsx: ', httpRes)
+    }
   }
 
   return (
