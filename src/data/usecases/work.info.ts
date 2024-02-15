@@ -11,7 +11,7 @@ export class WorkInfo implements IWorkInfo {
     private readonly HttpGetClient: IHttpClient
   ) {}
 
-  public async perform (token: string): Promise<workProps[]> {
+  public async perform (token: string): Promise<workProps[][]> {
     const httpResponse = await this.HttpGetClient.request({
       url: this.url,
       method: 'GET',
@@ -20,7 +20,7 @@ export class WorkInfo implements IWorkInfo {
       }
     })
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.ok: return [httpResponse.body as workProps]
+      case HttpStatusCode.ok: return [httpResponse.body as workProps[]]
       case HttpStatusCode.unathorized: throw new UnathorizedError()
       default: throw new UnexpectedError()
     }
