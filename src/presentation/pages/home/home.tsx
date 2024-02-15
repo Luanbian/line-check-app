@@ -25,8 +25,9 @@ export default function Home ({ getWorkInfo, localStorage }: Props): React.JSX.E
       <Button title='Teste' onPress={async () => { await getTest() }} />
       {data?.map(item => (
         <View key={item.id}>
-          <Text>Driver: {item.driver}</Text>
+          <Text>Driver: {item.accountName}</Text>
           <Text>Service: {item.service}</Text>
+          <Text>days of the week: {item.daysOfTheWeek.join(', ')}</Text>
         </View>
       ))}
     </View>

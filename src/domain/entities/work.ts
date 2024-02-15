@@ -1,21 +1,12 @@
 export interface workProps {
   id: string
-  driver: string
+  accountName: string
   startJourneyModel: string
   startLineModel: string
-  endExpedientModel: string
-  startJourneyReal: string
-  startLineReal: string
-  endExpedientReal: string
+  endLineModel: string
   service: string
-  road: string
+  logistic: string
   manufacture: string
   vehicle: string
-  monday: boolean
-  tuesday: boolean
-  wednesday: boolean
-  thursday: boolean
-  friday: boolean
-  saturday: boolean
-  sunday: boolean
+  daysOfTheWeek: string[]
 }
