@@ -4,10 +4,10 @@ import { type IuserData, type IDecodeToken } from '../protocols/decode.token.pro
 global.atob = decode
 
 export class DecodeToken implements IDecodeToken {
-  public decode (token: string): string | undefined {
+  public decode (token: string): IuserData {
     try {
       const decodedToken = jwtDecode(token) as IuserData
-      return decodedToken.role
+      return decodedToken
     } catch (error) {
       console.error(error)
       throw new Error('Error during decoding')

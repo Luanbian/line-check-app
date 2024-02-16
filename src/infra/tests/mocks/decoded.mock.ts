@@ -1,9 +1,12 @@
-import { type IDecodeToken } from '../../protocols/decode.token.protocol'
+import { type IuserData, type IDecodeToken } from '../../protocols/decode.token.protocol'
 
 export const makeDecodedTokenMock = (): IDecodeToken => {
   class DecodedTokenMock implements IDecodeToken {
-    public decode (token: string): string | undefined {
-      return 'DRIVER'
+    public decode (token: string): IuserData {
+      return {
+        role: 'DRIVER',
+        sub: 'fake_logged_user_id'
+      }
     }
   }
   return new DecodedTokenMock()
