@@ -10,3 +10,9 @@ export interface workProps {
   vehicle: string
   daysOfTheWeek: string[]
 }
+
+export interface workPropsComplete extends workProps {
+  startJourneyReal: string
+  startLineReal: string
+  endLineReal: string
+}
