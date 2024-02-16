@@ -3,13 +3,15 @@ import { View, Text, Button } from 'react-native'
 import { type IWorkInfo } from '../../../data/protocols/usecases/work.info.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type workProps } from '../../../domain/entities/work'
+import { type IUpdateLineCheck } from '../../../data/protocols/usecases/update.linecheck.protocol'
 
 interface Props {
   getWorkInfo: IWorkInfo
   localStorage: ILocalStorage
+  updateLinecheck: IUpdateLineCheck
 }
 
-export default function Home ({ getWorkInfo, localStorage }: Props): React.JSX.Element {
+export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Props): React.JSX.Element {
   const [data, setData] = useState<workProps[]>()
   const getTest = async (): Promise<void> => {
     const token = await localStorage.obtain('token')
