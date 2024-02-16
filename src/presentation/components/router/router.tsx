@@ -2,8 +2,8 @@ import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { makeLogin } from '../../../core/factories/pages/login/login.factory'
-import Manager from '../../pages/manager/manager'
 import { makeHome } from '../../../core/factories/pages/home/home.factory'
+import { makeManager } from '../../../core/factories/pages/manager/manager.factory'
 
 const Stack = createNativeStackNavigator()
 
@@ -17,10 +17,9 @@ export default function Router (): React.JSX.Element {
         <Stack.Screen name="Home">
           {(props) => <>{makeHome(props)}</>}
         </Stack.Screen>
-        <Stack.Screen
-          name="Manager"
-          component={Manager}
-        />
+        <Stack.Screen name="Manager">
+          {(props) => <>{makeManager(props)}</>}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   )
