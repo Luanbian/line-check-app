@@ -21,6 +21,7 @@ export class UpdateLineCheck implements IUpdateLineCheck {
       }
     })
     switch (httpResponse.statusCode) {
+      case HttpStatusCode.ok: return
       case HttpStatusCode.unathorized: throw new UnathorizedError()
       case HttpStatusCode.badRequest: throw new BadRequest()
       default: throw new UnexpectedError()
