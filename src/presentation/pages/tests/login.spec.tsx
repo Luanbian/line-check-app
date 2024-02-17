@@ -140,4 +140,24 @@ describe('login page', () => {
       expect(decodeSpy).toHaveBeenCalledWith(accessToken.accessToken)
     })
   })
+  test('should call localStorage with correct values', async () => {
+    const { sut, localStorageMock, authenticationMock, decodedTokenMock } = makeSut()
+    const accessToken = { accessToken: 'fake_token' }
+    jest.spyOn(authenticationMock, 'auth').mockResolvedValue(accessToken)
+    const decodeResponse = { role: 'DRIVER', sub: 'fake_account_id' }
+    jest.spyOn(decodedTokenMock, 'decode').mockResolvedValue(decodeResponse)
+    const localStorageSpy = jest.spyOn(localStorageMock, 'save')
+    const validEmail = faker.internet.email()
+    const email = sut.getByTestId('emailField')
+    fireEvent.changeText(email, validEmail)
+    const validPassword = faker.internet.password()
+    const password = sut.getByTestId('passwordField')
+    fireEvent.changeText(password, validPassword)
+    const submit = sut.getByTestId('submitButton')
+    fireEvent.press(submit)
+    await waitFor(() => {
+      expect(localStorageSpy).toHaveBeenCalledWith('token', accessToken.accessToken)
+      expect(localStorageSpy).toHaveBeenCalledWith('accountId', decodeResponse.sub)
+    })
+  })
 })
