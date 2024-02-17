@@ -17,7 +17,7 @@ export class LocalStorage implements ILocalStorage {
       return value
     } catch (error) {
       console.error('Erro ao obter item em cache:', error)
-      return null
+      throw new Error('Erro no asyncStorage')
     }
   }
 }

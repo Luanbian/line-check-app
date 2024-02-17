@@ -26,7 +26,7 @@ describe('LocalStorage', () => {
     await sut.save(name, value)
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(name, value)
   })
-  test('should throw an error if save in local storage fail', async () => {
+  test('should throw an error if save in local storage fails', async () => {
     const { sut } = makeSut()
     const name = faker.hacker.noun()
     const value = faker.string.uuid();
@@ -46,13 +46,12 @@ describe('LocalStorage', () => {
     expect(AsyncStorage.getItem).toHaveBeenCalledWith(name)
     expect(response).toBe(value)
   })
-  test('should return null if obtain in local storage fail', async () => {
+  test('should throw if obtain in local storage fails', async () => {
     const { sut } = makeSut()
     const name = faker.hacker.noun();
     (AsyncStorage.getItem as jest.Mock).mockImplementation(() => {
-      return null
+      throw new Error('Erro no asyncStorage')
     })
-    const response = await sut.obtain(name)
-    expect(response).toBe(null)
+    await expect(sut.obtain(name)).rejects.toThrow('Erro no asyncStorage')
   })
 })
