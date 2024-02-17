@@ -34,8 +34,8 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const { accessToken } = await authentication.auth(data)
-      await verifyAndRedirect(accessToken)
       await localStorage.save('token', accessToken)
+      await verifyAndRedirect(accessToken)
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)
