@@ -34,7 +34,7 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const { accessToken } = await authentication.auth(data)
-      const { role, sub } = decodeToken.decode(accessToken)
+      const { role, sub } = await decodeToken.decode(accessToken)
       await Promise.all([
         localStorage.save('token', accessToken),
         localStorage.save('accountId', sub),
@@ -48,12 +48,8 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
   }
 
   const redirect = async (role: string): Promise<void> => {
-    try {
-      const captalize = role[0].toUpperCase() + role.substring(1)
-      navigation.navigate(captalize as never)
-    } catch (error) {
-      navigation.navigate('Login' as never)
-    }
+    const captalize = role[0].toUpperCase() + role.substring(1)
+    navigation.navigate(captalize as never)
   }
 
   useEffect(() => {

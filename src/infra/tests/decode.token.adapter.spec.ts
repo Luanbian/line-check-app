@@ -26,15 +26,16 @@ describe('DecodeToken', () => {
       sub: faker.string.uuid()
     };
     (jwtDecode as jest.Mock).mockReturnValue(expectedUserData)
-    const decoded = sut.decode(token)
+    const decoded = await sut.decode(token)
     expect(decoded).toEqual(expectedUserData)
   })
-  test('should return an error if decoded fails', () => {
+  test('should return an error if decoded fails', async () => {
     const { sut } = makeSut()
     const invalidToken = faker.string.uuid();
     (jwtDecode as jest.Mock).mockImplementation(() => {
       throw new Error('Error during decoding')
     })
-    expect(() => sut.decode(invalidToken)).toThrow('Error during decoding')
+    const promise = sut.decode(invalidToken)
+    await expect(promise).rejects.toThrow('Error during decoding')
   })
 })

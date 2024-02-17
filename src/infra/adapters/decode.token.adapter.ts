@@ -4,7 +4,7 @@ import { type IuserData, type IDecodeToken } from '../protocols/decode.token.pro
 global.atob = decode
 
 export class DecodeToken implements IDecodeToken {
-  public decode (token: string): IuserData {
+  public async decode (token: string): Promise<IuserData> {
     try {
       const decodedToken = jwtDecode(token) as IuserData
       return decodedToken

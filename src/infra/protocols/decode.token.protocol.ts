@@ -6,5 +6,5 @@ export interface IuserData extends JwtPayload {
 }
 
 export interface IDecodeToken {
-  decode: (token: string) => IuserData
+  decode: (token: string) => Promise<IuserData>
 }
