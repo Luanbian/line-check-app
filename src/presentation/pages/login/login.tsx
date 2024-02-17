@@ -34,8 +34,12 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const { accessToken } = await authentication.auth(data)
-      await localStorage.save('token', accessToken)
-      await verifyAndRedirect(accessToken)
+      const { role, sub } = decodeToken.decode(accessToken)
+      await Promise.all([
+        localStorage.save('token', accessToken),
+        localStorage.save('accountId', sub),
+        redirect(role)
+      ])
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)
@@ -43,14 +47,11 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
     }
   }
 
-  const verifyAndRedirect = async (token: string): Promise<void> => {
-    const { role, sub } = decodeToken.decode(token)
-    await localStorage.save('accountId', sub)
-    if (role?.toUpperCase().trim() === 'MANAGER') {
-      navigation.navigate('Manager' as never)
-    } else if (role?.toUpperCase().trim() === 'DRIVER') {
-      navigation.navigate('Home' as never)
-    } else {
+  const redirect = async (role: string): Promise<void> => {
+    try {
+      const captalize = role[0].toUpperCase() + role.substring(1)
+      navigation.navigate(captalize as never)
+    } catch (error) {
       navigation.navigate('Login' as never)
     }
   }
