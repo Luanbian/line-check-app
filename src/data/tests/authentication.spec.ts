@@ -1,5 +1,5 @@
 import { Authentication } from '../usecases/authentication'
-import { HttpPostClientMock } from './mocks/http.post.client.mock'
+import { HttpClientMock } from './mocks/http.post.client.mock'
 import { faker } from '@faker-js/faker'
 import { accountMock, authMock } from './mocks/authentication.mock'
 import { InvalidCredentialsError } from '../../core/exceptions/invalid.credentials.error'
@@ -8,11 +8,11 @@ import { UnexpectedError } from '../../core/exceptions/unexpected.error'
 
 interface SutTypes {
   sut: Authentication
-  httpPostClientMock: HttpPostClientMock
+  httpPostClientMock: HttpClientMock
 }
 
 const makeSut = (url: string = faker.internet.url()): SutTypes => {
-  const httpPostClientMock = new HttpPostClientMock()
+  const httpPostClientMock = new HttpClientMock()
   const sut = new Authentication(url, httpPostClientMock)
   return {
     sut,
