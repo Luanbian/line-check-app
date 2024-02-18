@@ -37,19 +37,14 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
       const { role, sub } = await decodeToken.decode(accessToken)
       await Promise.all([
         localStorage.save('token', accessToken),
-        localStorage.save('accountId', sub),
-        redirect(role)
+        localStorage.save('accountId', sub)
       ])
+      navigation.navigate(role as never)
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)
       }
     }
-  }
-
-  const redirect = async (role: string): Promise<void> => {
-    const captalize = role[0].toUpperCase() + role.substring(1)
-    navigation.navigate(captalize as never)
   }
 
   useEffect(() => {

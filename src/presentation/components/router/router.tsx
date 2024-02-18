@@ -14,10 +14,10 @@ export default function Router (): React.JSX.Element {
         <Stack.Screen name="Login">
           {(props) => <>{makeLogin(props)}</>}
         </Stack.Screen>
-        <Stack.Screen name="Home">
+        <Stack.Screen name="DRIVER">
           {(props) => <>{makeHome(props)}</>}
         </Stack.Screen>
-        <Stack.Screen name="Manager">
+        <Stack.Screen name="MANAGER">
           {(props) => <>{makeManager(props)}</>}
         </Stack.Screen>
       </Stack.Navigator>
