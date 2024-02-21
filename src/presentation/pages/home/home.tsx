@@ -49,20 +49,20 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
 
   return (
     <ScrollView>
-      {(errorSubmit != null) && <Text>{errorSubmit}</Text>}
+      {(errorSubmit != null) && <Text testID='errorSubmit'>{errorSubmit}</Text>}
       {data?.map(item => (
         <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driverField'>Motorista: {item.accountName}</Text>
-          <Text>inicio jornada: {item.startJourneyModel}</Text>
-          <Button title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
-          <Text>inicio linha: {item.startLineModel}</Text>
-          <Button title='Check start line' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTLINEREAL') }} />
-          <Text>Serviço: {item.service}</Text>
-          <Text>Logistica: {item.logistic}</Text>
-          <Text>Fábrica: {item.manufacture}</Text>
-          <Text>Veículo: {item.vehicle}</Text>
-          <Text>Fim jornada: {item.endLineModel}</Text>
-          <Button title='Check end journey' onPress={async () => { await updateDriverLinecheck(item.id, 'ENDLINEREAL') }} />
+          <Text testID='initJourneyField'>inicio jornada: {item.startJourneyModel}</Text>
+          <Button testID='startJourneyBtn' title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
+          <Text testID='initLineField'>inicio linha: {item.startLineModel}</Text>
+          <Button testID='initLineBtn' title='Check start line' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTLINEREAL') }} />
+          <Text testID='serviceField'>Serviço: {item.service}</Text>
+          <Text testID='logisticField'>Logistica: {item.logistic}</Text>
+          <Text testID='manufactureField'>Fábrica: {item.manufacture}</Text>
+          <Text testID='vehicleField'>Veículo: {item.vehicle}</Text>
+          <Text testID='endJourneyField'>Fim jornada: {item.endLineModel}</Text>
+          <Button testID='endJourneyBtn' title='Check end journey' onPress={async () => { await updateDriverLinecheck(item.id, 'ENDLINEREAL') }} />
         </View>
       ))}
     </ScrollView>
