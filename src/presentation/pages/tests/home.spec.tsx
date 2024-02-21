@@ -45,7 +45,7 @@ describe('home page', () => {
       />
     )
     await waitFor(() => {
-      expect(localStorageMock.obtain).toHaveBeenCalledTimes(1)
+      expect(localStorageMock.obtain).toHaveBeenCalledWith('token')
       expect(getWorkInfoMock.perform).toHaveBeenCalledWith(fakeToken)
     })
   })
