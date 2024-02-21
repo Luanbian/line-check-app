@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { type workPropsComplete, type workProps } from '../../../domain/entities/work'
+import { type IWorkInfo } from '../../protocols/usecases/work.info.protocol'
 
 const generateCommonProps = (): workProps => ({
   id: faker.string.uuid(),
@@ -22,3 +23,17 @@ export const workPropsCompleteMock = (): workPropsComplete => ({
   startLineReal: faker.date.anytime.toString(),
   endLineReal: faker.date.anytime.toString()
 })
+
+export const makeWorkInfoMock = (): IWorkInfo => {
+  class WorkInfoMock implements IWorkInfo {
+    public async perform (token: string): Promise<workProps[][]> {
+      const workOne = generateCommonProps()
+      const workTwo = generateCommonProps()
+      return [
+        [workOne],
+        [workTwo]
+      ]
+    }
+  }
+  return new WorkInfoMock()
+}
