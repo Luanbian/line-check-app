@@ -1,4 +1,4 @@
-import { type RenderResult, render, waitFor } from '@testing-library/react-native'
+import { type RenderResult, render, waitFor, fireEvent } from '@testing-library/react-native'
 import '@testing-library/jest-native/extend-expect'
 import React from 'react'
 import Home from '../home/home'
@@ -79,5 +79,50 @@ describe('home page', () => {
     expect(endJourneyField).toHaveTextContent('fake_time 09:00:00')
     const endJourneyBtn = await sut.findByTestId('endJourneyBtn')
     expect(endJourneyBtn).toHaveTextContent('Check end journey')
+  })
+  test('should call updateLinecheck use case with correct start journey value', async () => {
+    const { sut, updateLinecheckMock, localStorageMock } = makeSut()
+    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
+    const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
+    const startJourneyBtn = await sut.findByTestId('startJourneyBtn')
+    await waitFor(() => {
+      fireEvent.press(startJourneyBtn)
+      expect(updateLinecheckSpy).toHaveBeenCalledWith({
+        workId: 'fake_id',
+        accountId: 'AccountIdOrToken',
+        marker: 'STARTJOURNEYREAL',
+        token: 'AccountIdOrToken'
+      })
+    })
+  })
+  test('should call updateLinecheck use case with correct start line value', async () => {
+    const { sut, updateLinecheckMock, localStorageMock } = makeSut()
+    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
+    const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
+    const initLineBtn = await sut.findByTestId('initLineBtn')
+    await waitFor(() => {
+      fireEvent.press(initLineBtn)
+      expect(updateLinecheckSpy).toHaveBeenCalledWith({
+        workId: 'fake_id',
+        accountId: 'AccountIdOrToken',
+        marker: 'STARTLINEREAL',
+        token: 'AccountIdOrToken'
+      })
+    })
+  })
+  test('should call updateLinecheck use case with correct end journey value', async () => {
+    const { sut, updateLinecheckMock, localStorageMock } = makeSut()
+    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
+    const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
+    const endJourneyBtn = await sut.findByTestId('endJourneyBtn')
+    await waitFor(() => {
+      fireEvent.press(endJourneyBtn)
+      expect(updateLinecheckSpy).toHaveBeenCalledWith({
+        workId: 'fake_id',
+        accountId: 'AccountIdOrToken',
+        marker: 'ENDLINEREAL',
+        token: 'AccountIdOrToken'
+      })
+    })
   })
 })
