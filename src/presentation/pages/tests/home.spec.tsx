@@ -1,4 +1,5 @@
 import { type RenderResult, render, waitFor } from '@testing-library/react-native'
+import '@testing-library/jest-native/extend-expect'
 import React from 'react'
 import Home from '../home/home'
 import { makeWorkInfoMock } from '../../../data/tests/mocks/work.info.mock'
@@ -15,6 +16,7 @@ interface SutTypes {
   localStorageMock: ILocalStorage
   updateLinecheckMock: IUpdateLineCheck
 }
+
 const makeSut = (): SutTypes => {
   const getWorkInfoMock = makeWorkInfoMock()
   const localStorageMock = makeLocalStorageMock()
@@ -34,8 +36,8 @@ describe('home page', () => {
   test('ensure the api are called when component is mounted', async () => {
     const { localStorageMock, getWorkInfoMock, updateLinecheckMock } = makeSut()
     const fakeToken = faker.string.uuid()
-    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue(fakeToken)
     const workPropsStub = makeWorkInfoMock().perform(fakeToken)
+    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue(fakeToken)
     jest.spyOn(getWorkInfoMock, 'perform').mockResolvedValue(workPropsStub)
     render(
       <Home
@@ -48,5 +50,10 @@ describe('home page', () => {
       expect(localStorageMock.obtain).toHaveBeenCalledWith('token')
       expect(getWorkInfoMock.perform).toHaveBeenCalledWith(fakeToken)
     })
+  })
+  test('first state of screen after get info from API', async () => {
+    const { sut } = makeSut()
+    const card = await sut.findByTestId('cardview')
+    expect(card).toBeDefined()
   })
 })

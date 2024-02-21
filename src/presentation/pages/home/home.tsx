@@ -51,8 +51,8 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
     <ScrollView>
       {(errorSubmit != null) && <Text>{errorSubmit}</Text>}
       {data?.map(item => (
-        <View key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
-          <Text>Motorista: {item.accountName}</Text>
+        <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
+          <Text testID='driverField'>Motorista: {item.accountName}</Text>
           <Text>inicio jornada: {item.startJourneyModel}</Text>
           <Button title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
           <Text>inicio linha: {item.startLineModel}</Text>
