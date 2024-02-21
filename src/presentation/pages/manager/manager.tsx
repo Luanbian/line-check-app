@@ -28,10 +28,16 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
       {data?.map(item => (
         <View key={item.id}>
           <Text>Driver: {item.accountName}</Text>
+          <Text>Inicio jornada: {item.startJourneyModel}</Text>
+          <Text>Inicio jornada real: {item.startJourneyReal}</Text>
+          <Text>Inicio linha: {item.startLineModel}</Text>
+          <Text>Inicio linha real: {item.startLineReal}</Text>
           <Text>Service: {item.service}</Text>
-          <Text>inicio jornada: {item.startJourneyModel}</Text>
-          <Text>inicio jornada real: {item.startJourneyReal}</Text>
-          <Text>fim jornada real: {item.endLineReal}</Text>
+          <Text>Logistica: {item.logistic}</Text>
+          <Text>Fábrica: {item.manufacture}</Text>
+          <Text>Veiculo: {item.vehicle}</Text>
+          <Text>Fim jornada: {item.endLineModel}</Text>
+          <Text>Fim jornada real: {item.endLineReal}</Text>
         </View>
       ))}
     </ScrollView>
