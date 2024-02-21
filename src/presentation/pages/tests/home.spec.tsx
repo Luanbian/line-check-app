@@ -59,14 +59,14 @@ describe('home page', () => {
     expect(errorSubmit).toBe(null)
     const driverField = await sut.findByTestId('driverField')
     expect(driverField).toHaveTextContent('Motorista: any_valid_name')
-    const initJourneyField = await sut.findByTestId('initJourneyField')
-    expect(initJourneyField).toHaveTextContent('inicio jornada: fake_time 05:00:00')
+    const startJourneyField = await sut.findByTestId('startJourneyField')
+    expect(startJourneyField).toHaveTextContent('inicio jornada: fake_time 05:00:00')
     const startJourneyBtn = await sut.findByTestId('startJourneyBtn')
     expect(startJourneyBtn).toHaveTextContent('Check start journey')
-    const initLineField = await sut.findByTestId('initLineField')
-    expect(initLineField).toHaveTextContent('fake_time 05:30:00')
-    const initLineBtn = await sut.findByTestId('initLineBtn')
-    expect(initLineBtn).toHaveTextContent('Check start line')
+    const startLineField = await sut.findByTestId('startLineField')
+    expect(startLineField).toHaveTextContent('inicio linha: fake_time 05:30:00')
+    const startLineBtn = await sut.findByTestId('startLineBtn')
+    expect(startLineBtn).toHaveTextContent('Check start line')
     const serviceField = await sut.findByTestId('serviceField')
     expect(serviceField).toHaveTextContent('any_valid_service')
     const logisticField = await sut.findByTestId('logisticField')
@@ -75,10 +75,10 @@ describe('home page', () => {
     expect(manufactureField).toHaveTextContent('any_valid_manufacture')
     const vehicleField = await sut.findByTestId('vehicleField')
     expect(vehicleField).toHaveTextContent('any_valid_vehicle')
-    const endJourneyField = await sut.findByTestId('endJourneyField')
-    expect(endJourneyField).toHaveTextContent('fake_time 09:00:00')
-    const endJourneyBtn = await sut.findByTestId('endJourneyBtn')
-    expect(endJourneyBtn).toHaveTextContent('Check end journey')
+    const endLineField = await sut.findByTestId('endLineField')
+    expect(endLineField).toHaveTextContent('Fim linha: fake_time 09:00:00')
+    const endLineBtn = await sut.findByTestId('endLineBtn')
+    expect(endLineBtn).toHaveTextContent('Check end line')
   })
   test('should call updateLinecheck use case with correct start journey value', async () => {
     const { sut, updateLinecheckMock, localStorageMock } = makeSut()
@@ -99,9 +99,9 @@ describe('home page', () => {
     const { sut, updateLinecheckMock, localStorageMock } = makeSut()
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
-    const initLineBtn = await sut.findByTestId('initLineBtn')
+    const startLineBtn = await sut.findByTestId('startLineBtn')
     await waitFor(() => {
-      fireEvent.press(initLineBtn)
+      fireEvent.press(startLineBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
         accountId: 'AccountIdOrToken',
@@ -114,9 +114,9 @@ describe('home page', () => {
     const { sut, updateLinecheckMock, localStorageMock } = makeSut()
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
-    const endJourneyBtn = await sut.findByTestId('endJourneyBtn')
+    const endLineBtn = await sut.findByTestId('endLineBtn')
     await waitFor(() => {
-      fireEvent.press(endJourneyBtn)
+      fireEvent.press(endLineBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
         accountId: 'AccountIdOrToken',

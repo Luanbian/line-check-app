@@ -53,16 +53,16 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
       {data?.map(item => (
         <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driverField'>Motorista: {item.accountName}</Text>
-          <Text testID='initJourneyField'>inicio jornada: {item.startJourneyModel}</Text>
+          <Text testID='startJourneyField'>inicio jornada: {item.startJourneyModel}</Text>
           <Button testID='startJourneyBtn' title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
-          <Text testID='initLineField'>inicio linha: {item.startLineModel}</Text>
-          <Button testID='initLineBtn' title='Check start line' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTLINEREAL') }} />
+          <Text testID='startLineField'>inicio linha: {item.startLineModel}</Text>
+          <Button testID='startLineBtn' title='Check start line' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTLINEREAL') }} />
           <Text testID='serviceField'>Serviço: {item.service}</Text>
           <Text testID='logisticField'>Logistica: {item.logistic}</Text>
           <Text testID='manufactureField'>Fábrica: {item.manufacture}</Text>
           <Text testID='vehicleField'>Veículo: {item.vehicle}</Text>
-          <Text testID='endJourneyField'>Fim jornada: {item.endLineModel}</Text>
-          <Button testID='endJourneyBtn' title='Check end journey' onPress={async () => { await updateDriverLinecheck(item.id, 'ENDLINEREAL') }} />
+          <Text testID='endLineField'>Fim linha: {item.endLineModel}</Text>
+          <Button testID='endLineBtn' title='Check end line' onPress={async () => { await updateDriverLinecheck(item.id, 'ENDLINEREAL') }} />
         </View>
       ))}
     </ScrollView>
