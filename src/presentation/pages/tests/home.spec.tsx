@@ -80,7 +80,7 @@ describe('home page', () => {
     const endLineBtn = await sut.findByTestId('endLineBtn')
     expect(endLineBtn).toHaveTextContent('Check end line')
   })
-  test('should call updateLinecheck use case with correct start journey value', async () => {
+  test('should call updateLinecheck service with correct start journey value', async () => {
     const { sut, updateLinecheckMock, localStorageMock } = makeSut()
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
@@ -95,7 +95,7 @@ describe('home page', () => {
       })
     })
   })
-  test('should call updateLinecheck use case with correct start line value', async () => {
+  test('should call updateLinecheck service with correct start line value', async () => {
     const { sut, updateLinecheckMock, localStorageMock } = makeSut()
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
@@ -110,7 +110,7 @@ describe('home page', () => {
       })
     })
   })
-  test('should call updateLinecheck use case with correct end journey value', async () => {
+  test('should call updateLinecheck service with correct end journey value', async () => {
     const { sut, updateLinecheckMock, localStorageMock } = makeSut()
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
@@ -123,6 +123,18 @@ describe('home page', () => {
         marker: 'ENDLINEREAL',
         token: 'AccountIdOrToken'
       })
+    })
+  })
+  test('should return an error message if updateLinecheck service throws', async () => {
+    const { updateLinecheckMock, sut, localStorageMock } = makeSut()
+    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
+    const endLineBtn = await sut.findByTestId('endLineBtn')
+    const error = new Error('update Line check throws')
+    jest.spyOn(updateLinecheckMock, 'perform').mockRejectedValueOnce(error)
+    await waitFor(() => {
+      fireEvent.press(endLineBtn)
+      const errorSubmit = sut.queryByTestId('errorSubmit')
+      expect(errorSubmit).toHaveTextContent('update Line check throws')
     })
   })
 })
