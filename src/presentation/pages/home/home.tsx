@@ -53,9 +53,9 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
       {data?.map(item => (
         <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driverField'>Motorista: {item.accountName}</Text>
-          <Text testID='startJourneyField'>inicio jornada: {item.startJourneyModel}</Text>
+          <Text testID='startJourneyField'>Inicio jornada: {item.startJourneyModel}</Text>
           <Button testID='startJourneyBtn' title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
-          <Text testID='startLineField'>inicio linha: {item.startLineModel}</Text>
+          <Text testID='startLineField'>Inicio linha: {item.startLineModel}</Text>
           <Button testID='startLineBtn' title='Check start line' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTLINEREAL') }} />
           <Text testID='serviceField'>Serviço: {item.service}</Text>
           <Text testID='logisticField'>Logistica: {item.logistic}</Text>
