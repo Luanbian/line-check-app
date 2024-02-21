@@ -55,5 +55,7 @@ describe('home page', () => {
     const { sut } = makeSut()
     const card = await sut.findByTestId('cardview')
     expect(card).toBeDefined()
+    const driver = await sut.findByTestId('driverField')
+    expect(driver).toHaveTextContent('Motorista: any_valid_name')
   })
 })
