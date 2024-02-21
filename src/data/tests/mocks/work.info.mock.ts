@@ -1,7 +1,7 @@
-import { type workPropsComplete, type workProps } from '../../../domain/entities/work'
+import { type workProps } from '../../../domain/entities/work'
 import { type IWorkInfo } from '../../protocols/usecases/work.info.protocol'
 
-const generateCommonProps = (): workProps => ({
+export const generateCommonProps = (): workProps => ({
   id: 'fake_id',
   accountName: 'any_valid_name',
   startJourneyModel: 'fake_time 05:00:00',
@@ -16,18 +16,11 @@ const generateCommonProps = (): workProps => ({
 
 export const workPropsMock = (): workProps => generateCommonProps()
 
-export const workPropsCompleteMock = (): workPropsComplete => ({
-  ...generateCommonProps(),
-  startJourneyReal: 'any_valid_timestamp 2024-01-01 05:05:10',
-  startLineReal: 'any_valid_timestamp 2024-01-01 05:35:35',
-  endLineReal: 'any_valid_timestamp 2024-01-01 09:15:12'
-})
-
 export const makeWorkInfoMock = (): IWorkInfo => {
   class WorkInfoMock implements IWorkInfo {
     public async perform (token: string): Promise<workProps[][]> {
-      const workOne = generateCommonProps()
-      const workTwo = generateCommonProps()
+      const workOne = workPropsMock()
+      const workTwo = workPropsMock()
       return [
         [workOne],
         [workTwo]

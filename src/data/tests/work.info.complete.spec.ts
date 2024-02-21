@@ -2,10 +2,10 @@ import { faker } from '@faker-js/faker'
 import { WorkInfoComplete } from '../usecases/work.info.complete'
 import { HttpClientMock } from './mocks/http.post.client.mock'
 import { type IWorkInfoComplete } from '../protocols/usecases/work.info.protocol'
-import { workPropsCompleteMock } from './mocks/work.info.mock'
 import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
+import { workPropsCompleteMock } from './mocks/work.info.complete.mock'
 
 interface SutTypes {
   sut: IWorkInfoComplete
