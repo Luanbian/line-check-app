@@ -26,18 +26,18 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
   return (
     <ScrollView>
       {data?.map(item => (
-        <View key={item.id}>
-          <Text>Driver: {item.accountName}</Text>
-          <Text>Inicio jornada: {item.startJourneyModel}</Text>
-          <Text>Inicio jornada real: {item.startJourneyReal}</Text>
-          <Text>Inicio linha: {item.startLineModel}</Text>
-          <Text>Inicio linha real: {item.startLineReal}</Text>
-          <Text>Service: {item.service}</Text>
-          <Text>Logistica: {item.logistic}</Text>
-          <Text>Fábrica: {item.manufacture}</Text>
-          <Text>Veiculo: {item.vehicle}</Text>
-          <Text>Fim jornada: {item.endLineModel}</Text>
-          <Text>Fim jornada real: {item.endLineReal}</Text>
+        <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
+          <Text testID='driver'>Motorista: {item.accountName}</Text>
+          <Text testID='startJourneyModel'>Inicio jornada: {item.startJourneyModel}</Text>
+          <Text testID='startJourneyReal'>Inicio jornada real: {item.startJourneyReal}</Text>
+          <Text testID='startLineModel'>Inicio linha: {item.startLineModel}</Text>
+          <Text testID='startLineReal'>Inicio linha real: {item.startLineReal}</Text>
+          <Text testID='service'>Service: {item.service}</Text>
+          <Text testID='logistic'>Logistica: {item.logistic}</Text>
+          <Text testID='manufacture'>Fábrica: {item.manufacture}</Text>
+          <Text testID='vehicle'>Veiculo: {item.vehicle}</Text>
+          <Text testID='endLineModel'>Fim jornada: {item.endLineModel}</Text>
+          <Text testID='endLineReal'>Fim jornada real: {item.endLineReal}</Text>
         </View>
       ))}
     </ScrollView>
