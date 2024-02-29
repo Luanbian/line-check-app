@@ -1,8 +1,15 @@
 import React from 'react'
-import CreateLineForm from '../../../../presentation/pages/manager/create.line.form'
+import CreateLineForm, { type ParamList } from '../../../../presentation/pages/manager/create.line.form'
+import { type RouteProp } from '@react-navigation/native'
 
-export const makeCreateLineForm: React.FC = () => {
+interface Props {
+  route: RouteProp<ParamList, 'CREATELINE'>
+}
+
+export const makeCreateLineForm: React.FC<Props> = ({ route }) => {
   return (
-    <CreateLineForm/>
+    <CreateLineForm
+      route={route}
+    />
   )
 }

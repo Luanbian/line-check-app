@@ -5,14 +5,18 @@ import { type ILocalStorage } from '../../../infra/protocols/local.storage.proto
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
 import { type workPropsComplete } from '../../../domain/entities/work'
 
+interface NavigationType {
+  navigate: (name: string, params?: { data: workPropsComplete[] }) => void
+}
+
 interface Props {
   localStorage: ILocalStorage
   workInfoComplete: IWorkInfoComplete
 }
 
 export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
-  const navigation = useNavigation()
-  const [data, setData] = useState<workPropsComplete[]>()
+  const navigation = useNavigation<NavigationType>()
+  const [data, setData] = useState<workPropsComplete[]>([])
 
   useEffect(() => {
     const getWorkDriverCompleteInfo = async (): Promise<void> => {
@@ -25,9 +29,13 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
     void getWorkDriverCompleteInfo()
   }, [])
 
+  const handleCreateLine = (): void => {
+    navigation.navigate('CREATELINE', { data })
+  }
+
   return (
     <ScrollView>
-      <Button title='Criar linha' onPress={() => { navigation.navigate('CREATELINE' as never) }}/>
+      <Button title='Criar linha' onPress={handleCreateLine}/>
       {data?.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driver'>Motorista: {item.accountName}</Text>
