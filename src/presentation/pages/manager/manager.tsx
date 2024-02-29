@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Button } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
 import { type workPropsComplete } from '../../../domain/entities/work'
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
+  const navigation = useNavigation()
   const [data, setData] = useState<workPropsComplete[]>()
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
 
   return (
     <ScrollView>
+      <Button title='Criar linha' onPress={() => { navigation.navigate('CREATELINE' as never) }}/>
       {data?.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driver'>Motorista: {item.accountName}</Text>

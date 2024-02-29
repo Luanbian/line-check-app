@@ -14,6 +14,11 @@ interface SutTypes {
   workInfoCompleteMock: IWorkInfoComplete
 }
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({ navigate: jest.fn() })
+}))
+
 const makeSut = (): SutTypes => {
   const localStorageMock = makeLocalStorageMock()
   const workInfoCompleteMock = makeWorkInfoCompleteMock()
