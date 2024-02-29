@@ -21,6 +21,7 @@ export class WorkInfo implements IWorkInfo {
     })
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok: return [httpResponse.body as workProps[]]
+      case HttpStatusCode.noContent: return [[] as workProps[]]
       case HttpStatusCode.unathorized: throw new UnathorizedError()
       default: throw new UnexpectedError()
     }
