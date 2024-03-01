@@ -158,10 +158,12 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
         <DateTimePicker
           isVisible={isVisible}
           mode='time'
+          is24Hour
           date={new Date()}
           onConfirm={handleConfirmHours}
           onCancel={() => { setIsVisible(false) }}
         />
+        <Text>{horario}</Text>
         <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
