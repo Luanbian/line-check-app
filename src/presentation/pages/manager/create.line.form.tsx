@@ -45,6 +45,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
   })
   const [selectedDays, setSelectedDays] = useState([])
   const [open, setOpen] = useState(false)
+  const [errorSelectDay, setErrorSelectDay] = useState(false)
 
   useEffect(() => {
     register('account')
@@ -58,6 +59,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
   }, [register])
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (selectedDays.length === 0) setErrorSelectDay(true)
     console.log(data)
   }
 
@@ -133,6 +135,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
             label: 'Sábado', value: 'Saturday'
           }]}
         />
+        {(errorSelectDay) && <Text>Erro, selecione os dias</Text>}
         <Text>Horário de inicio da jornada</Text>
         <TextInput
           placeholder='inicio jornada'
