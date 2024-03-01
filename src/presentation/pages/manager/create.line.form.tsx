@@ -5,6 +5,8 @@ import { type EntityNames } from '../../../domain/entities/entity.names'
 import SelectPicker from 'react-native-picker-select'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
+import { object, string } from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 export interface ParamList extends ParamListBase {
   'CREATELINE': { data: EntityNames[] }
@@ -25,9 +27,22 @@ interface Inputs {
   endLine: string
 }
 
+const fieldsValidationSchema = object({
+  account: string().required('O motorista não está selecionado'),
+  logistic: string().required('O trajeto não está selecionado'),
+  service: string().required('O serviço não está selecionado'),
+  manufacture: string().required('A fábrica não está selecionado'),
+  vehicle: string().required('O veículo não está selecionado'),
+  startJourney: string().required('Horário inválido'),
+  startLine: string().required('Horário inválido'),
+  endLine: string().required('Horário inválido')
+})
+
 export default function CreateLineForm ({ route }: Props): React.JSX.Element {
   const { data } = route.params
-  const { register, setValue, handleSubmit } = useForm<Inputs>()
+  const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
+    resolver: yupResolver(fieldsValidationSchema)
+  })
   const [selectedDays, setSelectedDays] = useState([])
   const [open, setOpen] = useState(false)
 
@@ -56,6 +71,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
             label: item.name, value: item.name
           }))}
         />
+        {(errors.account != null) && <Text>{errors.account.message}</Text>}
         <Text>Selecione o trajeto</Text>
         <SelectPicker
           onValueChange={(value: string) => { setValue('logistic', value) }}
@@ -63,6 +79,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
             label: item.name, value: item.name
           }))}
         />
+        {(errors.logistic != null) && <Text>{errors.logistic.message}</Text>}
         <Text>Selecione o serviço</Text>
         <SelectPicker
           onValueChange={(value: string) => { setValue('service', value) }}
@@ -70,6 +87,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
             label: item.name, value: item.name
           }))}
         />
+        {(errors.service != null) && <Text>{errors.service.message}</Text>}
         <Text>Selecione a fábrica de destino</Text>
         <SelectPicker
           onValueChange={(value: string) => { setValue('manufacture', value) }}
@@ -77,6 +95,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
             label: item.name, value: item.name
           }))}
         />
+        {(errors.manufacture != null) && <Text>{errors.manufacture.message}</Text>}
         <Text>Selecione o veiculo</Text>
         <SelectPicker
           onValueChange={(value: string) => { setValue('vehicle', value) }}
@@ -84,6 +103,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
             label: item.name, value: item.name
           }))}
         />
+        {(errors.vehicle != null) && <Text>{errors.vehicle.message}</Text>}
         <Text>Selecione os dias da semana</Text>
         <DropDownPicker
           open={open}
@@ -118,16 +138,19 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
           placeholder='inicio jornada'
           onChangeText={(text) => { setValue('startJourney', text) }}
         />
+        {(errors.startJourney != null) && <Text>{errors.startJourney.message}</Text>}
         <Text>Horário de inicio da linha</Text>
         <TextInput
           placeholder='inicio linha'
           onChangeText={(text) => { setValue('startLine', text) }}
         />
+        {(errors.startLine != null) && <Text>{errors.startLine.message}</Text>}
         <Text>Horário de fim da jornada</Text>
         <TextInput
           placeholder='fim jornada'
           onChangeText={(text) => { setValue('endLine', text) }}
         />
+        {(errors.endLine != null) && <Text>{errors.endLine.message}</Text>}
         <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
