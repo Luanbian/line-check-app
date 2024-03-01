@@ -4,6 +4,7 @@ import { Button, FlatList, Text, TextInput } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import SelectPicker from 'react-native-picker-select'
 import DropDownPicker from 'react-native-dropdown-picker'
+import DateTimePicker from 'react-native-modal-datetime-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -24,7 +25,6 @@ interface Inputs {
   vehicle: string
   startJourney: string
   startLine: string
-  endLine: string
 }
 
 const fieldsValidationSchema = object({
@@ -34,8 +34,7 @@ const fieldsValidationSchema = object({
   manufacture: string().required('A fábrica não está selecionado'),
   vehicle: string().required('O veículo não está selecionado'),
   startJourney: string().required('Horário inválido'),
-  startLine: string().required('Horário inválido'),
-  endLine: string().required('Horário inválido')
+  startLine: string().required('Horário inválido')
 })
 
 export default function CreateLineForm ({ route }: Props): React.JSX.Element {
@@ -43,8 +42,10 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
+  const [horario, setHorario] = useState('')
   const [selectedDays, setSelectedDays] = useState([])
   const [open, setOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const [errorSelectDay, setErrorSelectDay] = useState(false)
 
   useEffect(() => {
@@ -55,12 +56,16 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
     register('vehicle')
     register('startJourney')
     register('startLine')
-    register('endLine')
   }, [register])
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (selectedDays.length === 0) setErrorSelectDay(true)
     console.log(data)
+    console.log(horario)
+  }
+  const handleConfirmHours = (date: Date): void => {
+    setHorario(date.toISOString().substring(11, 19))
+    setIsVisible(false)
   }
 
   return (
@@ -149,11 +154,14 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
         />
         {(errors.startLine != null) && <Text>{errors.startLine.message}</Text>}
         <Text>Horário de fim da jornada</Text>
-        <TextInput
-          placeholder='fim jornada'
-          onChangeText={(text) => { setValue('endLine', text) }}
+        <Button title='Selecionar horário' onPress={() => { setIsVisible(true) }}/>
+        <DateTimePicker
+          isVisible={isVisible}
+          mode='time'
+          date={new Date()}
+          onConfirm={handleConfirmHours}
+          onCancel={() => { setIsVisible(false) }}
         />
-        {(errors.endLine != null) && <Text>{errors.endLine.message}</Text>}
         <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
