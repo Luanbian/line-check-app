@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { type ParamListBase, type RouteProp } from '@react-navigation/native'
-import { Button, FlatList, Text, TextInput } from 'react-native'
+import { Button, FlatList, Text } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import SelectPicker from 'react-native-picker-select'
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -25,6 +25,7 @@ interface Inputs {
   vehicle: string
   startJourney: string
   startLine: string
+  endLine: string
 }
 
 const fieldsValidationSchema = object({
@@ -34,7 +35,8 @@ const fieldsValidationSchema = object({
   manufacture: string().required('A fábrica não está selecionado'),
   vehicle: string().required('O veículo não está selecionado'),
   startJourney: string().required('Horário inválido'),
-  startLine: string().required('Horário inválido')
+  startLine: string().required('Horário inválido'),
+  endLine: string().required('Horário inválido')
 })
 
 export default function CreateLineForm ({ route }: Props): React.JSX.Element {
@@ -42,10 +44,14 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
-  const [horario, setHorario] = useState('')
+  const [endLineHour, setEndLineHour] = useState('')
+  const [startLineHour, setStartLineHour] = useState('')
+  const [startJourneyHour, setStartJourneyHour] = useState('')
   const [selectedDays, setSelectedDays] = useState([])
   const [open, setOpen] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisibleEnd, setIsVisibleEnd] = useState(false)
+  const [isVisibleStartLine, setIsVisibleStartLine] = useState(false)
+  const [isVisibleStartJourney, setIsVisibleStartJourney] = useState(false)
   const [errorSelectDay, setErrorSelectDay] = useState(false)
 
   useEffect(() => {
@@ -56,16 +62,25 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
     register('vehicle')
     register('startJourney')
     register('startLine')
+    register('endLine')
   }, [register])
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (selectedDays.length === 0) setErrorSelectDay(true)
     console.log(data)
-    console.log(horario)
+    console.log(endLineHour)
   }
-  const handleConfirmHours = (date: Date): void => {
-    setHorario(date.toISOString().substring(11, 19))
-    setIsVisible(false)
+  const handleConfirmEndLineHours = (date: Date): void => {
+    setEndLineHour(date.toISOString().substring(11, 19))
+    setIsVisibleEnd(false)
+  }
+  const handleConfirmStartLineHours = (date: Date): void => {
+    setStartLineHour(date.toISOString().substring(11, 19))
+    setIsVisibleStartLine(false)
+  }
+  const handleConfirmStartJourneyHours = (date: Date): void => {
+    setStartJourneyHour(date.toISOString().substring(11, 19))
+    setIsVisibleStartJourney(false)
   }
 
   return (
@@ -142,28 +157,38 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
         />
         {(errorSelectDay) && <Text>Erro, selecione os dias</Text>}
         <Text>Horário de inicio da jornada</Text>
-        <TextInput
-          placeholder='inicio jornada'
-          onChangeText={(text) => { setValue('startJourney', text) }}
-        />
-        {(errors.startJourney != null) && <Text>{errors.startJourney.message}</Text>}
-        <Text>Horário de inicio da linha</Text>
-        <TextInput
-          placeholder='inicio linha'
-          onChangeText={(text) => { setValue('startLine', text) }}
-        />
-        {(errors.startLine != null) && <Text>{errors.startLine.message}</Text>}
-        <Text>Horário de fim da jornada</Text>
-        <Button title='Selecionar horário' onPress={() => { setIsVisible(true) }}/>
+        <Button title='Selecionar horário' onPress={() => { setIsVisibleStartJourney(true) }}/>
         <DateTimePicker
-          isVisible={isVisible}
+          isVisible={isVisibleStartJourney}
           mode='time'
           is24Hour
           date={new Date()}
-          onConfirm={handleConfirmHours}
-          onCancel={() => { setIsVisible(false) }}
+          onConfirm={handleConfirmStartJourneyHours}
+          onCancel={() => { setIsVisibleStartJourney(false) }}
         />
-        <Text>{horario}</Text>
+        <Text>{startJourneyHour}</Text>
+        <Text>Horário de inicio da linha</Text>
+        <Button title='Selecionar horário' onPress={() => { setIsVisibleStartLine(true) }}/>
+        <DateTimePicker
+          isVisible={isVisibleStartLine}
+          mode='time'
+          is24Hour
+          date={new Date()}
+          onConfirm={handleConfirmStartLineHours}
+          onCancel={() => { setIsVisibleStartLine(false) }}
+        />
+        <Text>{startLineHour}</Text>
+        <Text>Horário de fim da jornada</Text>
+        <Button title='Selecionar horário' onPress={() => { setIsVisibleEnd(true) }}/>
+        <DateTimePicker
+          isVisible={isVisibleEnd}
+          mode='time'
+          is24Hour
+          date={new Date()}
+          onConfirm={handleConfirmEndLineHours}
+          onCancel={() => { setIsVisibleEnd(false) }}
+        />
+        <Text>{endLineHour}</Text>
         <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
