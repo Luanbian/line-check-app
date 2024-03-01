@@ -1,5 +1,6 @@
-import { type workPropsComplete } from '../../../domain/entities/work'
+import { type workPropsManager, type workPropsComplete } from '../../../domain/entities/work'
 import { type IWorkInfoComplete } from '../../protocols/usecases/work.info.protocol'
+import { entityNamesMock } from './entity.names.mock'
 import { generateCommonProps } from './work.info.mock'
 
 export const workPropsCompleteMock = (): workPropsComplete => ({
@@ -11,13 +12,14 @@ export const workPropsCompleteMock = (): workPropsComplete => ({
 
 export const makeWorkInfoCompleteMock = (): IWorkInfoComplete => {
   class WorkInfoCompleteMock implements IWorkInfoComplete {
-    public async perform (token: string): Promise<workPropsComplete[][]> {
+    public async perform (token: string): Promise<workPropsManager> {
       const workOne = workPropsCompleteMock()
-      const workTwo = workPropsCompleteMock()
-      return [
-        [workOne],
-        [workTwo]
-      ]
+      const entityOne = entityNamesMock()
+      const entityTwo = entityNamesMock()
+      return {
+        works: [workOne],
+        entities: [entityOne, entityTwo]
+      }
     }
   }
   return new WorkInfoCompleteMock()

@@ -52,6 +52,8 @@ describe('manager page', () => {
   })
   test('first state of screen after get info from API', async () => {
     const { sut } = makeSut()
+    const createLineBtn = await sut.findByTestId('createLineBtn')
+    expect(createLineBtn).toHaveTextContent('Criar linha')
     const card = await sut.findByTestId('card')
     expect(card).toBeDefined()
     const driver = await sut.findByTestId('driver')

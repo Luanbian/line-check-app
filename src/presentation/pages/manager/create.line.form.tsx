@@ -1,10 +1,10 @@
 import React from 'react'
 import { type ParamListBase, type RouteProp } from '@react-navigation/native'
 import { Text, View } from 'react-native'
-import { type workPropsComplete } from '../../../domain/entities/work'
+import { type EntityNames } from '../../../domain/entities/entity.names'
 
 export interface ParamList extends ParamListBase {
-  'CREATELINE': { data: workPropsComplete[] }
+  'CREATELINE': { data: EntityNames[] }
 }
 
 interface Props {
@@ -18,7 +18,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
       <Text>
       {data.map(item => (
         <View key={item.id}>
-          <Text>{item.accountName}</Text>
+          <Text>{item.name}</Text>
         </View>
       ))}
       </Text>

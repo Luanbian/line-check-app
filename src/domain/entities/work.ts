@@ -1,3 +1,5 @@
+import { type EntityNames } from './entity.names'
+
 export interface workProps {
   id: string
   accountName: string
@@ -15,4 +17,9 @@ export interface workPropsComplete extends workProps {
   startJourneyReal: string
   startLineReal: string
   endLineReal: string
+}
+
+export interface workPropsManager {
+  works: workPropsComplete[]
+  entities: EntityNames[]
 }

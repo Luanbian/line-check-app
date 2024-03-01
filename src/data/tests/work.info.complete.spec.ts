@@ -43,7 +43,7 @@ describe('WorkInfoComplete', () => {
     }
     const response = await sut.perform('fake_token')
     expect(httpClientMock.response.statusCode).toBe(HttpStatusCode.ok)
-    expect(httpClientMock.response.body).toBe(response[0])
+    expect(httpClientMock.response.body).toBe(response)
   })
   test('should throw unauthorized error with status 401', async () => {
     const { sut, httpClientMock } = makeSut()

@@ -3,10 +3,11 @@ import { View, Text, ScrollView, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
-import { type workPropsComplete } from '../../../domain/entities/work'
+import { type workPropsManager } from '../../../domain/entities/work'
+import { type EntityNames } from '../../../domain/entities/entity.names'
 
 interface NavigationType {
-  navigate: (name: string, params?: { data: workPropsComplete[] }) => void
+  navigate: (name: string, params?: { data: EntityNames[] | undefined }) => void
 }
 
 interface Props {
@@ -16,27 +17,27 @@ interface Props {
 
 export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
   const navigation = useNavigation<NavigationType>()
-  const [data, setData] = useState<workPropsComplete[]>([])
+  const [data, setData] = useState<workPropsManager>()
 
   useEffect(() => {
     const getWorkDriverCompleteInfo = async (): Promise<void> => {
       const token = await localStorage.obtain('token')
       if (token != null) {
         const httpRes = await workInfoComplete.perform(token)
-        setData(httpRes[0])
+        setData(httpRes)
       }
     }
     void getWorkDriverCompleteInfo()
   }, [])
 
   const handleCreateLine = (): void => {
-    navigation.navigate('CREATELINE', { data })
+    navigation.navigate('CREATELINE', { data: data?.entities })
   }
 
   return (
     <ScrollView>
-      <Button title='Criar linha' onPress={handleCreateLine}/>
-      {data?.map(item => (
+      <Button testID='createLineBtn' title='Criar linha' onPress={handleCreateLine}/>
+      {data?.works.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driver'>Motorista: {item.accountName}</Text>
           <Text testID='startJourneyModel'>Inicio jornada: {item.startJourneyModel}</Text>
