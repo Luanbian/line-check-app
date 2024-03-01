@@ -34,9 +34,9 @@ const fieldsValidationSchema = object({
   service: string().required('O serviço não está selecionado'),
   manufacture: string().required('A fábrica não está selecionado'),
   vehicle: string().required('O veículo não está selecionado'),
-  startJourney: string().required('Horário inválido'),
-  startLine: string().required('Horário inválido'),
-  endLine: string().required('Horário inválido')
+  startJourney: string().nonNullable().required('O horário para começar a jornada não está selecionado'),
+  startLine: string().nonNullable().required('O horário para começar a linha não está selecionado'),
+  endLine: string().nonNullable().required('O horário para terminar a jornada não está selecionado')
 })
 
 export default function CreateLineForm ({ route }: Props): React.JSX.Element {
@@ -72,14 +72,17 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
   }
   const handleConfirmEndLineHours = (date: Date): void => {
     setEndLineHour(date.toISOString().substring(11, 19))
+    setValue('endLine', endLineHour)
     setIsVisibleEnd(false)
   }
   const handleConfirmStartLineHours = (date: Date): void => {
     setStartLineHour(date.toISOString().substring(11, 19))
+    setValue('startLine', startLineHour)
     setIsVisibleStartLine(false)
   }
   const handleConfirmStartJourneyHours = (date: Date): void => {
     setStartJourneyHour(date.toISOString().substring(11, 19))
+    setValue('startJourney', startJourneyHour)
     setIsVisibleStartJourney(false)
   }
 
@@ -167,6 +170,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
           onCancel={() => { setIsVisibleStartJourney(false) }}
         />
         <Text>{startJourneyHour}</Text>
+        {(errors.startJourney != null) && <Text>{errors.startJourney.message}</Text>}
         <Text>Horário de inicio da linha</Text>
         <Button title='Selecionar horário' onPress={() => { setIsVisibleStartLine(true) }}/>
         <DateTimePicker
@@ -178,6 +182,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
           onCancel={() => { setIsVisibleStartLine(false) }}
         />
         <Text>{startLineHour}</Text>
+        {(errors.startLine != null) && <Text>{errors.startLine.message}</Text>}
         <Text>Horário de fim da jornada</Text>
         <Button title='Selecionar horário' onPress={() => { setIsVisibleEnd(true) }}/>
         <DateTimePicker
@@ -189,6 +194,7 @@ export default function CreateLineForm ({ route }: Props): React.JSX.Element {
           onCancel={() => { setIsVisibleEnd(false) }}
         />
         <Text>{endLineHour}</Text>
+        {(errors.endLine != null) && <Text>{errors.endLine.message}</Text>}
         <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
