@@ -83,7 +83,9 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         daysOfTheWeeks: selectedDays
       }
       const token = await localStorage.obtain('token')
-      console.log(params, token)
+      if (token != null) {
+        await createLine.perform(params, token)
+      }
     } else {
       setErrorSelectDay(true)
     }
@@ -111,7 +113,7 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         <SelectPicker
           onValueChange={(value: string) => { setValue('account', value) }}
           items={data.filter(item => item.origin === 'accounts').map(item => ({
-            label: item.name, value: item.name
+            label: item.name, value: item.id
           }))}
         />
         {(errors.account != null) && <Text>{errors.account.message}</Text>}
@@ -119,7 +121,7 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         <SelectPicker
           onValueChange={(value: string) => { setValue('logistic', value) }}
           items={data.filter(item => item.origin === 'logistics').map(item => ({
-            label: item.name, value: item.name
+            label: item.name, value: item.id
           }))}
         />
         {(errors.logistic != null) && <Text>{errors.logistic.message}</Text>}
@@ -127,7 +129,7 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         <SelectPicker
           onValueChange={(value: string) => { setValue('service', value) }}
           items={data.filter(item => item.origin === 'services').map(item => ({
-            label: item.name, value: item.name
+            label: item.name, value: item.id
           }))}
         />
         {(errors.service != null) && <Text>{errors.service.message}</Text>}
@@ -135,7 +137,7 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         <SelectPicker
           onValueChange={(value: string) => { setValue('manufacture', value) }}
           items={data.filter(item => item.origin === 'manufactures').map(item => ({
-            label: item.name, value: item.name
+            label: item.name, value: item.id
           }))}
         />
         {(errors.manufacture != null) && <Text>{errors.manufacture.message}</Text>}
@@ -143,7 +145,7 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         <SelectPicker
           onValueChange={(value: string) => { setValue('vehicle', value) }}
           items={data.filter(item => item.origin === 'vehicles').map(item => ({
-            label: item.name, value: item.name
+            label: item.name, value: item.id
           }))}
         />
         {(errors.vehicle != null) && <Text>{errors.vehicle.message}</Text>}
@@ -163,19 +165,19 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
               : ''
           }
           items={[{
-            label: 'Domingo', value: 'Sunday'
+            label: 'Domingo', value: 'SUNDAY'
           }, {
-            label: 'Segunda', value: 'Monday'
+            label: 'Segunda', value: 'MONDAY'
           }, {
-            label: 'Terça', value: 'Tuesday'
+            label: 'Terça', value: 'TUESDAY'
           }, {
-            label: 'Quarta', value: 'Wednesday'
+            label: 'Quarta', value: 'WEDNESDAY'
           }, {
-            label: 'Quinta', value: 'Thursday'
+            label: 'Quinta', value: 'THURSDAY'
           }, {
-            label: 'Sexta', value: 'Friday'
+            label: 'Sexta', value: 'FRIDAY'
           }, {
-            label: 'Sábado', value: 'Saturday'
+            label: 'Sábado', value: 'SATURDAY'
           }]}
         />
         {(errorSelectDay) && <Text>Erro, selecione os dias</Text>}
