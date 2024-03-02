@@ -9,6 +9,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type CreateLineCheckParams, type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
+import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 
 export interface ParamList extends ParamListBase {
   'CREATELINE': { data: EntityNames[] }
@@ -17,6 +18,7 @@ export interface ParamList extends ParamListBase {
 interface Props {
   route: RouteProp<ParamList, 'CREATELINE'>
   createLine: ICreateLine
+  localStorage: ILocalStorage
 }
 
 interface Inputs {
@@ -41,7 +43,7 @@ const fieldsValidationSchema = object({
   endLine: string().nonNullable().required('O horário para terminar a jornada não está selecionado')
 })
 
-export default function CreateLineForm ({ route, createLine }: Props): React.JSX.Element {
+export default function CreateLineForm ({ route, createLine, localStorage }: Props): React.JSX.Element {
   const { data } = route.params
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
@@ -80,7 +82,8 @@ export default function CreateLineForm ({ route, createLine }: Props): React.JSX
         serviceId: data.service,
         daysOfTheWeeks: selectedDays
       }
-      console.log(params)
+      const token = await localStorage.obtain('token')
+      console.log(params, token)
     } else {
       setErrorSelectDay(true)
     }
