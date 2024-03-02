@@ -8,7 +8,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
+import { type CreateLineCheckParams, type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
 
 export interface ParamList extends ParamListBase {
   'CREATELINE': { data: EntityNames[] }
@@ -49,7 +49,7 @@ export default function CreateLineForm ({ route, createLine }: Props): React.JSX
   const [endLineHour, setEndLineHour] = useState('')
   const [startLineHour, setStartLineHour] = useState('')
   const [startJourneyHour, setStartJourneyHour] = useState('')
-  const [selectedDays, setSelectedDays] = useState([])
+  const [selectedDays, setSelectedDays] = useState<string[]>()
   const [open, setOpen] = useState(false)
   const [isVisibleEnd, setIsVisibleEnd] = useState(false)
   const [isVisibleStartLine, setIsVisibleStartLine] = useState(false)
@@ -68,9 +68,22 @@ export default function CreateLineForm ({ route, createLine }: Props): React.JSX
   }, [register])
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    if (selectedDays.length === 0) setErrorSelectDay(true)
-    console.log(data)
-    console.log(endLineHour)
+    if (selectedDays != null && selectedDays.length > 0) {
+      const params: CreateLineCheckParams = {
+        startJourneyModel: data.startJourney,
+        startLineModel: data.startLine,
+        endLineModel: data.endLine,
+        manufactureId: data.manufacture,
+        accountId: data.account,
+        logisticId: data.logistic,
+        vehicleId: data.vehicle,
+        serviceId: data.service,
+        daysOfTheWeeks: selectedDays
+      }
+      console.log(params)
+    } else {
+      setErrorSelectDay(true)
+    }
   }
   const handleConfirmEndLineHours = (date: Date): void => {
     setEndLineHour(date.toISOString().substring(11, 19))
@@ -135,14 +148,16 @@ export default function CreateLineForm ({ route, createLine }: Props): React.JSX
         <DropDownPicker
           open={open}
           setOpen={setOpen}
-          value={selectedDays}
+          value={selectedDays ?? []}
           setValue={setSelectedDays}
           multiple
           placeholder='Selecione'
           multipleText={
-            selectedDays.length > 1
-              ? `${selectedDays.length} dias selecionados`
-              : `${selectedDays.length} dia selecionado`
+            selectedDays != null
+              ? selectedDays.length > 1
+                ? `${selectedDays?.length} dias selecionados`
+                : `${selectedDays?.length} dia selecionado`
+              : ''
           }
           items={[{
             label: 'Domingo', value: 'Sunday'
