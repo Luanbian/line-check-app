@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Text, View, TextInput, Button } from 'react-native'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { object, string } from 'yup'
@@ -26,7 +26,7 @@ interface Inputs {
 
 export default function Login ({ authentication, decodeToken, localStorage }: Props): React.JSX.Element {
   const navigation = useNavigation()
-  const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
   const [errorSubmit, setErrorSubmit] = useState<string | null>(null)
@@ -46,11 +46,6 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
       }
     }
   }
-
-  useEffect(() => {
-    register('email')
-    register('password')
-  }, [register])
 
   return (
     <View>
