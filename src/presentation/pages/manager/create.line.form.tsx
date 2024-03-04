@@ -4,12 +4,12 @@ import { Button, FlatList, Text } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
-import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type CreateLineCheckParams, type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import SelectInput from '../../components/input/select.input'
 import TimePicker from '../../components/input/time.input'
+import { createLineValidationSchema } from '../../../validation/create.line.validation'
 
 export interface ParamList extends ParamListBase {
   'CREATELINE': { data: EntityNames[] }
@@ -32,21 +32,10 @@ export interface Inputs {
   endLine: string
 }
 
-const fieldsValidationSchema = object({
-  account: string().required('O motorista não está selecionado'),
-  logistic: string().required('O trajeto não está selecionado'),
-  service: string().required('O serviço não está selecionado'),
-  manufacture: string().required('A fábrica não está selecionado'),
-  vehicle: string().required('O veículo não está selecionado'),
-  startJourney: string().nonNullable().required('O horário para começar a jornada não está selecionado'),
-  startLine: string().nonNullable().required('O horário para começar a linha não está selecionado'),
-  endLine: string().nonNullable().required('O horário para terminar a jornada não está selecionado')
-})
-
 export default function CreateLineForm ({ route, createLine, localStorage }: Props): React.JSX.Element {
   const { data } = route.params
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
-    resolver: yupResolver(fieldsValidationSchema)
+    resolver: yupResolver(createLineValidationSchema)
   })
 
   const [selectedDays, setSelectedDays] = useState<string[]>()

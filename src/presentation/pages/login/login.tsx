@@ -1,17 +1,12 @@
 import React, { useState } from 'react'
 import { Text, View, TextInput, Button } from 'react-native'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
-
-const fieldsValidationSchema = object({
-  email: string().email('email inválido').required('O email é obrigatório'),
-  password: string().required('A senha é obrigatória')
-})
+import { loginValidationSchema } from '../../../validation/login.validation'
 
 interface Props {
   authentication: IAuthentication
@@ -27,7 +22,7 @@ interface Inputs {
 export default function Login ({ authentication, decodeToken, localStorage }: Props): React.JSX.Element {
   const navigation = useNavigation()
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
-    resolver: yupResolver(fieldsValidationSchema)
+    resolver: yupResolver(loginValidationSchema)
   })
   const [errorSubmit, setErrorSubmit] = useState<string | null>(null)
 
