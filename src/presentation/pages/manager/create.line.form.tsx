@@ -3,13 +3,13 @@ import { type ParamListBase, type RouteProp } from '@react-navigation/native'
 import { Button, FlatList, Text } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import DropDownPicker from 'react-native-dropdown-picker'
-import DateTimePicker from 'react-native-modal-datetime-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type CreateLineCheckParams, type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import SelectInput from '../../components/input/select.input'
+import TimePicker from '../../components/input/time.input'
 
 export interface ParamList extends ParamListBase {
   'CREATELINE': { data: EntityNames[] }
@@ -48,14 +48,9 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
-  const [endLineHour, setEndLineHour] = useState('')
-  const [startLineHour, setStartLineHour] = useState('')
-  const [startJourneyHour, setStartJourneyHour] = useState('')
+
   const [selectedDays, setSelectedDays] = useState<string[]>()
   const [open, setOpen] = useState(false)
-  const [isVisibleEnd, setIsVisibleEnd] = useState(false)
-  const [isVisibleStartLine, setIsVisibleStartLine] = useState(false)
-  const [isVisibleStartJourney, setIsVisibleStartJourney] = useState(false)
   const [errorSelectDay, setErrorSelectDay] = useState(false)
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -78,21 +73,6 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
     } else {
       setErrorSelectDay(true)
     }
-  }
-  const handleConfirmEndLineHours = (date: Date): void => {
-    setEndLineHour(date.toISOString().substring(11, 19))
-    setValue('endLine', endLineHour)
-    setIsVisibleEnd(false)
-  }
-  const handleConfirmStartLineHours = (date: Date): void => {
-    setStartLineHour(date.toISOString().substring(11, 19))
-    setValue('startLine', startLineHour)
-    setIsVisibleStartLine(false)
-  }
-  const handleConfirmStartJourneyHours = (date: Date): void => {
-    setStartJourneyHour(date.toISOString().substring(11, 19))
-    setValue('startJourney', startJourneyHour)
-    setIsVisibleStartJourney(false)
   }
 
   return (
@@ -141,41 +121,11 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         />
         {(errorSelectDay) && <Text>Erro, selecione os dias</Text>}
         <Text>Horário de inicio da jornada</Text>
-        <Button title='Selecionar horário' onPress={() => { setIsVisibleStartJourney(true) }}/>
-        <DateTimePicker
-          isVisible={isVisibleStartJourney}
-          mode='time'
-          is24Hour
-          date={new Date()}
-          onConfirm={handleConfirmStartJourneyHours}
-          onCancel={() => { setIsVisibleStartJourney(false) }}
-        />
-        <Text>{startJourneyHour}</Text>
-        {(errors.startJourney != null) && <Text>{errors.startJourney.message}</Text>}
+        <TimePicker input='startJourney' setValue={setValue} errors={errors}/>
         <Text>Horário de inicio da linha</Text>
-        <Button title='Selecionar horário' onPress={() => { setIsVisibleStartLine(true) }}/>
-        <DateTimePicker
-          isVisible={isVisibleStartLine}
-          mode='time'
-          is24Hour
-          date={new Date()}
-          onConfirm={handleConfirmStartLineHours}
-          onCancel={() => { setIsVisibleStartLine(false) }}
-        />
-        <Text>{startLineHour}</Text>
-        {(errors.startLine != null) && <Text>{errors.startLine.message}</Text>}
+        <TimePicker input='startLine' setValue={setValue} errors={errors}/>
         <Text>Horário de fim da jornada</Text>
-        <Button title='Selecionar horário' onPress={() => { setIsVisibleEnd(true) }}/>
-        <DateTimePicker
-          isVisible={isVisibleEnd}
-          mode='time'
-          is24Hour
-          date={new Date()}
-          onConfirm={handleConfirmEndLineHours}
-          onCancel={() => { setIsVisibleEnd(false) }}
-        />
-        <Text>{endLineHour}</Text>
-        {(errors.endLine != null) && <Text>{errors.endLine.message}</Text>}
+        <TimePicker input='endLine' setValue={setValue} errors={errors}/>
         <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
