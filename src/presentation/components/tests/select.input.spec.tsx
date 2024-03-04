@@ -17,7 +17,7 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
-  const dataMock = [entityNamesMock()]
+  const dataMock = [entityNamesMock(), entityNamesMock()]
   const originMock = 'accounts'
   const setValueMock = jest.fn()
   const errorsMock = {
@@ -45,7 +45,13 @@ describe('SelectInput Component', () => {
     const errorMessage = sut.queryByTestId('error-message')
     expect(errorMessage).toBeNull()
   })
-  test('show error message if value is null', () => {
+  test('should render the SelectPicker component with items', async () => {
+    const { sut } = makeSut()
+    const select = await sut.findByTestId('select')
+    expect(select.props.children[0]).toBeDefined()
+    expect(select.props.children[0].props.items).toHaveLength(2)
+  })
+  test('show error message if value is null', async () => {
     const { sut, errorsMock, dataMock, inputMock, originMock, setValueMock } = makeSut()
     errorsMock.account = {
       type: 'required',
