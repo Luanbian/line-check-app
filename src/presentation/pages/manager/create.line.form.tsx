@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { type ParamListBase, type RouteProp } from '@react-navigation/native'
 import { Button, FlatList, Text } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
@@ -45,7 +45,7 @@ const fieldsValidationSchema = object({
 
 export default function CreateLineForm ({ route, createLine, localStorage }: Props): React.JSX.Element {
   const { data } = route.params
-  const { register, setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(fieldsValidationSchema)
   })
   const [endLineHour, setEndLineHour] = useState('')
@@ -57,17 +57,6 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
   const [isVisibleStartLine, setIsVisibleStartLine] = useState(false)
   const [isVisibleStartJourney, setIsVisibleStartJourney] = useState(false)
   const [errorSelectDay, setErrorSelectDay] = useState(false)
-
-  useEffect(() => {
-    register('account')
-    register('logistic')
-    register('service')
-    register('manufacture')
-    register('vehicle')
-    register('startJourney')
-    register('startLine')
-    register('endLine')
-  }, [register])
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (selectedDays != null && selectedDays.length > 0) {
