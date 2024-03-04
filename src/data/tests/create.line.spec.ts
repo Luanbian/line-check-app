@@ -35,29 +35,26 @@ describe('CreateLine', () => {
   })
   test('should return unauthorized error with status 401', async () => {
     const { sut, httpClientMock } = makeSut()
-    const token = faker.internet.ip()
     httpClientMock.response = {
       statusCode: HttpStatusCode.unathorized
     }
-    const promise = sut.perform(paramsMock, token)
+    const promise = sut.perform(paramsMock, 'fake_token')
     await expect(promise).rejects.toThrow(new UnathorizedError())
   })
   test('should throw BadRequest error if httpClient return bad request', async () => {
     const { sut, httpClientMock } = makeSut()
-    const token = faker.internet.ip()
     httpClientMock.response = {
       statusCode: HttpStatusCode.badRequest
     }
-    const promise = sut.perform(paramsMock, token)
+    const promise = sut.perform(paramsMock, 'fake_token')
     await expect(promise).rejects.toThrow(new BadRequest())
   })
   test('should throw unexpected error if httpClient return no Contet', async () => {
     const { sut, httpClientMock } = makeSut()
-    const token = faker.internet.ip()
     httpClientMock.response = {
       statusCode: HttpStatusCode.noContent
     }
-    const promise = sut.perform(paramsMock, token)
+    const promise = sut.perform(paramsMock, 'fake_token')
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })

@@ -47,6 +47,14 @@ describe('WorkInfo', () => {
     expect(httpClientMock.response.statusCode).toBe(HttpStatusCode.ok)
     expect(httpClientMock.response.body).toBe(response[0])
   })
+  test('should return noContent error with status 204', async () => {
+    const { sut, httpClientMock } = makeSut()
+    httpClientMock.response = {
+      statusCode: HttpStatusCode.noContent
+    }
+    const response = await sut.perform('fake_token')
+    expect(response).toEqual([[]])
+  })
   test('should throw unauthorized error with status 401', async () => {
     const { sut, httpClientMock } = makeSut()
     httpClientMock.response = {
