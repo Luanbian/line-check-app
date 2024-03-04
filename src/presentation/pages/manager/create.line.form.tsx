@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { type ParamListBase, type RouteProp } from '@react-navigation/native'
 import { Button, FlatList, Text } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
-import SelectPicker from 'react-native-picker-select'
 import DropDownPicker from 'react-native-dropdown-picker'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -10,6 +9,7 @@ import { object, string } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type CreateLineCheckParams, type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
+import SelectInput from '../../components/input/select.input'
 
 export interface ParamList extends ParamListBase {
   'CREATELINE': { data: EntityNames[] }
@@ -21,7 +21,7 @@ interface Props {
   localStorage: ILocalStorage
 }
 
-interface Inputs {
+export interface Inputs {
   account: string
   logistic: string
   service: string
@@ -110,45 +110,15 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
     <FlatList ListHeaderComponent={
       <>
         <Text>Selecione o motorista</Text>
-        <SelectPicker
-          onValueChange={(value: string) => { setValue('account', value) }}
-          items={data.filter(item => item.origin === 'accounts').map(item => ({
-            label: item.name, value: item.id
-          }))}
-        />
-        {(errors.account != null) && <Text>{errors.account.message}</Text>}
+        <SelectInput data={data} origin='accounts' setValue={setValue} errors={errors} input='account'/>
         <Text>Selecione o trajeto</Text>
-        <SelectPicker
-          onValueChange={(value: string) => { setValue('logistic', value) }}
-          items={data.filter(item => item.origin === 'logistics').map(item => ({
-            label: item.name, value: item.id
-          }))}
-        />
-        {(errors.logistic != null) && <Text>{errors.logistic.message}</Text>}
+        <SelectInput data={data} origin='logistics' setValue={setValue} errors={errors} input='logistic'/>
         <Text>Selecione o serviço</Text>
-        <SelectPicker
-          onValueChange={(value: string) => { setValue('service', value) }}
-          items={data.filter(item => item.origin === 'services').map(item => ({
-            label: item.name, value: item.id
-          }))}
-        />
-        {(errors.service != null) && <Text>{errors.service.message}</Text>}
+        <SelectInput data={data} origin='services' setValue={setValue} errors={errors} input='service'/>
         <Text>Selecione a fábrica de destino</Text>
-        <SelectPicker
-          onValueChange={(value: string) => { setValue('manufacture', value) }}
-          items={data.filter(item => item.origin === 'manufactures').map(item => ({
-            label: item.name, value: item.id
-          }))}
-        />
-        {(errors.manufacture != null) && <Text>{errors.manufacture.message}</Text>}
+        <SelectInput data={data} origin='manufactures' setValue={setValue} errors={errors} input='manufacture'/>
         <Text>Selecione o veiculo</Text>
-        <SelectPicker
-          onValueChange={(value: string) => { setValue('vehicle', value) }}
-          items={data.filter(item => item.origin === 'vehicles').map(item => ({
-            label: item.name, value: item.id
-          }))}
-        />
-        {(errors.vehicle != null) && <Text>{errors.vehicle.message}</Text>}
+        <SelectInput data={data} origin='vehicles' setValue={setValue} errors={errors} input='vehicle'/>
         <Text>Selecione os dias da semana</Text>
         <DropDownPicker
           open={open}
