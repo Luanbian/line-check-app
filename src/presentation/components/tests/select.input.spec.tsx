@@ -1,5 +1,6 @@
 import React from 'react'
 import { type RenderResult, render } from '@testing-library/react-native'
+import '@testing-library/jest-native/extend-expect'
 import SelectInput from '../input/select.input'
 import { entityNamesMock } from '../../../data/tests/mocks/entity.names.mock'
 import { type EntityNames } from '../../../domain/entities/entity.names'
@@ -43,5 +44,24 @@ describe('SelectInput Component', () => {
     expect(selectCard).toBeDefined()
     const errorMessage = sut.queryByTestId('error-message')
     expect(errorMessage).toBeNull()
+  })
+  test('show error message if value is null', () => {
+    const { sut, errorsMock, dataMock, inputMock, originMock, setValueMock } = makeSut()
+    errorsMock.account = {
+      type: 'required',
+      message: 'error message'
+    }
+    sut.rerender(
+      <SelectInput
+        data={dataMock}
+        errors={errorsMock}
+        input={inputMock}
+        origin={originMock}
+        setValue={setValueMock}
+      />
+    )
+    const errorMessage = sut.queryByTestId('error-message')
+    expect(errorMessage).not.toBeNull()
+    expect(errorMessage).toHaveTextContent('error message')
   })
 })
