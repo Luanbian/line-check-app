@@ -51,6 +51,13 @@ describe('SelectInput Component', () => {
     expect(select.props.children[0]).toBeDefined()
     expect(select.props.children[0].props.items).toHaveLength(2)
   })
+  test('should setValue correctly', async () => {
+    const { sut, setValueMock, inputMock } = makeSut()
+    const select = await sut.findByTestId('select')
+    const firstOption = select.props.children[0].props.items[0].value
+    select.props.children[0].props.onValueChange(firstOption)
+    expect(setValueMock).toHaveBeenCalledWith(inputMock, firstOption)
+  })
   test('show error message if value is null', async () => {
     const { sut, errorsMock, dataMock, inputMock, originMock, setValueMock } = makeSut()
     errorsMock.account = {
