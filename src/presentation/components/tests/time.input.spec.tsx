@@ -1,4 +1,4 @@
-import { type RenderResult, render } from '@testing-library/react-native'
+import { type RenderResult, render, fireEvent, waitFor, act } from '@testing-library/react-native'
 import '@testing-library/jest-native/extend-expect'
 import React from 'react'
 import TimePicker from '../input/time.input'
@@ -43,5 +43,46 @@ describe('TimePicker Component', () => {
     expect(hourTxt).toHaveTextContent('')
     const errorMessage = await sut.queryByTestId('error-message')
     expect(errorMessage).toBeNull()
+  })
+  test('should render the DatePicker when button are pressed', async () => {
+    const { sut } = makeSut()
+    const selectHourBtn = await sut.getByTestId('selectHourBtn')
+    await waitFor(async () => {
+      fireEvent.press(selectHourBtn)
+      const datepicker = await sut.queryByTestId('datepicker')
+      expect(datepicker).toBeDefined()
+    })
+  })
+  test('should confirm selected hour and show in the screen', async () => {
+    const { sut, setValueMock, inputMock } = makeSut()
+    const selectHourBtn = await sut.getByTestId('selectHourBtn')
+    act(() => {
+      fireEvent.press(selectHourBtn)
+    })
+    const datepicker = await sut.findByTestId('picker')
+    const selectedHour = new Date('2024-03-05T10:00:00')
+    await waitFor(async () => {
+      datepicker.props.children[1].props.onConfirm(selectedHour)
+      expect(setValueMock).toHaveBeenCalledWith(inputMock, '13:00:00', { shouldValidate: true })
+      const hourTxt = await sut.findByTestId('hourTxt')
+      expect(hourTxt).toHaveTextContent('13:00:00')
+    })
+  })
+  test('show error message if value is null', async () => {
+    const { sut, errorsMock, inputMock, setValueMock } = makeSut()
+    errorsMock.startJourney = {
+      type: 'required',
+      message: 'error message'
+    }
+    sut.rerender(
+      <TimePicker
+        errors={errorsMock}
+        input={inputMock}
+        setValue={setValueMock}
+      />
+    )
+    const errorMessage = sut.queryByTestId('error-message')
+    expect(errorMessage).not.toBeNull()
+    expect(errorMessage).toHaveTextContent('error message')
   })
 })

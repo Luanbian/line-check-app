@@ -14,9 +14,10 @@ export default function TimePicker ({ input, errors, setValue }: Props): React.J
   const [isVisible, setIsVisible] = useState(false)
   const [inputHour, setInputHour] = useState('')
 
-  const handleConfirmStartLineHours = (date: Date): void => {
-    setInputHour(date.toISOString().substring(11, 19))
-    setValue(input, inputHour)
+  const handleConfirmHours = (date: Date): void => {
+    const newInputHour = date.toISOString().substring(11, 19)
+    setInputHour(newInputHour)
+    setValue(input, inputHour, { shouldValidate: true })
     setIsVisible(false)
   }
 
@@ -29,7 +30,7 @@ export default function TimePicker ({ input, errors, setValue }: Props): React.J
           mode='time'
           is24Hour
           date={new Date()}
-          onConfirm={handleConfirmStartLineHours}
+          onConfirm={handleConfirmHours}
           onCancel={() => { setIsVisible(false) }}
         />
         <Text testID='hourTxt'>{inputHour}</Text>
