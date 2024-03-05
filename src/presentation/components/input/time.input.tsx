@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { type UseFormSetValue, type FieldErrors } from 'react-hook-form'
-import { Button, Text } from 'react-native'
+import { Button, Text, View } from 'react-native'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { type Inputs } from '../../pages/manager/create.line.form'
 
@@ -21,9 +21,10 @@ export default function TimePicker ({ input, errors, setValue }: Props): React.J
   }
 
   return (
-    <>
-     <Button title='Selecionar horário' onPress={() => { setIsVisible(true) }}/>
+    <View testID='picker'>
+     <Button testID='selectHourBtn' title='Selecionar horário' onPress={() => { setIsVisible(true) }}/>
         <DateTimePicker
+          testID='datepicker'
           isVisible={isVisible}
           mode='time'
           is24Hour
@@ -31,8 +32,8 @@ export default function TimePicker ({ input, errors, setValue }: Props): React.J
           onConfirm={handleConfirmStartLineHours}
           onCancel={() => { setIsVisible(false) }}
         />
-        <Text>{inputHour}</Text>
-        {(errors[input] != null) && <Text>{errors[input]?.message}</Text>}
-    </>
+        <Text testID='hourTxt'>{inputHour}</Text>
+        {(errors[input] != null) && <Text testID='error-message'>{errors[input]?.message}</Text>}
+    </View>
   )
 }
