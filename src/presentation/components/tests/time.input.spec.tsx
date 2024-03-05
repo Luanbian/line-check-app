@@ -68,6 +68,19 @@ describe('TimePicker Component', () => {
       expect(hourTxt).toHaveTextContent('13:00:00')
     })
   })
+  test('should hide components when confirm selected hour', async () => {
+    const { sut } = makeSut()
+    const selectHourBtn = await sut.getByTestId('selectHourBtn')
+    act(() => {
+      fireEvent.press(selectHourBtn)
+    })
+    const datepicker = await sut.findByTestId('picker')
+    await waitFor(async () => {
+      datepicker.props.children[1].props.onCancel()
+      const picker = await sut.queryByTestId('datepicker')
+      expect(picker).toBeNull()
+    })
+  })
   test('show error message if value is null', async () => {
     const { sut, errorsMock, inputMock, setValueMock } = makeSut()
     errorsMock.startJourney = {
