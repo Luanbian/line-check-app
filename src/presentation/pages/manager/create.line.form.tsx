@@ -65,20 +65,21 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
   }
 
   return (
-    <FlatList ListHeaderComponent={
+    <FlatList testID='flatList' ListHeaderComponent={
       <>
-        <Text>Selecione o motorista</Text>
+        <Text testID='sltDriver'>Selecione o motorista</Text>
         <SelectInput data={data} origin='accounts' setValue={setValue} errors={errors} input='account'/>
-        <Text>Selecione o trajeto</Text>
+        <Text testID='sltRoad'>Selecione o trajeto</Text>
         <SelectInput data={data} origin='logistics' setValue={setValue} errors={errors} input='logistic'/>
-        <Text>Selecione o serviço</Text>
+        <Text testID='sltService'>Selecione o serviço</Text>
         <SelectInput data={data} origin='services' setValue={setValue} errors={errors} input='service'/>
-        <Text>Selecione a fábrica de destino</Text>
+        <Text testID='sltManufacture'>Selecione a fábrica de destino</Text>
         <SelectInput data={data} origin='manufactures' setValue={setValue} errors={errors} input='manufacture'/>
-        <Text>Selecione o veiculo</Text>
+        <Text testID='sltVehicle'>Selecione o veiculo</Text>
         <SelectInput data={data} origin='vehicles' setValue={setValue} errors={errors} input='vehicle'/>
-        <Text>Selecione os dias da semana</Text>
+        <Text testID='sltDayOfWeek'>Selecione os dias da semana</Text>
         <DropDownPicker
+          testID='dropDownPicker'
           open={open}
           setOpen={setOpen}
           value={selectedDays ?? []}
@@ -108,14 +109,14 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
             label: 'Sábado', value: 'SATURDAY'
           }]}
         />
-        {(errorSelectDay) && <Text>Erro, selecione os dias</Text>}
-        <Text>Horário de inicio da jornada</Text>
+        {(errorSelectDay) && <Text testID='error-message'>Erro, selecione os dias</Text>}
+        <Text testID='putInitJourney'>Horário de inicio da jornada</Text>
         <TimePicker input='startJourney' setValue={setValue} errors={errors}/>
-        <Text>Horário de inicio da linha</Text>
+        <Text testID='putInitLine'>Horário de inicio da linha</Text>
         <TimePicker input='startLine' setValue={setValue} errors={errors}/>
-        <Text>Horário de fim da jornada</Text>
+        <Text testID='putEndLine'>Horário de fim da jornada</Text>
         <TimePicker input='endLine' setValue={setValue} errors={errors}/>
-        <Button title='Criar' onPress={handleSubmit(onSubmit)}/>
+        <Button testID='btnCreate' title='Criar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
       keyExtractor={() => Math.random().toString()}
