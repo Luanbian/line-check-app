@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { type ParamListBase, type RouteProp } from '@react-navigation/native'
-import { Button, FlatList, Text } from 'react-native'
+import { Button, FlatList, Text, View } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -78,33 +78,34 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
         <Text testID='sltVehicle'>Selecione o veiculo</Text>
         <SelectInput data={data} origin='vehicles' setValue={setValue} errors={errors} input='vehicle'/>
         <Text testID='sltDayOfWeek'>Selecione os dias da semana</Text>
-        <DropDownPicker
-          testID='dropDownPicker'
-          open={open}
-          setOpen={setOpen}
-          value={selectedDays ?? []}
-          setValue={setSelectedDays}
-          multiple
-          placeholder='Selecione'
-          maxHeight={300}
-          multipleText={
-            selectedDays != null
-              ? selectedDays.length > 1
-                ? `${selectedDays?.length} dias selecionados`
-                : `${selectedDays?.length} dia selecionado`
-              : ''
-          }
-          items={[
-            { label: 'Domingo', value: 'SUNDAY' },
-            { label: 'Segunda', value: 'MONDAY' },
-            { label: 'Terça', value: 'TUESDAY' },
-            { label: 'Quarta', value: 'WEDNESDAY' },
-            { label: 'Quinta', value: 'THURSDAY' },
-            { label: 'Sexta', value: 'FRIDAY' },
-            { label: 'Sábado', value: 'SATURDAY' }
-          ]}
-        />
-        {(errorSelectDay) && <Text testID='error-message'>Erro, selecione os dias</Text>}
+        <View testID='dropDownPicker'>
+          <DropDownPicker
+            open={open}
+            setOpen={setOpen}
+            value={selectedDays ?? []}
+            setValue={setSelectedDays}
+            multiple
+            placeholder='Selecione'
+            maxHeight={300}
+            multipleText={
+              selectedDays != null
+                ? selectedDays.length > 1
+                  ? `${selectedDays?.length} dias selecionados`
+                  : `${selectedDays?.length} dia selecionado`
+                : ''
+            }
+            items={[
+              { label: 'Domingo', value: 'SUNDAY' },
+              { label: 'Segunda', value: 'MONDAY' },
+              { label: 'Terça', value: 'TUESDAY' },
+              { label: 'Quarta', value: 'WEDNESDAY' },
+              { label: 'Quinta', value: 'THURSDAY' },
+              { label: 'Sexta', value: 'FRIDAY' },
+              { label: 'Sábado', value: 'SATURDAY' }
+            ]}
+          />
+          {(errorSelectDay) && <Text testID='error-message'>Erro, selecione os dias</Text>}
+        </View>
         <Text testID='putInitJourney'>Horário de inicio da jornada</Text>
         <TimePicker input='startJourney' setValue={setValue} errors={errors}/>
         <Text testID='putInitLine'>Horário de inicio da linha</Text>

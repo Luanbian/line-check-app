@@ -73,4 +73,15 @@ describe('CreateLineForm', () => {
     const btnCreate = sut.getByTestId('btnCreate')
     expect(btnCreate).toHaveTextContent('Criar')
   })
+  test('should select day(s) of the week', async () => {
+    const { sut } = makeSut()
+    const selectedDays = ['MONDAY', 'SUNDAY']
+    const dropDownPicker = await sut.getByTestId('dropDownPicker')
+    const openPicker = dropDownPicker.props.children[0].props.open = true
+    expect(openPicker).toBeTruthy()
+    const selectDays = dropDownPicker.props.children[0].props.value = selectedDays
+    expect(selectDays).toBe(selectedDays)
+    const multipleText = dropDownPicker.props.children[0].props.multipleText = `${selectDays.length} dias selecionados`
+    expect(multipleText).toBe(`${selectDays.length} dias selecionados`)
+  })
 })
