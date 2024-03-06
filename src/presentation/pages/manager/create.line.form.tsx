@@ -86,6 +86,7 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
           setValue={setSelectedDays}
           multiple
           placeholder='Selecione'
+          maxHeight={300}
           multipleText={
             selectedDays != null
               ? selectedDays.length > 1
@@ -93,21 +94,15 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
                 : `${selectedDays?.length} dia selecionado`
               : ''
           }
-          items={[{
-            label: 'Domingo', value: 'SUNDAY'
-          }, {
-            label: 'Segunda', value: 'MONDAY'
-          }, {
-            label: 'Terça', value: 'TUESDAY'
-          }, {
-            label: 'Quarta', value: 'WEDNESDAY'
-          }, {
-            label: 'Quinta', value: 'THURSDAY'
-          }, {
-            label: 'Sexta', value: 'FRIDAY'
-          }, {
-            label: 'Sábado', value: 'SATURDAY'
-          }]}
+          items={[
+            { label: 'Domingo', value: 'SUNDAY' },
+            { label: 'Segunda', value: 'MONDAY' },
+            { label: 'Terça', value: 'TUESDAY' },
+            { label: 'Quarta', value: 'WEDNESDAY' },
+            { label: 'Quinta', value: 'THURSDAY' },
+            { label: 'Sexta', value: 'FRIDAY' },
+            { label: 'Sábado', value: 'SATURDAY' }
+          ]}
         />
         {(errorSelectDay) && <Text testID='error-message'>Erro, selecione os dias</Text>}
         <Text testID='putInitJourney'>Horário de inicio da jornada</Text>
