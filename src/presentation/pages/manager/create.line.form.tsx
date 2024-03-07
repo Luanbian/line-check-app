@@ -10,15 +10,17 @@ import { type ILocalStorage } from '../../../infra/protocols/local.storage.proto
 import SelectInput from '../../components/input/select.input'
 import TimePicker from '../../components/input/time.input'
 import { createLineValidationSchema } from '../../../validation/create.line.validation'
+import { type IUpdateLine } from '../../../data/protocols/usecases/update.line.protocol'
 
 export interface ParamList extends ParamListBase {
-  'CREATELINE': { data: EntityNames[] }
+  'CREATELINE': { data: EntityNames[], id: string | undefined }
 }
 
 interface Props {
   route: RouteProp<ParamList, 'CREATELINE'>
   createLine: ICreateLine
   localStorage: ILocalStorage
+  updateLine: IUpdateLine
 }
 
 export interface Inputs {
@@ -32,8 +34,8 @@ export interface Inputs {
   endLine: string
 }
 
-export default function CreateLineForm ({ route, createLine, localStorage }: Props): React.JSX.Element {
-  const { data } = route.params
+export default function CreateLineForm ({ route, createLine, localStorage, updateLine }: Props): React.JSX.Element {
+  const { data, id } = route.params
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(createLineValidationSchema)
   })
@@ -57,7 +59,11 @@ export default function CreateLineForm ({ route, createLine, localStorage }: Pro
       }
       const token = await localStorage.obtain('token')
       if (token != null) {
-        await createLine.perform(params, token)
+        if (id === undefined) {
+          await createLine.perform(params, token)
+        } else {
+          await updateLine.perform(params, id, token)
+        }
       }
     } else {
       setErrorSelectDay(true)
