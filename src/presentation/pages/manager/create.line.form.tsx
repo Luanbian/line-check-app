@@ -45,29 +45,25 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
   const [errorSelectDay, setErrorSelectDay] = useState(false)
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    if (selectedDays != null && selectedDays.length > 0) {
-      const params: CreateLineCheckParams = {
-        startJourneyModel: data.startJourney,
-        startLineModel: data.startLine,
-        endLineModel: data.endLine,
-        manufactureId: data.manufacture,
-        accountId: data.account,
-        logisticId: data.logistic,
-        vehicleId: data.vehicle,
-        serviceId: data.service,
-        daysOfTheWeeks: selectedDays
-      }
-      const token = await localStorage.obtain('token')
-      if (token != null) {
-        if (id === undefined) {
-          await createLine.perform(params, token)
-        } else {
-          await updateLine.perform(params, id, token)
-        }
-      }
-    } else {
+    if (selectedDays == null || selectedDays.length === 0) {
       setErrorSelectDay(true)
+      return
     }
+    const token = await localStorage.obtain('token')
+    if (token == null) return
+    const params: CreateLineCheckParams = {
+      startJourneyModel: data.startJourney,
+      startLineModel: data.startLine,
+      endLineModel: data.endLine,
+      manufactureId: data.manufacture,
+      accountId: data.account,
+      logisticId: data.logistic,
+      vehicleId: data.vehicle,
+      serviceId: data.service,
+      daysOfTheWeeks: selectedDays
+    }
+    if (id !== undefined) await updateLine.perform(params, id, token)
+    else await createLine.perform(params, token)
   }
 
   return (
@@ -118,7 +114,7 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
         <TimePicker input='startLine' setValue={setValue} errors={errors}/>
         <Text testID='putEndLine'>Horário de fim da jornada</Text>
         <TimePicker input='endLine' setValue={setValue} errors={errors}/>
-        <Button testID='btnCreate' title='Criar' onPress={handleSubmit(onSubmit)}/>
+        <Button testID='btnCreate' title='Confirmar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
       keyExtractor={() => Math.random().toString()}

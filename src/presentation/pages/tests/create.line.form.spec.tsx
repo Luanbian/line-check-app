@@ -8,6 +8,7 @@ import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.m
 import { makeCreateLineMock } from '../../../data/tests/mocks/create.line.mock'
 import { type ICreateLine } from '../../../data/protocols/usecases/create.line.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
+import { makeUpdateLineMock } from '../../../data/tests/mocks/update.line.mock'
 
 interface SutTypes {
   sut: RenderResult
@@ -27,16 +28,19 @@ const makeSut = (): SutTypes => {
         entityNamesMock('manufactures'),
         entityNamesMock('services'),
         entityNamesMock('vehicles')
-      ]
+      ],
+      id: undefined
     }
   }
   const createLineMock = makeCreateLineMock()
   const localStorageMock = makeLocalStorageMock()
+  const updateLineMock = makeUpdateLineMock()
   const sut = render(
     <CreateLineForm
       route={routeMock}
       createLine={createLineMock}
       localStorage={localStorageMock}
+      updateLine={updateLineMock}
     />
   )
   return {
@@ -71,7 +75,7 @@ describe('CreateLineForm', () => {
     const putEndLine = sut.getByTestId('putEndLine')
     expect(putEndLine).toHaveTextContent('Horário de fim da jornada')
     const btnCreate = sut.getByTestId('btnCreate')
-    expect(btnCreate).toHaveTextContent('Criar')
+    expect(btnCreate).toHaveTextContent('Confirmar')
   })
   test('should select day(s) of the week', async () => {
     const { sut } = makeSut()
