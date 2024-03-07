@@ -7,7 +7,7 @@ import { type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 
 interface NavigationType {
-  navigate: (name: string, params?: { data: EntityNames[] | undefined }) => void
+  navigate: (name: string, params?: { data: EntityNames[] | undefined, id: string | undefined }) => void
 }
 
 interface Props {
@@ -31,7 +31,11 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
   }, [])
 
   const handleCreateLine = (): void => {
-    navigation.navigate('CREATELINE', { data: data?.entities })
+    navigation.navigate('CREATELINE', { data: data?.entities, id: undefined })
+  }
+
+  const handleUpdateLine = (id: string): void => {
+    navigation.navigate('CREATELINE', { data: data?.entities, id })
   }
 
   return (
@@ -39,6 +43,7 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
       <Button testID='createLineBtn' title='Criar linha' onPress={handleCreateLine}/>
       {data?.works.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
+          <Button title='atualizar' onPress={() => { handleUpdateLine(item.id) }}/>
           <Text testID='driver'>Motorista: {item.accountName}</Text>
           <Text testID='startJourneyModel'>Inicio jornada: {item.startJourneyModel}</Text>
           <Text testID='startJourneyReal'>Inicio jornada real: {item.startJourneyReal}</Text>
