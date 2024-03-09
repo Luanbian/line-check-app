@@ -20,4 +20,13 @@ export class LocalStorage implements ILocalStorage {
       throw new Error('Erro no asyncStorage')
     }
   }
+
+  public async clean (): Promise<void> {
+    try {
+      await AsyncStorage.clear()
+    } catch (error) {
+      console.error('Erro ao limpar cache:', error)
+      throw new Error('Erro no asyncStorage')
+    }
+  }
 }
