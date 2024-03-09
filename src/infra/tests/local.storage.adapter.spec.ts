@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),
-  getItem: jest.fn()
+  getItem: jest.fn(),
+  clear: jest.fn()
 }))
 
 interface SutTypes {
@@ -25,6 +26,18 @@ describe('LocalStorage', () => {
     const value = faker.string.uuid()
     await sut.save(name, value)
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(name, value)
+  })
+  test('should clean local storage correctly', async () => {
+    const { sut } = makeSut()
+    await sut.clean()
+    expect(AsyncStorage.clear).toHaveBeenCalled()
+  })
+  test('should throw an error if clean local storage fails', async () => {
+    const { sut } = makeSut();
+    (AsyncStorage.clear as jest.Mock).mockImplementation(() => {
+      throw new Error('Erro no asyncStorage')
+    })
+    await expect(sut.clean()).rejects.toThrow('Erro no asyncStorage')
   })
   test('should throw an error if save in local storage fails', async () => {
     const { sut } = makeSut()
