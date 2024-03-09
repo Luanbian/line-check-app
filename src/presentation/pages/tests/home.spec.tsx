@@ -9,32 +9,37 @@ import { type IWorkInfo } from '../../../data/protocols/usecases/work.info.proto
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IUpdateLineCheck } from '../../../data/protocols/usecases/update.linecheck.protocol'
 import { faker } from '@faker-js/faker'
+import { makeInsertKmMock } from '../../../data/tests/mocks/insert.km.mock'
+import { type IinsertKm } from '../../../data/protocols/usecases/insert.km.protocol'
 
 interface SutTypes {
   sut: RenderResult
   getWorkInfoMock: IWorkInfo
   localStorageMock: ILocalStorage
   updateLinecheckMock: IUpdateLineCheck
+  insertKmMock: IinsertKm
 }
 
 const makeSut = (): SutTypes => {
   const getWorkInfoMock = makeWorkInfoMock()
   const localStorageMock = makeLocalStorageMock()
   const updateLinecheckMock = makeUpdateLinecheckMock()
+  const insertKmMock = makeInsertKmMock()
   const sut = render(
     <Home
       getWorkInfo={getWorkInfoMock}
       localStorage={localStorageMock}
       updateLinecheck={updateLinecheckMock}
+      insertKm={insertKmMock}
     />
   )
   return {
-    sut, getWorkInfoMock, localStorageMock, updateLinecheckMock
+    sut, getWorkInfoMock, localStorageMock, updateLinecheckMock, insertKmMock
   }
 }
 describe('home page', () => {
   test('ensure the api are called when component is mounted', async () => {
-    const { localStorageMock, getWorkInfoMock, updateLinecheckMock } = makeSut()
+    const { localStorageMock, getWorkInfoMock, updateLinecheckMock, insertKmMock } = makeSut()
     const fakeToken = faker.string.uuid()
     const workPropsStub = makeWorkInfoMock().perform(fakeToken)
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue(fakeToken)
@@ -44,6 +49,7 @@ describe('home page', () => {
         getWorkInfo={getWorkInfoMock}
         localStorage={localStorageMock}
         updateLinecheck={updateLinecheckMock}
+        insertKm={insertKmMock}
       />
     )
     await waitFor(() => {

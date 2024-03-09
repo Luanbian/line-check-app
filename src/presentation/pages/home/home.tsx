@@ -64,12 +64,22 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
     await localStorage.save('initKm', String(value))
   }
   const handleEndLine = async (id: string, value: number): Promise<void> => {
-    const initKm = await localStorage.obtain('initKm')
+    const [initKm, accountId, token] = await Promise.all([
+      localStorage.obtain('initKm'),
+      localStorage.obtain('accountId'),
+      localStorage.obtain('token')
+    ])
     if (initKm === null) {
       setErrorSubmit('Você esqueceu de colocar a quilometragem inicial')
       return
     }
     await updateDriverLinecheck(id, 'ENDLINEREAL')
+    if (token != null && accountId != null) {
+      await insertKm.perform({
+        finalKm: value,
+        initialKm: Number(initKm)
+      }, id, accountId, token)
+    }
   }
 
   return (
