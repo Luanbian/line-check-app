@@ -57,10 +57,16 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
     }
   }
 
-  const handleInitLine = async (id: string): Promise<void> => {
+  const handleInitLine = async (id: string, value: number): Promise<void> => {
     await updateDriverLinecheck(id, 'STARTLINEREAL')
+    await localStorage.save('initKm', String(value))
   }
-  const handleEndLine = async (id: string): Promise<void> => {
+  const handleEndLine = async (id: string, value: number): Promise<void> => {
+    const initKm = await localStorage.obtain('initKm')
+    if (initKm === null) {
+      setErrorSubmit('Você esqueceu de colocar a quilometragem inicial')
+      return
+    }
     await updateDriverLinecheck(id, 'ENDLINEREAL')
   }
 
@@ -75,7 +81,7 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
           <Text testID='startLineField'>Inicio linha: {item.startLineModel}</Text>
           <TextInput testID='inputInitKm' placeholder='quilômetragem inicial' onChangeText={(value: string) => { setValueInit('init', Number(value)) }}/>
           {errInit.init != null && <Text>{errInit.init.message}</Text>}
-          <Button testID='startLineBtn' title='Check start line' onPress={handleSubmitInit(async () => { await handleInitLine(item.id) })} />
+          <Button testID='startLineBtn' title='Check start line' onPress={handleSubmitInit(async (data) => { await handleInitLine(item.id, data.init) })} />
           <Text testID='serviceField'>Serviço: {item.service}</Text>
           <Text testID='logisticField'>Logistica: {item.logistic}</Text>
           <Text testID='manufactureField'>Fábrica: {item.manufacture}</Text>
@@ -83,7 +89,7 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
           <Text testID='endLineField'>Fim linha: {item.endLineModel}</Text>
           <TextInput testID='inputEndKm' placeholder='quilômetragem final' onChangeText={(value: string) => { setValueFinal('final', Number(value)) }}/>
           {errFinal.final != null && <Text>{errFinal.final.message}</Text>}
-          <Button testID='endLineBtn' title='Check end line' onPress={handleSubmitFinal(async () => { await handleEndLine(item.id) })} />
+          <Button testID='endLineBtn' title='Check end line' onPress={handleSubmitFinal(async (data) => { await handleEndLine(item.id, data.final) })} />
         </View>
       ))}
     </ScrollView>
