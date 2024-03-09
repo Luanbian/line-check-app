@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, Button, ScrollView, TextInput } from 'react-native'
 import { type IWorkInfo } from '../../../data/protocols/usecases/work.info.protocol'
+import { type IinsertKm } from '../../../data/protocols/usecases/insert.km.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type workProps } from '../../../domain/entities/work'
 import { type LinecheckOptions, type IUpdateLineCheck } from '../../../data/protocols/usecases/update.linecheck.protocol'
@@ -12,9 +13,10 @@ interface Props {
   getWorkInfo: IWorkInfo
   localStorage: ILocalStorage
   updateLinecheck: IUpdateLineCheck
+  insertKm: IinsertKm
 }
 
-export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Props): React.JSX.Element {
+export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm }: Props): React.JSX.Element {
   const { setValue: setValueInit, handleSubmit: handleSubmitInit, formState: { errors: errInit } } = useForm({
     resolver: yupResolver(InitInsertKmValidationSchema)
   })
