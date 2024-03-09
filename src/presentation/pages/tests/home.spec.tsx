@@ -100,7 +100,9 @@ describe('home page', () => {
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
     const startLineBtn = await sut.findByTestId('startLineBtn')
+    const inputInitKm = await sut.findByTestId('inputInitKm')
     await waitFor(() => {
+      fireEvent.changeText(inputInitKm, 100)
       fireEvent.press(startLineBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
@@ -115,7 +117,9 @@ describe('home page', () => {
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
     const endLineBtn = await sut.findByTestId('endLineBtn')
+    const inputEndKm = await sut.findByTestId('inputEndKm')
     await waitFor(() => {
+      fireEvent.changeText(inputEndKm, 200)
       fireEvent.press(endLineBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
@@ -128,7 +132,7 @@ describe('home page', () => {
   test('should return an error message if updateLinecheck service throws', async () => {
     const { updateLinecheckMock, sut, localStorageMock } = makeSut()
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValue('AccountIdOrToken')
-    const endLineBtn = await sut.findByTestId('endLineBtn')
+    const endLineBtn = await sut.findByTestId('startJourneyBtn')
     const error = new Error('update Line check throws')
     jest.spyOn(updateLinecheckMock, 'perform').mockRejectedValueOnce(error)
     await waitFor(() => {

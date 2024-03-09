@@ -6,7 +6,7 @@ import { type workProps } from '../../../domain/entities/work'
 import { type LinecheckOptions, type IUpdateLineCheck } from '../../../data/protocols/usecases/update.linecheck.protocol'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { insertKmValidationSchema } from '../../../validation/insert.km.validation'
+import { FinalInsertKmValidationSchema, InitInsertKmValidationSchema } from '../../../validation/insert.km.validation'
 
 interface Props {
   getWorkInfo: IWorkInfo
@@ -15,9 +15,13 @@ interface Props {
 }
 
 export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Props): React.JSX.Element {
-  const { setValue, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(insertKmValidationSchema)
+  const { setValue: setValueInit, handleSubmit: handleSubmitInit, formState: { errors: errInit } } = useForm({
+    resolver: yupResolver(InitInsertKmValidationSchema)
   })
+  const { setValue: setValueFinal, handleSubmit: handleSubmitFinal, formState: { errors: errFinal } } = useForm({
+    resolver: yupResolver(FinalInsertKmValidationSchema)
+  })
+
   const [data, setData] = useState<workProps[]>()
   const [errorSubmit, setErrorSubmit] = useState<string | null>(null)
 
@@ -53,6 +57,13 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
     }
   }
 
+  const handleInitLine = async (id: string): Promise<void> => {
+    await updateDriverLinecheck(id, 'STARTLINEREAL')
+  }
+  const handleEndLine = async (id: string): Promise<void> => {
+    await updateDriverLinecheck(id, 'ENDLINEREAL')
+  }
+
   return (
     <ScrollView>
       {(errorSubmit != null) && <Text testID='errorSubmit'>{errorSubmit}</Text>}
@@ -60,22 +71,19 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck }: Pr
         <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driverField'>Motorista: {item.accountName}</Text>
           <Text testID='startJourneyField'>Inicio jornada: {item.startJourneyModel}</Text>
-          <TextInput placeholder='quilômetragem inicial' onChangeText={(value: string) => { setValue('init', Number(value)) }}/>
-          {errors.init != null && <Text>{errors.init.message}</Text>}
           <Button testID='startJourneyBtn' title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
           <Text testID='startLineField'>Inicio linha: {item.startLineModel}</Text>
-          <Button testID='startLineBtn' title='Check start line' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTLINEREAL') }} />
+          <TextInput testID='inputInitKm' placeholder='quilômetragem inicial' onChangeText={(value: string) => { setValueInit('init', Number(value)) }}/>
+          {errInit.init != null && <Text>{errInit.init.message}</Text>}
+          <Button testID='startLineBtn' title='Check start line' onPress={handleSubmitInit(async () => { await handleInitLine(item.id) })} />
           <Text testID='serviceField'>Serviço: {item.service}</Text>
           <Text testID='logisticField'>Logistica: {item.logistic}</Text>
           <Text testID='manufactureField'>Fábrica: {item.manufacture}</Text>
           <Text testID='vehicleField'>Veículo: {item.vehicle}</Text>
           <Text testID='endLineField'>Fim linha: {item.endLineModel}</Text>
-          <TextInput placeholder='quilômetragem final' onChangeText={(value: string) => { setValue('final', Number(value)) }}/>
-          {errors.final != null && <Text>{errors.final.message}</Text>}
-          <Button testID='endLineBtn' title='Check end line' onPress={async () => { await updateDriverLinecheck(item.id, 'ENDLINEREAL') }} />
-          <Button title='test' onPress={handleSubmit((data) => {
-            console.log(data)
-          })}/>
+          <TextInput testID='inputEndKm' placeholder='quilômetragem final' onChangeText={(value: string) => { setValueFinal('final', Number(value)) }}/>
+          {errFinal.final != null && <Text>{errFinal.final.message}</Text>}
+          <Button testID='endLineBtn' title='Check end line' onPress={handleSubmitFinal(async () => { await handleEndLine(item.id) })} />
         </View>
       ))}
     </ScrollView>
