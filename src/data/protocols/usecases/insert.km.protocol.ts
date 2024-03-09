@@ -1,6 +1,6 @@
 export interface InsertKmParams {
-  init: number
-  final: number
+  initialKm: number
+  finalKm: number
 }
 
 export interface IinsertKm {
