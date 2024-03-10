@@ -155,4 +155,53 @@ describe('home page', () => {
       expect(errorSubmit).toHaveTextContent('update Line check throws')
     })
   })
+  test('should save initKm value in localStorage correctly', async () => {
+    const { sut, localStorageMock } = makeSut()
+    const storageSpy = jest.spyOn(localStorageMock, 'save')
+    const inputInitKm = await sut.findByTestId('inputInitKm')
+    const startLineBtn = await sut.getByTestId('startLineBtn')
+    await waitFor(() => {
+      fireEvent.changeText(inputInitKm, 100)
+      fireEvent.press(startLineBtn)
+      expect(storageSpy).toHaveBeenCalledWith('initKm', '100')
+    })
+  })
+  test('should obtain values from local storage correctly', async () => {
+    const { sut, localStorageMock } = makeSut()
+    const storageSpy = jest.spyOn(localStorageMock, 'obtain')
+    const inputEndKm = await sut.findByTestId('inputEndKm')
+    const endLineBtn = await sut.getByTestId('endLineBtn')
+    await waitFor(() => {
+      fireEvent.changeText(inputEndKm, 200)
+      fireEvent.press(endLineBtn)
+      expect(storageSpy).toHaveBeenCalledWith('initKm')
+      expect(storageSpy).toHaveBeenCalledWith('accountId')
+      expect(storageSpy).toHaveBeenCalledWith('token')
+    })
+  })
+  test('should call insertKm use case correctly, then clean local storage', async () => {
+    const { sut, localStorageMock, insertKmMock } = makeSut()
+    const insertKmSpy = jest.spyOn(insertKmMock, 'perform')
+    const localStorageSpy = jest.spyOn(localStorageMock, 'clean')
+    const id = 'fake_id'
+    const initKm = '100'
+    const finalKm = 200
+    const accountId = faker.string.uuid()
+    const token = faker.string.uuid()
+    jest.spyOn(localStorageMock, 'obtain')
+      .mockResolvedValueOnce(initKm)
+      .mockResolvedValueOnce(accountId)
+      .mockResolvedValueOnce(token)
+    const inputEndKm = await sut.findByTestId('inputEndKm')
+    const endLineBtn = await sut.getByTestId('endLineBtn')
+    await waitFor(() => {
+      fireEvent.changeText(inputEndKm, finalKm)
+      fireEvent.press(endLineBtn)
+      expect(insertKmSpy).toHaveBeenCalledWith({
+        finalKm,
+        initialKm: Number(initKm)
+      }, id, accountId, token)
+      expect(localStorageSpy).toHaveBeenCalled()
+    })
+  })
 })
