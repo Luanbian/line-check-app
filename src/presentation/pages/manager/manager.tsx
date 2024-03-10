@@ -3,11 +3,11 @@ import { View, Text, ScrollView, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
-import { type workPropsManager } from '../../../domain/entities/work'
+import { type workPropsComplete, type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 
 interface NavigationType {
-  navigate: (name: string, params?: { data: EntityNames[] | undefined, id: string | undefined }) => void
+  navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
 }
 
 interface Props {
@@ -31,11 +31,11 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
   }, [])
 
   const handleCreateLine = (): void => {
-    navigation.navigate('CREATELINE', { data: data?.entities, id: undefined })
+    navigation.navigate('CREATELINE', { data: data?.entities })
   }
 
-  const handleUpdateLine = (id: string): void => {
-    navigation.navigate('CREATELINE', { data: data?.entities, id })
+  const handleUpdateLine = (item: workPropsComplete): void => {
+    navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
   }
 
   return (
@@ -43,7 +43,7 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
       <Button testID='createLineBtn' title='Criar linha' onPress={handleCreateLine}/>
       {data?.works.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
-          <Button title='atualizar' onPress={() => { handleUpdateLine(item.id) }}/>
+          <Button title='atualizar' onPress={() => { handleUpdateLine(item) }}/>
           <Text testID='driver'>Motorista: {item.accountName}</Text>
           <Text testID='startJourneyModel'>Inicio jornada: {item.startJourneyModel}</Text>
           <Text testID='startJourneyReal'>Inicio jornada real: {item.startJourneyReal}</Text>

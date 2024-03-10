@@ -11,9 +11,10 @@ import SelectInput from '../../components/input/select.input'
 import TimePicker from '../../components/input/time.input'
 import { createLineValidationSchema } from '../../../validation/create.line.validation'
 import { type IUpdateLine } from '../../../data/protocols/usecases/update.line.protocol'
+import { type workPropsComplete } from '../../../domain/entities/work'
 
 export interface ParamList extends ParamListBase {
-  'CREATELINE': { data: EntityNames[], id: string | undefined }
+  'CREATELINE': { data: EntityNames[], id?: string, values?: workPropsComplete }
 }
 
 interface Props {
@@ -35,7 +36,7 @@ export interface Inputs {
 }
 
 export default function CreateLineForm ({ route, createLine, localStorage, updateLine }: Props): React.JSX.Element {
-  const { data, id } = route.params
+  const { data, id, values } = route.params
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(createLineValidationSchema)
   })
@@ -70,15 +71,15 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
     <FlatList testID='flatList' ListHeaderComponent={
       <>
         <Text testID='sltDriver'>Selecione o motorista</Text>
-        <SelectInput data={data} origin='accounts' setValue={setValue} errors={errors} input='account'/>
+        <SelectInput data={data} origin='accounts' setValue={setValue} errors={errors} input='account' values={values?.accountName}/>
         <Text testID='sltRoad'>Selecione o trajeto</Text>
-        <SelectInput data={data} origin='logistics' setValue={setValue} errors={errors} input='logistic'/>
+        <SelectInput data={data} origin='logistics' setValue={setValue} errors={errors} input='logistic' values={values?.logistic}/>
         <Text testID='sltService'>Selecione o serviço</Text>
-        <SelectInput data={data} origin='services' setValue={setValue} errors={errors} input='service'/>
+        <SelectInput data={data} origin='services' setValue={setValue} errors={errors} input='service' values={values?.service}/>
         <Text testID='sltManufacture'>Selecione a fábrica de destino</Text>
-        <SelectInput data={data} origin='manufactures' setValue={setValue} errors={errors} input='manufacture'/>
+        <SelectInput data={data} origin='manufactures' setValue={setValue} errors={errors} input='manufacture' values={values?.manufacture}/>
         <Text testID='sltVehicle'>Selecione o veiculo</Text>
-        <SelectInput data={data} origin='vehicles' setValue={setValue} errors={errors} input='vehicle'/>
+        <SelectInput data={data} origin='vehicles' setValue={setValue} errors={errors} input='vehicle' values={values?.vehicle}/>
         <Text testID='sltDayOfWeek'>Selecione os dias da semana</Text>
         <View testID='dropDownPicker'>
           <DropDownPicker

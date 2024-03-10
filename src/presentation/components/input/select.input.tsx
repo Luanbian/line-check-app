@@ -11,16 +11,18 @@ interface Props {
   setValue: UseFormSetValue<Inputs>
   errors: FieldErrors<Inputs>
   input: keyof Inputs
+  values?: string
 }
 
-export default function SelectInput ({ data, origin, setValue, errors, input }: Props): React.JSX.Element {
+export default function SelectInput ({ data, origin, setValue, errors, input, values }: Props): React.JSX.Element {
   return (
     <View testID='select'>
       <SelectPicker
         onValueChange={(value: string) => { setValue(input, value) }}
         items={data.filter(item => item.origin === origin).map(item => ({
-          label: item.name, value: item.id
+          label: item.name, value: item.id, key: item.name
         }))}
+        itemKey={values}
       />
       {(errors[input] != null) && <Text testID='error-message'>{errors[input]?.message}</Text>}
     </View>
