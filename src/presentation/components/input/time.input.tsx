@@ -17,24 +17,24 @@ export default function TimePicker ({ input, errors, setValue }: Props): React.J
   const handleConfirmHours = (date: Date): void => {
     const newInputHour = date.toISOString().substring(11, 19)
     setInputHour(newInputHour)
-    setValue(input, inputHour, { shouldValidate: true })
+    setValue(input, newInputHour)
     setIsVisible(false)
   }
 
   return (
     <View testID='picker'>
-     <Button testID='selectHourBtn' title='Selecionar horário' onPress={() => { setIsVisible(true) }}/>
-        <DateTimePicker
-          testID='datepicker'
-          isVisible={isVisible}
-          mode='time'
-          is24Hour
-          date={new Date()}
-          onConfirm={handleConfirmHours}
-          onCancel={() => { setIsVisible(false) }}
-        />
-        <Text testID='hourTxt'>{inputHour}</Text>
-        {(errors[input] != null) && <Text testID='error-message'>{errors[input]?.message}</Text>}
+      <Button testID='selectHourBtn' title='Selecionar horário' onPress={() => { setIsVisible(true) }}/>
+      <DateTimePicker
+        testID='datepicker'
+        isVisible={isVisible}
+        mode='time'
+        is24Hour
+        date={new Date()}
+        onConfirm={handleConfirmHours}
+        onCancel={() => { setIsVisible(false) }}
+      />
+      <Text testID='hourTxt'>{inputHour}</Text>
+      {(errors[input] != null) && <Text testID='error-message'>{errors[input]?.message}</Text>}
     </View>
   )
 }

@@ -63,7 +63,7 @@ describe('TimePicker Component', () => {
     const selectedHour = new Date('2024-03-05T10:00:00')
     await waitFor(async () => {
       datepicker.props.children[1].props.onConfirm(selectedHour)
-      expect(setValueMock).toHaveBeenCalledWith(inputMock, '13:00:00', { shouldValidate: true })
+      expect(setValueMock).toHaveBeenCalledWith(inputMock, '13:00:00')
       const hourTxt = await sut.findByTestId('hourTxt')
       expect(hourTxt).toHaveTextContent('13:00:00')
     })
