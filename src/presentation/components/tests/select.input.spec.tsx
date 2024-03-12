@@ -14,6 +14,7 @@ interface SutTypes {
   setValueMock: UseFormSetValue<Inputs>
   errorsMock: FieldErrors<Inputs>
   inputMock: keyof Inputs
+  valuesMock?: string
 }
 
 const makeSut = (): SutTypes => {
@@ -24,6 +25,7 @@ const makeSut = (): SutTypes => {
     account: undefined
   }
   const inputMock = 'account'
+  const valuesMock = dataMock[0].name
   const sut = render(
     <SelectInput
       data={dataMock}
@@ -31,10 +33,11 @@ const makeSut = (): SutTypes => {
       setValue={setValueMock}
       errors={errorsMock}
       input={inputMock}
+      values={valuesMock}
     />
   )
   return {
-    sut, dataMock, originMock, setValueMock, errorsMock, inputMock
+    sut, dataMock, originMock, setValueMock, errorsMock, inputMock, valuesMock
   }
 }
 describe('SelectInput Component', () => {
@@ -76,5 +79,14 @@ describe('SelectInput Component', () => {
     const errorMessage = sut.queryByTestId('error-message')
     expect(errorMessage).not.toBeNull()
     expect(errorMessage).toHaveTextContent('error message')
+  })
+  test('should pre select item if values is defined correctly', async () => {
+    const { sut, setValueMock, inputMock, valuesMock, dataMock, originMock } = makeSut()
+    const filtered = dataMock.filter(item => item.origin === originMock)
+    const selectedItem = filtered.filter(item => item.name === valuesMock)
+    expect(setValueMock).toHaveBeenCalledWith(inputMock, selectedItem[0].id)
+    const select = await sut.findByTestId('select')
+    const option = select.props.children[0].props.items[0].value
+    expect(option).toBe(selectedItem[0].id)
   })
 })
