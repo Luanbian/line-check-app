@@ -8,9 +8,10 @@ interface Props {
   input: keyof Inputs
   errors: FieldErrors<Inputs>
   setValue: UseFormSetValue<Inputs>
+  values?: string
 }
 
-export default function TimePicker ({ input, errors, setValue }: Props): React.JSX.Element {
+export default function TimePicker ({ input, errors, setValue, values }: Props): React.JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
   const [inputHour, setInputHour] = useState('')
 
@@ -29,11 +30,11 @@ export default function TimePicker ({ input, errors, setValue }: Props): React.J
         isVisible={isVisible}
         mode='time'
         is24Hour
-        date={new Date()}
+        date={values === undefined ? new Date() : new Date(`2024-03-05T${values}`)}
         onConfirm={handleConfirmHours}
         onCancel={() => { setIsVisible(false) }}
       />
-      <Text testID='hourTxt'>{inputHour}</Text>
+      <Text testID='hourTxt'>{values ?? inputHour}</Text>
       {(errors[input] != null) && <Text testID='error-message'>{errors[input]?.message}</Text>}
     </View>
   )

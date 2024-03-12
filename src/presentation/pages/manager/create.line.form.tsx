@@ -147,18 +147,21 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
           input='startJourney'
           setValue={setValue}
           errors={errors}
+          values={values?.startJourneyModel}
         />
         <Text testID='putInitLine'>Horário de inicio da linha</Text>
         <TimePicker
           input='startLine'
           setValue={setValue}
           errors={errors}
+          values={values?.startLineModel}
         />
         <Text testID='putEndLine'>Horário de fim da jornada</Text>
         <TimePicker
           input='endLine'
           setValue={setValue}
           errors={errors}
+          values={values?.endLineModel}
         />
         <Button testID='btnCreate' title='Confirmar' onPress={handleSubmit(onSubmit)}/>
       </>}
