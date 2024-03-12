@@ -5,6 +5,7 @@ import { makeLogin } from '../../../core/factories/pages/login/login.factory'
 import { makeHome } from '../../../core/factories/pages/home/home.factory'
 import { makeManager } from '../../../core/factories/pages/manager/manager.factory'
 import { makeCreateLineForm } from '../../../core/factories/pages/manager/create.line.form.factory'
+import { makeCreateTransportData } from '../../../core/factories/pages/manager/create.transport.data.factory'
 
 const Stack = createNativeStackNavigator()
 
@@ -23,6 +24,9 @@ export default function Router (): React.JSX.Element {
         </Stack.Screen>
         <Stack.Screen name="CREATELINE">
           {(props) => <>{makeCreateLineForm(props)}</>}
+        </Stack.Screen>
+        <Stack.Screen name="CREATETRANSPORT">
+          {(props) => <>{makeCreateTransportData(props)}</>}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

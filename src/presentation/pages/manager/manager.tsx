@@ -5,9 +5,10 @@ import { type ILocalStorage } from '../../../infra/protocols/local.storage.proto
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
 import { type workPropsComplete, type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
+import { type transport } from '../../../domain/entities/transport'
 
 interface NavigationType {
-  navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
+  navigate: (name: string, params?: { data?: EntityNames[] | transport, id?: string, values?: workPropsComplete }) => void
 }
 
 interface Props {
@@ -33,14 +34,17 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
   const handleCreateLine = (): void => {
     navigation.navigate('CREATELINE', { data: data?.entities })
   }
-
   const handleUpdateLine = (item: workPropsComplete): void => {
     navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
+  }
+  const handleCreateTransport = (data: transport): void => {
+    navigation.navigate('CREATETRANSPORT', { data })
   }
 
   return (
     <ScrollView>
       <Button testID='createLineBtn' title='Criar linha' onPress={handleCreateLine}/>
+      <Button title='Cadastrar veiculo' onPress={() => { handleCreateTransport('vehicle') }}/>
       {data?.works.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Button title='atualizar' onPress={() => { handleUpdateLine(item) }}/>
