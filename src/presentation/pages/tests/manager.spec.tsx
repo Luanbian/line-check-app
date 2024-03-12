@@ -78,5 +78,7 @@ describe('manager page', () => {
     expect(endLineModel).toHaveTextContent('Fim jornada: fake_time 09:00:00')
     const endLineReal = await sut.findByTestId('endLineReal')
     expect(endLineReal).toHaveTextContent('Fim jornada real: any_valid_timestamp 2024-01-01 09:15:12')
+    const daysOfTheWeek = await sut.findByTestId('daysOfTheWeek')
+    expect(daysOfTheWeek).toHaveTextContent('Dias da semana: aaaabbbbccccc')
   })
 })

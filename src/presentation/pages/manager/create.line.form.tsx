@@ -41,7 +41,7 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
     resolver: yupResolver(createLineValidationSchema)
   })
 
-  const [selectedDays, setSelectedDays] = useState<string[]>()
+  const [selectedDays, setSelectedDays] = useState<string[] | undefined>(values?.daysOfTheWeek)
   const [open, setOpen] = useState(false)
   const [errorSelectDay, setErrorSelectDay] = useState(false)
 

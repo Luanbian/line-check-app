@@ -55,6 +55,7 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
           <Text testID='vehicle'>Veiculo: {item.vehicle}</Text>
           <Text testID='endLineModel'>Fim jornada: {item.endLineModel}</Text>
           <Text testID='endLineReal'>Fim jornada real: {item.endLineReal}</Text>
+          <Text testID='daysOfTheWeek'>Dias da semana: {item.daysOfTheWeek}</Text>
         </View>
       ))}
     </ScrollView>
