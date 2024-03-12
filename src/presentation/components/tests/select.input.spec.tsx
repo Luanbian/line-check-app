@@ -86,7 +86,23 @@ describe('SelectInput Component', () => {
     const selectedItem = filtered.filter(item => item.name === valuesMock)
     expect(setValueMock).toHaveBeenCalledWith(inputMock, selectedItem[0].id)
     const select = await sut.findByTestId('select')
-    const option = select.props.children[0].props.items[0].value
+    const option = select.props.children[0].props.value
     expect(option).toBe(selectedItem[0].id)
+  })
+  test('should not pre select item if values is undefined', async () => {
+    const { sut, dataMock, errorsMock, inputMock, originMock, setValueMock } = makeSut()
+    sut.rerender(
+      <SelectInput
+        data={dataMock}
+        errors={errorsMock}
+        input={inputMock}
+        origin={originMock}
+        setValue={setValueMock}
+        values={undefined}
+      />
+    )
+    const select = await sut.findByTestId('select')
+    const option = select.props.children[0].props.value
+    expect(option).toBe(undefined)
   })
 })
