@@ -90,19 +90,39 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
         <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driverField'>Motorista: {item.accountName}</Text>
           <Text testID='startJourneyField'>Inicio jornada: {item.startJourneyModel}</Text>
-          <Button testID='startJourneyBtn' title='Check start journey' onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }} />
+          <Button
+            testID='startJourneyBtn'
+            title='Check start journey'
+            onPress={async () => { await updateDriverLinecheck(item.id, 'STARTJOURNEYREAL') }}
+          />
           <Text testID='startLineField'>Inicio linha: {item.startLineModel}</Text>
-          <TextInput testID='inputInitKm' placeholder='quilômetragem inicial' onChangeText={(value: string) => { setValueInit('init', Number(value)) }}/>
+          <TextInput
+            testID='inputInitKm'
+            placeholder='quilômetragem inicial'
+            onChangeText={(value: string) => { setValueInit('init', Number(value)) }}
+          />
           {(errInit.init != null) && <Text testID='errInit-message'>{errInit.init.message}</Text>}
-          <Button testID='startLineBtn' title='Check start line' onPress={handleSubmitInit(async (data) => { await handleInitLine(item.id, data.init) })} />
+          <Button
+            testID='startLineBtn'
+            title='Check start line'
+            onPress={handleSubmitInit(async (data) => { await handleInitLine(item.id, data.init) })}
+          />
           <Text testID='serviceField'>Serviço: {item.service}</Text>
           <Text testID='logisticField'>Logistica: {item.logistic}</Text>
           <Text testID='manufactureField'>Fábrica: {item.manufacture}</Text>
           <Text testID='vehicleField'>Veículo: {item.vehicle}</Text>
           <Text testID='endLineField'>Fim linha: {item.endLineModel}</Text>
-          <TextInput testID='inputEndKm' placeholder='quilômetragem final' onChangeText={(value: string) => { setValueFinal('final', Number(value)) }}/>
+          <TextInput
+            testID='inputEndKm'
+            placeholder='quilômetragem final'
+            onChangeText={(value: string) => { setValueFinal('final', Number(value)) }}
+          />
           {errFinal.final != null && <Text testID='errFinal-message'>{errFinal.final.message}</Text>}
-          <Button testID='endLineBtn' title='Check end line' onPress={handleSubmitFinal(async (data) => { await handleEndLine(item.id, data.final) })} />
+          <Button
+            testID='endLineBtn'
+            title='Check end line'
+            onPress={handleSubmitFinal(async (data) => { await handleEndLine(item.id, data.final) })}
+          />
         </View>
       ))}
     </ScrollView>

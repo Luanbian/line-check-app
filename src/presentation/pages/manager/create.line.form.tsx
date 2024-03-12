@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { type ParamListBase, type RouteProp } from '@react-navigation/native'
-import { Button, FlatList, Text, View } from 'react-native'
+import { Button, FlatList, Text } from 'react-native'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -71,50 +71,95 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
     <FlatList testID='flatList' ListHeaderComponent={
       <>
         <Text testID='sltDriver'>Selecione o motorista</Text>
-        <SelectInput data={data} origin='accounts' setValue={setValue} errors={errors} input='account' values={values?.accountName}/>
+        <SelectInput
+          data={data}
+          origin='accounts'
+          setValue={setValue}
+          errors={errors}
+          input='account'
+          values={values?.accountName}
+        />
         <Text testID='sltRoad'>Selecione o trajeto</Text>
-        <SelectInput data={data} origin='logistics' setValue={setValue} errors={errors} input='logistic' values={values?.logistic}/>
+        <SelectInput
+          data={data}
+          origin='logistics'
+          setValue={setValue}
+          errors={errors}
+          input='logistic'
+          values={values?.logistic}
+        />
         <Text testID='sltService'>Selecione o serviço</Text>
-        <SelectInput data={data} origin='services' setValue={setValue} errors={errors} input='service' values={values?.service}/>
+        <SelectInput
+          data={data}
+          origin='services'
+          setValue={setValue}
+          errors={errors}
+          input='service'
+          values={values?.service}
+        />
         <Text testID='sltManufacture'>Selecione a fábrica de destino</Text>
-        <SelectInput data={data} origin='manufactures' setValue={setValue} errors={errors} input='manufacture' values={values?.manufacture}/>
+        <SelectInput
+          data={data}
+          origin='manufactures'
+          setValue={setValue}
+          errors={errors}
+          input='manufacture'
+          values={values?.manufacture}
+        />
         <Text testID='sltVehicle'>Selecione o veiculo</Text>
-        <SelectInput data={data} origin='vehicles' setValue={setValue} errors={errors} input='vehicle' values={values?.vehicle}/>
+        <SelectInput
+          data={data}
+          origin='vehicles'
+          setValue={setValue}
+          errors={errors}
+          input='vehicle'
+          values={values?.vehicle}
+        />
         <Text testID='sltDayOfWeek'>Selecione os dias da semana</Text>
-        <View testID='dropDownPicker'>
-          <DropDownPicker
-            open={open}
-            setOpen={setOpen}
-            value={selectedDays ?? []}
-            setValue={setSelectedDays}
-            multiple
-            placeholder='Selecione'
-            maxHeight={300}
-            multipleText={
-              selectedDays != null
-                ? selectedDays.length > 1
-                  ? `${selectedDays?.length} dias selecionados`
-                  : `${selectedDays?.length} dia selecionado`
-                : ''
-            }
-            items={[
-              { label: 'Domingo', value: 'SUNDAY' },
-              { label: 'Segunda', value: 'MONDAY' },
-              { label: 'Terça', value: 'TUESDAY' },
-              { label: 'Quarta', value: 'WEDNESDAY' },
-              { label: 'Quinta', value: 'THURSDAY' },
-              { label: 'Sexta', value: 'FRIDAY' },
-              { label: 'Sábado', value: 'SATURDAY' }
-            ]}
-          />
-          {(errorSelectDay) && <Text testID='error-message'>Erro, selecione os dias</Text>}
-        </View>
+        <DropDownPicker
+          open={open}
+          setOpen={setOpen}
+          value={selectedDays ?? []}
+          setValue={setSelectedDays}
+          multiple
+          placeholder='Selecione'
+          maxHeight={300}
+          multipleText={
+            selectedDays != null
+              ? selectedDays.length > 1
+                ? `${selectedDays?.length} dias selecionados`
+                : `${selectedDays?.length} dia selecionado`
+              : ''
+          }
+          items={[
+            { label: 'Domingo', value: 'SUNDAY' },
+            { label: 'Segunda', value: 'MONDAY' },
+            { label: 'Terça', value: 'TUESDAY' },
+            { label: 'Quarta', value: 'WEDNESDAY' },
+            { label: 'Quinta', value: 'THURSDAY' },
+            { label: 'Sexta', value: 'FRIDAY' },
+            { label: 'Sábado', value: 'SATURDAY' }
+          ]}
+        />
+        {(errorSelectDay) && <Text testID='error-message'>Erro, selecione os dias</Text>}
         <Text testID='putInitJourney'>Horário de inicio da jornada</Text>
-        <TimePicker input='startJourney' setValue={setValue} errors={errors}/>
+        <TimePicker
+          input='startJourney'
+          setValue={setValue}
+          errors={errors}
+        />
         <Text testID='putInitLine'>Horário de inicio da linha</Text>
-        <TimePicker input='startLine' setValue={setValue} errors={errors}/>
+        <TimePicker
+          input='startLine'
+          setValue={setValue}
+          errors={errors}
+        />
         <Text testID='putEndLine'>Horário de fim da jornada</Text>
-        <TimePicker input='endLine' setValue={setValue} errors={errors}/>
+        <TimePicker
+          input='endLine'
+          setValue={setValue}
+          errors={errors}
+        />
         <Button testID='btnCreate' title='Confirmar' onPress={handleSubmit(onSubmit)}/>
       </>}
       data={[]}
