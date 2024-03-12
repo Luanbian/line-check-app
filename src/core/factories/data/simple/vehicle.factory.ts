@@ -1,0 +1,9 @@
+import { type ICreateVehicle } from '../../../../data/protocols/usecases/create.simple.protocol'
+import { CreateVehicle } from '../../../../data/usecases/create.vehicle'
+import { makeHttpClient } from '../../infra/adapters/http.client.factory'
+
+export const makeCreateVehicle = (): ICreateVehicle => {
+  const url = 'http://10.0.2.2:8080/api/checkpoint/vehicle'
+  const httpPostClient = makeHttpClient()
+  return new CreateVehicle(url, httpPostClient)
+}
