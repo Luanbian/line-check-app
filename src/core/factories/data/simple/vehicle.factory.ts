@@ -1,4 +1,4 @@
-import { type ICreateVehicle } from '../../../../data/protocols/usecases/create.simple.protocol'
+import { type ICreateVehicle } from '../../../../data/protocols/usecases/create.vehicle.protocol'
 import { CreateVehicle } from '../../../../data/usecases/create.vehicle'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

@@ -3,7 +3,7 @@ import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
 import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type VehicleParams, type ICreateVehicle } from '../protocols/usecases/create.simple.protocol'
+import { type VehicleParams, type ICreateVehicle } from '../protocols/usecases/create.vehicle.protocol'
 
 export class CreateVehicle implements ICreateVehicle {
   constructor (
