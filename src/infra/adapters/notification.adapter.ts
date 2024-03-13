@@ -8,6 +8,7 @@ ExpoNotification.setNotificationHandler({
     shouldShowAlert: true
   })
 })
+
 export class Notification implements INotification {
   constructor (private readonly id: string) {}
 

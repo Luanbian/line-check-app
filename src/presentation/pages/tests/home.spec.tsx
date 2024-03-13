@@ -179,10 +179,9 @@ describe('home page', () => {
       expect(storageSpy).toHaveBeenCalledWith('token')
     })
   })
-  test('should call insertKm use case correctly, then clean local storage', async () => {
+  test('should call insertKm use case correctly', async () => {
     const { sut, localStorageMock, insertKmMock } = makeSut()
     const insertKmSpy = jest.spyOn(insertKmMock, 'perform')
-    const localStorageSpy = jest.spyOn(localStorageMock, 'clean')
     const id = 'fake_id'
     const initKm = '100'
     const finalKm = 200
@@ -201,7 +200,6 @@ describe('home page', () => {
         finalKm,
         initialKm: Number(initKm)
       }, id, accountId, token)
-      expect(localStorageSpy).toHaveBeenCalled()
     })
   })
 })

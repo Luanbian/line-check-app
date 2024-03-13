@@ -79,7 +79,6 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
         finalKm: value,
         initialKm: Number(initKm)
       }, id, accountId, token)
-      await localStorage.clean()
     }
   }
 
