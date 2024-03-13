@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView, Button } from 'react-native'
+import { View, Text, ScrollView, Button, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
 import { type workPropsComplete, type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import { type transport } from '../../../domain/entities/transport'
+import { useForm } from 'react-hook-form'
 
 interface NavigationType {
   navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
@@ -16,9 +17,15 @@ interface Props {
   workInfoComplete: IWorkInfoComplete
 }
 
+interface Inputs {
+  field: string
+}
+
 export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
+  const [transp, setTransp] = useState<transport | null>(null)
+  const { setValue, formState: { errors }, handleSubmit } = useForm<Inputs>()
 
   useEffect(() => {
     const getWorkDriverCompleteInfo = async (): Promise<void> => {
@@ -37,14 +44,31 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
   const handleUpdateLine = (item: workPropsComplete): void => {
     navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
   }
-  const handleCreateTransport = (data: transport): void => {
-    console.log(data)
+  const onSubmit = async (data: string, field: transport): Promise<void> => {
+
   }
 
   return (
     <ScrollView>
       <Button testID='createLineBtn' title='Criar linha' onPress={handleCreateLine}/>
-      <Button title='Cadastrar veiculo' onPress={() => { handleCreateTransport('vehicle') }}/>
+      <Button title='Cadastrar veiculo' onPress={() => { setTransp('vehicle') }}/>
+      <Button title='Cadastrar serviço' onPress={() => { setTransp('service') }}/>
+      <Button title='Cadastrar fábrica' onPress={() => { setTransp('manufacture') }}/>
+      <Button title='Cadastrar rota' onPress={() => { setTransp('logistic') }}/>
+      {transp !== null && (
+        <>
+          <Text>Cadastrar {transp}</Text>
+          <TextInput
+            placeholder='valor'
+            onChangeText={text => { setValue('field', text) }}
+          />
+          <Button
+            title='Cadastrar'
+            onPress={handleSubmit(async (data) => { await onSubmit(data.field, transp) })}
+          />
+          {(errors.field != null) && <Text>{errors.field.message}</Text>}
+        </>
+      )}
       {data?.works.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Button title='atualizar' onPress={() => { handleUpdateLine(item) }}/>
