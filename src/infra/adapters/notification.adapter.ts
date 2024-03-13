@@ -10,15 +10,23 @@ ExpoNotification.setNotificationHandler({
 })
 
 export class Notification implements INotification {
+  constructor (private readonly id: string) {}
+
   public async notify (): Promise<void> {
     const { status } = await ExpoNotification.getPermissionsAsync()
     if (status !== 'granted') return
+    const token = await this.getToken()
     await ExpoNotification.scheduleNotificationAsync({
       content: {
         title: 'test title',
         body: 'test body'
       },
-      trigger: null
+      trigger: null,
+      identifier: token
     })
+  }
+
+  private async getToken (): Promise<string> {
+    return (await ExpoNotification.getExpoPushTokenAsync({ projectId: this.id })).data
   }
 }
