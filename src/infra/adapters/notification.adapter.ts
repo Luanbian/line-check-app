@@ -1,4 +1,5 @@
 import * as ExpoNotification from 'expo-notifications'
+import { type INotification } from '../protocols/notification.protocol'
 
 ExpoNotification.setNotificationHandler({
   handleNotification: async () => ({
@@ -7,13 +8,17 @@ ExpoNotification.setNotificationHandler({
     shouldShowAlert: true
   })
 })
-export class Notification {
+export class Notification implements INotification {
+  constructor (private readonly id: string) {}
+
   public async notify (): Promise<void> {
     const { status } = await ExpoNotification.getPermissionsAsync()
-    console.log(status)
+    if (status !== 'granted') return
+    const token = await this.getToken()
+    console.log(token)
   }
 
-  public async getToken (): Promise<string> {
-    return (await ExpoNotification.getExpoPushTokenAsync()).data
+  private async getToken (): Promise<string> {
+    return (await ExpoNotification.getExpoPushTokenAsync({ projectId: this.id })).data
   }
 }
