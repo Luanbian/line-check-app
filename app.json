@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "lineCheck",
-    "slug": "lineCheck",
+    "slug": "linecheckapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "da6ccbef-e512-453e-9eff-78cc27524584"
+      }
+    },
+    "owner": "luanalmeidadev"
   }
 }
