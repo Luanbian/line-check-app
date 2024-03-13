@@ -1,4 +1,4 @@
-import { type accountProps } from '../../../domain/entities/account'
+import { type accountProps } from '../../domain/entities/account'
 
 export interface authParamns {
   email: string

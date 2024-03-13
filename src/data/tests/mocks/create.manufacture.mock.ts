@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type ICreateManufacture, type ManufactureParams } from '../../protocols/usecases/create.manufacture.protocol'
+import { type ICreateManufacture, type ManufactureParams } from '../../protocols/create.manufacture.protocol'
 
 export const paramsMock: ManufactureParams = {
   manufacture: faker.company.name()

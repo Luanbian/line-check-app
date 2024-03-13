@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type IUpdateLineCheck, type UpdateLineCheckParams } from '../../protocols/usecases/update.linecheck.protocol'
+import { type IUpdateLineCheck, type UpdateLineCheckParams } from '../../protocols/update.linecheck.protocol'
 
 export const paramsMock: UpdateLineCheckParams = {
   workId: faker.string.uuid(),

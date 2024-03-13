@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type ICreateLogistic, type LogisticParam } from '../../protocols/usecases/logistic.protocol'
+import { type ICreateLogistic, type LogisticParam } from '../../protocols/logistic.protocol'
 
 export const paramsMock: LogisticParam = {
   logistic: faker.location.city()

@@ -1,4 +1,4 @@
-import { type ICreateLogistic } from '../../../../data/protocols/usecases/logistic.protocol'
+import { type ICreateLogistic } from '../../../../data/protocols/logistic.protocol'
 import { CreateLogistic } from '../../../../data/usecases/create.logistic'
 
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type ICreateLine, type CreateLineCheckParams } from '../../protocols/usecases/create.line.protocol'
+import { type ICreateLine, type CreateLineCheckParams } from '../../protocols/create.line.protocol'
 
 export const paramsMock: CreateLineCheckParams = {
   startJourneyModel: '15:00:00',

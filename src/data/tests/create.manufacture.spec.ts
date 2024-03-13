@@ -4,7 +4,7 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type ICreateManufacture } from '../protocols/usecases/create.manufacture.protocol'
+import { type ICreateManufacture } from '../protocols/create.manufacture.protocol'
 import { CreateManufacture } from '../usecases/create.manufacture'
 import { paramsMock } from './mocks/create.manufacture.mock'
 

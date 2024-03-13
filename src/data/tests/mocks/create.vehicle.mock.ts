@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type VehicleParams, type ICreateVehicle } from '../../protocols/usecases/create.vehicle.protocol'
+import { type VehicleParams, type ICreateVehicle } from '../../protocols/create.vehicle.protocol'
 
 export const paramsMock: VehicleParams = {
   vehicle: faker.vehicle.vehicle()

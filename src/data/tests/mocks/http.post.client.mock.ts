@@ -1,5 +1,5 @@
 import { HttpStatusCode, type HttpResponse } from '../../../@types/http.response'
-import { type httpParams, type IHttpClient } from '../../protocols/http/http.post.client.protocol'
+import { type httpParams, type IHttpClient } from '../../../infra/protocols/http.post.client.protocol'
 
 export class HttpClientMock implements IHttpClient {
   url?: string

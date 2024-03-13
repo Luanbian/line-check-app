@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type InsertKmParams, type IinsertKm } from '../../protocols/usecases/insert.km.protocol'
+import { type InsertKmParams, type IinsertKm } from '../../protocols/insert.km.protocol'
 
 export const paramsMock: InsertKmParams = {
   initialKm: faker.number.int(),

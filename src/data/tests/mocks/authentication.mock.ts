@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type IAuthentication, type authParamns } from '../../protocols/usecases/authentication.protocol'
+import { type IAuthentication, type authParamns } from '../../protocols/authentication.protocol'
 import { type accountProps } from '../../../domain/entities/account'
 
 export const authMock = (): authParamns => ({

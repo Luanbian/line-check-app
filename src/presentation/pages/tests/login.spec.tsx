@@ -3,7 +3,7 @@ import { type RenderResult, render, cleanup, fireEvent, waitFor } from '@testing
 import '@testing-library/jest-native/extend-expect'
 import Login from '../login/login'
 import { faker } from '@faker-js/faker'
-import { type IAuthentication } from '../../../data/protocols/usecases/authentication.protocol'
+import { type IAuthentication } from '../../../data/protocols/authentication.protocol'
 import { makeAuthenticationMock } from '../../../data/tests/mocks/authentication.mock'
 import { InvalidCredentialsError } from '../../../core/exceptions/invalid.credentials.error'
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'

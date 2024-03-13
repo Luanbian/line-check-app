@@ -1,4 +1,4 @@
-import { type IAuthentication } from '../../../../data/protocols/usecases/authentication.protocol'
+import { type IAuthentication } from '../../../../data/protocols/authentication.protocol'
 import { Authentication } from '../../../../data/usecases/authentication'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

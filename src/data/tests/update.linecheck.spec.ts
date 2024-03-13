@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { UpdateLineCheck } from '../usecases/update.linecheck'
 import { HttpClientMock } from './mocks/http.post.client.mock'
-import { type IUpdateLineCheck } from '../protocols/usecases/update.linecheck.protocol'
+import { type IUpdateLineCheck } from '../protocols/update.linecheck.protocol'
 import { paramsMock } from './mocks/update.linecheck.mock'
 import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'

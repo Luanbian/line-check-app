@@ -1,4 +1,4 @@
-import { type ICreateService } from '../../../../data/protocols/usecases/create.service.protocol'
+import { type ICreateService } from '../../../../data/protocols/create.service.protocol'
 import { CreateService } from '../../../../data/usecases/create.service'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

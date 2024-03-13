@@ -5,12 +5,12 @@ import Home from '../home/home'
 import { makeWorkInfoMock } from '../../../data/tests/mocks/work.info.mock'
 import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
 import { makeUpdateLinecheckMock } from '../../../data/tests/mocks/update.linecheck.mock'
-import { type IWorkInfo } from '../../../data/protocols/usecases/work.info.protocol'
+import { type IWorkInfo } from '../../../data/protocols/work.info.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
-import { type IUpdateLineCheck } from '../../../data/protocols/usecases/update.linecheck.protocol'
+import { type IUpdateLineCheck } from '../../../data/protocols/update.linecheck.protocol'
 import { faker } from '@faker-js/faker'
 import { makeInsertKmMock } from '../../../data/tests/mocks/insert.km.mock'
-import { type IinsertKm } from '../../../data/protocols/usecases/insert.km.protocol'
+import { type IinsertKm } from '../../../data/protocols/insert.km.protocol'
 
 interface SutTypes {
   sut: RenderResult

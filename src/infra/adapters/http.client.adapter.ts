@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from 'axios'
-import { type IHttpClient, type httpParams } from '../../data/protocols/http/http.post.client.protocol'
+import { type IHttpClient, type httpParams } from '../protocols/http.post.client.protocol'
 import { type HttpResponse } from '../../@types/http.response'
 
 export class HttpClientAdapter implements IHttpClient {

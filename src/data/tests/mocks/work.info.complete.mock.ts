@@ -1,5 +1,5 @@
 import { type workPropsManager, type workPropsComplete } from '../../../domain/entities/work'
-import { type IWorkInfoComplete } from '../../protocols/usecases/work.info.protocol'
+import { type IWorkInfoComplete } from '../../protocols/work.info.protocol'
 import { entityNamesMock } from './entity.names.mock'
 import { generateCommonProps } from './work.info.mock'
 

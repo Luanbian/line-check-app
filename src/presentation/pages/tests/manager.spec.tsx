@@ -5,7 +5,7 @@ import Manager from '../manager/manager'
 import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
 import { makeWorkInfoCompleteMock } from '../../../data/tests/mocks/work.info.complete.mock'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
-import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
+import { type IWorkInfoComplete } from '../../../data/protocols/work.info.protocol'
 import { faker } from '@faker-js/faker'
 
 interface SutTypes {

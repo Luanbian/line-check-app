@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { UpdateLine } from '../usecases/update.line'
 import { HttpClientMock } from './mocks/http.post.client.mock'
-import { type IUpdateLine } from '../protocols/usecases/update.line.protocol'
+import { type IUpdateLine } from '../protocols/update.line.protocol'
 import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { BadRequest } from '../../core/exceptions/bad.request.error'

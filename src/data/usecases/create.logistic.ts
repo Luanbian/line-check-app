@@ -2,8 +2,8 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type LogisticParam, type ICreateLogistic } from '../protocols/usecases/logistic.protocol'
+import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type LogisticParam, type ICreateLogistic } from '../protocols/logistic.protocol'
 
 export class CreateLogistic implements ICreateLogistic {
   constructor (

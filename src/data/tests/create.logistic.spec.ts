@@ -4,7 +4,7 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type ICreateLogistic } from '../protocols/usecases/logistic.protocol'
+import { type ICreateLogistic } from '../protocols/logistic.protocol'
 import { CreateLogistic } from '../usecases/create.logistic'
 import { paramsMock } from './mocks/create.logistic.mock'
 

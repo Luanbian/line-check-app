@@ -4,7 +4,7 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type ICreateVehicle } from '../protocols/usecases/create.vehicle.protocol'
+import { type ICreateVehicle } from '../protocols/create.vehicle.protocol'
 import { CreateVehicle } from '../usecases/create.vehicle'
 import { paramsMock } from './mocks/create.vehicle.mock'
 

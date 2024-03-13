@@ -1,4 +1,4 @@
-import { type IUpdateLineCheck } from '../../../../data/protocols/usecases/update.linecheck.protocol'
+import { type IUpdateLineCheck } from '../../../../data/protocols/update.linecheck.protocol'
 import { UpdateLineCheck } from '../../../../data/usecases/update.linecheck'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

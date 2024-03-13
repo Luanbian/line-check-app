@@ -1,4 +1,4 @@
-import { type workProps, type workPropsManager } from '../../../domain/entities/work'
+import { type workProps, type workPropsManager } from '../../domain/entities/work'
 
 export interface IWorkInfo {
   perform: (token: string) => Promise<workProps[][]>

@@ -2,8 +2,8 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type UpdateLineCheckParams, type IUpdateLineCheck } from '../protocols/usecases/update.linecheck.protocol'
+import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type UpdateLineCheckParams, type IUpdateLineCheck } from '../protocols/update.linecheck.protocol'
 
 export class UpdateLineCheck implements IUpdateLineCheck {
   constructor (

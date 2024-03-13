@@ -2,8 +2,8 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
 import { type workPropsManager } from '../../domain/entities/work'
-import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type IWorkInfoComplete } from '../protocols/usecases/work.info.protocol'
+import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type IWorkInfoComplete } from '../protocols/work.info.protocol'
 
 export class WorkInfoComplete implements IWorkInfoComplete {
   constructor (

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type ICreateLine } from '../protocols/usecases/create.line.protocol'
+import { type ICreateLine } from '../protocols/create.line.protocol'
 import { CreateLine } from '../usecases/create.line'
 import { HttpClientMock } from './mocks/http.post.client.mock'
 import { paramsMock } from './mocks/create.line.mock'

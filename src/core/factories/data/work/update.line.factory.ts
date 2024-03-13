@@ -1,4 +1,4 @@
-import { type IUpdateLine } from '../../../../data/protocols/usecases/update.line.protocol'
+import { type IUpdateLine } from '../../../../data/protocols/update.line.protocol'
 import { UpdateLine } from '../../../../data/usecases/update.line'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

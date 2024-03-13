@@ -1,4 +1,4 @@
-import { type ICreateManufacture } from '../../../../data/protocols/usecases/create.manufacture.protocol'
+import { type ICreateManufacture } from '../../../../data/protocols/create.manufacture.protocol'
 import { CreateManufacture } from '../../../../data/usecases/create.manufacture'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

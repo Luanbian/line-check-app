@@ -1,4 +1,4 @@
-import { type IWorkInfoComplete, type IWorkInfo } from '../../../../data/protocols/usecases/work.info.protocol'
+import { type IWorkInfoComplete, type IWorkInfo } from '../../../../data/protocols/work.info.protocol'
 import { WorkInfo } from '../../../../data/usecases/work.info'
 import { WorkInfoComplete } from '../../../../data/usecases/work.info.complete'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'

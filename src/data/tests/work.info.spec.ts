@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type IWorkInfo } from '../protocols/usecases/work.info.protocol'
+import { type IWorkInfo } from '../protocols/work.info.protocol'
 import { WorkInfo } from '../usecases/work.info'
 import { HttpClientMock } from './mocks/http.post.client.mock'
 import { HttpStatusCode } from '../../@types/http.response'

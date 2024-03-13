@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { InsertKm } from '../usecases/insert.km'
 import { HttpClientMock } from './mocks/http.post.client.mock'
-import { type IinsertKm } from '../protocols/usecases/insert.km.protocol'
+import { type IinsertKm } from '../protocols/insert.km.protocol'
 import { paramsMock } from './mocks/insert.km.mock'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { HttpStatusCode } from '../../@types/http.response'

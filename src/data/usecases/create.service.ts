@@ -2,8 +2,8 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type ServiceParams, type ICreateService } from '../protocols/usecases/create.service.protocol'
+import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type ServiceParams, type ICreateService } from '../protocols/create.service.protocol'
 
 export class CreateService implements ICreateService {
   constructor (

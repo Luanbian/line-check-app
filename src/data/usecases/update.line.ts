@@ -2,9 +2,9 @@ import { HttpStatusCode } from '../../@types/http.response'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type CreateLineCheckParams } from '../protocols/usecases/create.line.protocol'
-import { type IUpdateLine } from '../protocols/usecases/update.line.protocol'
+import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type CreateLineCheckParams } from '../protocols/create.line.protocol'
+import { type IUpdateLine } from '../protocols/update.line.protocol'
 
 export class UpdateLine implements IUpdateLine {
   constructor (

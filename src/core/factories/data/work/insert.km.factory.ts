@@ -1,4 +1,4 @@
-import { type IinsertKm } from '../../../../data/protocols/usecases/insert.km.protocol'
+import { type IinsertKm } from '../../../../data/protocols/insert.km.protocol'
 import { InsertKm } from '../../../../data/usecases/insert.km'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

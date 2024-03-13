@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import axios from 'axios'
-import { type httpParams } from '../../../data/protocols/http/http.post.client.protocol'
+import { type httpParams } from '../../protocols/http.post.client.protocol'
 
 export const mockAxios = (): jest.Mocked<typeof axios> => {
   const mockedAxios = axios as jest.Mocked<typeof axios>

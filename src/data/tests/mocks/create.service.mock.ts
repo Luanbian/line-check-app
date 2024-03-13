@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { type ICreateService, type ServiceParams } from '../../protocols/usecases/create.service.protocol'
+import { type ICreateService, type ServiceParams } from '../../protocols/create.service.protocol'
 
 export const paramsMock: ServiceParams = {
   service: faker.hacker.noun()

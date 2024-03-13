@@ -1,4 +1,4 @@
-import { type ICreateLine } from '../../../../data/protocols/usecases/create.line.protocol'
+import { type ICreateLine } from '../../../../data/protocols/create.line.protocol'
 import { CreateLine } from '../../../../data/usecases/create.line'
 import { makeHttpClient } from '../../infra/adapters/http.client.factory'
 

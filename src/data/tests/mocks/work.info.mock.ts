@@ -1,5 +1,5 @@
 import { type workProps } from '../../../domain/entities/work'
-import { type IWorkInfo } from '../../protocols/usecases/work.info.protocol'
+import { type IWorkInfo } from '../../protocols/work.info.protocol'
 
 export const generateCommonProps = (): workProps => ({
   id: 'fake_id',

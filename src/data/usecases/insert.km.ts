@@ -1,5 +1,5 @@
-import { type IHttpClient } from '../protocols/http/http.post.client.protocol'
-import { type InsertKmParams, type IinsertKm } from '../protocols/usecases/insert.km.protocol'
+import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type InsertKmParams, type IinsertKm } from '../protocols/insert.km.protocol'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { BadRequest } from '../../core/exceptions/bad.request.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
