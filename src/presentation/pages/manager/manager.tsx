@@ -7,6 +7,10 @@ import { type workPropsComplete, type workPropsManager } from '../../../domain/e
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import { type transport } from '../../../domain/entities/transport'
 import { useForm } from 'react-hook-form'
+import { type ICreateVehicle } from '../../../data/protocols/usecases/create.vehicle.protocol'
+import { type ICreateService } from '../../../data/protocols/usecases/create.service.protocol'
+import { type ICreateManufacture } from '../../../data/protocols/usecases/create.manufacture.protocol'
+import { type ICreateLogistic } from '../../../data/protocols/usecases/logistic.protocol'
 
 interface NavigationType {
   navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
@@ -15,13 +19,24 @@ interface NavigationType {
 interface Props {
   localStorage: ILocalStorage
   workInfoComplete: IWorkInfoComplete
+  createVehicle: ICreateVehicle
+  createService: ICreateService
+  createManufacture: ICreateManufacture
+  createLogistic: ICreateLogistic
 }
 
 interface Inputs {
   field: string
 }
 
-export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
+export default function Manager ({
+  localStorage,
+  workInfoComplete,
+  createVehicle,
+  createService,
+  createManufacture,
+  createLogistic
+}: Props): React.JSX.Element {
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
   const { setValue, formState: { errors }, handleSubmit } = useForm<Inputs>()
@@ -45,7 +60,12 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
     navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
   }
   const onSubmit = async (data: string, field: transport): Promise<void> => {
-
+    const token = await localStorage.obtain('token')
+    if (token === null) return
+    if (field === 'vehicle') await createVehicle.perform({ vehicle: data }, token)
+    else if (field === 'service') await createService.perform({ service: data }, token)
+    else if (field === 'manufacture') await createManufacture.perform({ manufacture: data }, token)
+    else if (field === 'logistic') await createLogistic.perform({ logistic: data }, token)
   }
 
   return (
