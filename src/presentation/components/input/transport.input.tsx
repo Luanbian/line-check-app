@@ -55,16 +55,18 @@ export default function TransportInput ({
 
   return (
     <>
-      <Text>Cadastrar {transp}</Text>
+      <Text testID='title'>Cadastrar {transp}</Text>
       <TextInput
+        testID='valueInput'
         placeholder='valor'
         onChangeText={text => { setValue('value', text) }}
       />
       <Button
+        testID='submitBtn'
         title='Cadastrar'
         onPress={handleSubmit(async (data) => { await onSubmit(data.value, transp) })}
       />
-      {(errors.value != null) && <Text>{errors.value.message}</Text>}
+      {(errors.value != null) && <Text testID='error-message'>{errors.value.message}</Text>}
     </>
   )
 }

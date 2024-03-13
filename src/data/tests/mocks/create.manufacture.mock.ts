@@ -5,7 +5,7 @@ export const paramsMock: ManufactureParams = {
   manufacture: faker.company.name()
 }
 
-export const makeCreateServiceMock = (): ICreateManufacture => {
+export const makeCreateManufactureMock = (): ICreateManufacture => {
   class CreateManufactureMock implements ICreateManufacture {
     public async perform (data: ManufactureParams, token: string): Promise<void> {}
   }
