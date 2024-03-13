@@ -7,6 +7,8 @@ import { type ICreateService } from '../../../data/protocols/usecases/create.ser
 import { type ICreateManufacture } from '../../../data/protocols/usecases/create.manufacture.protocol'
 import { type ICreateLogistic } from '../../../data/protocols/usecases/logistic.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { createTransportValidationSchema } from '../../../validation/create.transport.validation'
 
 interface Props {
   transp: transport
@@ -29,7 +31,9 @@ export default function TransportInput ({
   createManufacture,
   createLogistic
 }: Props): React.JSX.Element {
-  const { setValue, formState: { errors }, handleSubmit } = useForm<Inputs>()
+  const { setValue, formState: { errors }, handleSubmit } = useForm<Inputs>({
+    resolver: yupResolver(createTransportValidationSchema)
+  })
 
   const onSubmit = async (data: string, field: transport): Promise<void> => {
     const token = await localStorage.obtain('token')
