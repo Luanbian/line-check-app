@@ -21,11 +21,15 @@ interface Inputs {
   field: string
 }
 
+interface Inputs {
+  field: string
+}
+
 export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
-  const [transp, setTransp] = useState<transport | null>(null)
   const { setValue, formState: { errors }, handleSubmit } = useForm<Inputs>()
+  const [transp, setTransp] = useState<transport | null>(null)
 
   useEffect(() => {
     const getWorkDriverCompleteInfo = async (): Promise<void> => {
