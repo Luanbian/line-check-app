@@ -84,4 +84,31 @@ describe('TransportInput', () => {
       expect(create).toHaveBeenCalledWith({ logistic: value }, token)
     })
   })
+  test('should show error message if value is invalid', async () => {
+    const { sut } = makeSut()
+    const valueInput = await sut.getByTestId('valueInput')
+    const submitBtn = await sut.getByTestId('submitBtn')
+    const value = null
+    await waitFor(async () => {
+      const errorMessage = await sut.queryByTestId('error-message')
+      fireEvent.changeText(valueInput, value)
+      fireEvent.press(submitBtn)
+      expect(errorMessage).toHaveTextContent('O valor é obrigatório')
+    })
+  })
+  test('should not call create if token is null', async () => {
+    const { sut, localStorageMock, createLogisticMock } = makeSut()
+    jest.spyOn(localStorageMock, 'obtain').mockImplementationOnce(async () => {
+      return null
+    })
+    const create = jest.spyOn(createLogisticMock, 'perform')
+    const valueInput = await sut.getByTestId('valueInput')
+    const submitBtn = await sut.getByTestId('submitBtn')
+    const value = 'any_value'
+    await waitFor(async () => {
+      fireEvent.changeText(valueInput, value)
+      fireEvent.press(submitBtn)
+      expect(create).toHaveBeenCalledTimes(0)
+    })
+  })
 })
