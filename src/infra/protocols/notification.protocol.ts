@@ -1,3 +1,3 @@
 export interface INotification {
-  notify: () => Promise<void>
+  notify: (title: string, body: string) => Promise<void>
 }

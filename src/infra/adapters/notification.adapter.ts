@@ -12,15 +12,13 @@ ExpoNotification.setNotificationHandler({
 export class Notification implements INotification {
   constructor (private readonly id: string) {}
 
-  public async notify (): Promise<void> {
+  public async notify (title: string, body: string): Promise<void> {
     const { status } = await ExpoNotification.getPermissionsAsync()
     if (status !== 'granted') return
     const token = await this.getToken()
+    console.log(token)
     await ExpoNotification.scheduleNotificationAsync({
-      content: {
-        title: 'test title',
-        body: 'test body'
-      },
+      content: { title, body },
       trigger: null,
       identifier: token
     })
