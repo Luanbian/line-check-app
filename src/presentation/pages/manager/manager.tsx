@@ -8,7 +8,7 @@ import { type EntityNames } from '../../../domain/entities/entity.names'
 import { type transport } from '../../../domain/entities/transport'
 
 interface NavigationType {
-  navigate: (name: string, params?: { data?: EntityNames[] | transport, id?: string, values?: workPropsComplete }) => void
+  navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
 }
 
 interface Props {
@@ -38,7 +38,7 @@ export default function Manager ({ localStorage, workInfoComplete }: Props): Rea
     navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
   }
   const handleCreateTransport = (data: transport): void => {
-    navigation.navigate('CREATETRANSPORT', { data })
+    console.log(data)
   }
 
   return (
