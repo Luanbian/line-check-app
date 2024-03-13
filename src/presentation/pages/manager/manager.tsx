@@ -21,10 +21,6 @@ interface Inputs {
   field: string
 }
 
-interface Inputs {
-  field: string
-}
-
 export default function Manager ({ localStorage, workInfoComplete }: Props): React.JSX.Element {
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
