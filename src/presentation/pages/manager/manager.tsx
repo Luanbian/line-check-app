@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView, Button, TextInput } from 'react-native'
+import { View, Text, ScrollView, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IWorkInfoComplete } from '../../../data/protocols/usecases/work.info.protocol'
 import { type workPropsComplete, type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
 import { type transport } from '../../../domain/entities/transport'
-import { useForm } from 'react-hook-form'
 import { type ICreateVehicle } from '../../../data/protocols/usecases/create.vehicle.protocol'
 import { type ICreateService } from '../../../data/protocols/usecases/create.service.protocol'
 import { type ICreateManufacture } from '../../../data/protocols/usecases/create.manufacture.protocol'
 import { type ICreateLogistic } from '../../../data/protocols/usecases/logistic.protocol'
+import TransportInput from '../../components/input/transport.input'
 
 interface NavigationType {
   navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
@@ -25,10 +25,6 @@ interface Props {
   createLogistic: ICreateLogistic
 }
 
-interface Inputs {
-  field: string
-}
-
 export default function Manager ({
   localStorage,
   workInfoComplete,
@@ -39,7 +35,6 @@ export default function Manager ({
 }: Props): React.JSX.Element {
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
-  const { setValue, formState: { errors }, handleSubmit } = useForm<Inputs>()
   const [transp, setTransp] = useState<transport | null>(null)
 
   useEffect(() => {
@@ -59,14 +54,6 @@ export default function Manager ({
   const handleUpdateLine = (item: workPropsComplete): void => {
     navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
   }
-  const onSubmit = async (data: string, field: transport): Promise<void> => {
-    const token = await localStorage.obtain('token')
-    if (token === null) return
-    if (field === 'vehicle') await createVehicle.perform({ vehicle: data }, token)
-    else if (field === 'service') await createService.perform({ service: data }, token)
-    else if (field === 'manufacture') await createManufacture.perform({ manufacture: data }, token)
-    else if (field === 'logistic') await createLogistic.perform({ logistic: data }, token)
-  }
 
   return (
     <ScrollView>
@@ -76,18 +63,14 @@ export default function Manager ({
       <Button title='Cadastrar fábrica' onPress={() => { setTransp('manufacture') }}/>
       <Button title='Cadastrar rota' onPress={() => { setTransp('logistic') }}/>
       {transp !== null && (
-        <>
-          <Text>Cadastrar {transp}</Text>
-          <TextInput
-            placeholder='valor'
-            onChangeText={text => { setValue('field', text) }}
-          />
-          <Button
-            title='Cadastrar'
-            onPress={handleSubmit(async (data) => { await onSubmit(data.field, transp) })}
-          />
-          {(errors.field != null) && <Text>{errors.field.message}</Text>}
-        </>
+        <TransportInput
+          createLogistic={createLogistic}
+          createManufacture={createManufacture}
+          createService={createService}
+          createVehicle={createVehicle}
+          localStorage={localStorage}
+          transp={transp}
+        />
       )}
       {data?.works.map(item => (
         <View testID='card' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
