@@ -1,19 +1,18 @@
+import { type EntityNames } from '../../domain/entities/entity.names'
 import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
+import { type IinsertDeviceToken } from '../protocols/insert.device.token.protocol'
+import { type INotificationService, type message } from '../protocols/notification.service.protocol'
 
-interface message {
-  to: string
-  title: string
-  body: string
-}
-
-export class NotificationService {
+export class NotificationService implements INotificationService {
   constructor (
     private readonly url: string,
-    private readonly httpPostClient: IHttpClient
+    private readonly httpPostClient: IHttpClient,
+    private readonly insertDeviceToken: IinsertDeviceToken
   ) {}
 
-  public async send (): Promise<void> {
-    const message = await this.mountMessage()
+  public async send (accountId: string, data: EntityNames[], token: string): Promise<void> {
+    const deviceToken = await this.verifyDeviceToken(accountId, data, token)
+    const message = this.mountMessage(deviceToken)
     await this.httpPostClient.request({
       method: 'POST',
       url: this.url,
@@ -25,9 +24,18 @@ export class NotificationService {
     })
   }
 
-  private async mountMessage (): Promise<message> {
+  private async verifyDeviceToken (accountId: string, data: EntityNames[], token: string): Promise<string> {
+    const account = data.filter(item => item.id === accountId)[0]
+    const deviceToken = await this.insertDeviceToken.getToken()
+    if (account.deviceToken === null || deviceToken !== account.deviceToken) {
+      await this.insertDeviceToken.perform({ accountId }, token)
+    }
+    return deviceToken
+  }
+
+  private mountMessage (deviceToken: string): message {
     const message: message = {
-      to: 'expo token',
+      to: deviceToken,
       title: 'titulo de teste',
       body: 'tamo aqui testando'
     }
