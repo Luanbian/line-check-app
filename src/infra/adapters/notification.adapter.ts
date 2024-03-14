@@ -27,7 +27,6 @@ export class Notification implements INotification {
     const { status } = await ExpoNotification.getPermissionsAsync()
     if (status !== 'granted') return
     const token = await this.getToken()
-    console.log(token)
     const message = this.mountMessage(token, title, body)
     await this.httpPostClient.request({
       method: 'POST',
@@ -45,7 +44,7 @@ export class Notification implements INotification {
   }
 
   private mountMessage (token: string, title: string, body: string): message {
-    const message: message = { to: 'token', title, body }
+    const message: message = { to: token, title, body }
     return message
   }
 }
