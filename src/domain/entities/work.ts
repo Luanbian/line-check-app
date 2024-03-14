@@ -23,3 +23,8 @@ export interface workPropsManager {
   works: workPropsComplete[]
   entities: EntityNames[]
 }
+
+export interface workPropsDriver {
+  works: workProps[]
+  entities: EntityNames[]
+}

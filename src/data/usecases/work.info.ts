@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '../../@types/http.response'
 import { UnathorizedError } from '../../core/exceptions/unathorized.error'
 import { UnexpectedError } from '../../core/exceptions/unexpected.error'
-import { type workProps } from '../../domain/entities/work'
+import { type workPropsDriver } from '../../domain/entities/work'
 import { type IHttpClient } from '../../infra/protocols/http.post.client.protocol'
 import { type IWorkInfo } from '../protocols/work.info.protocol'
 
@@ -11,7 +11,7 @@ export class WorkInfo implements IWorkInfo {
     private readonly HttpGetClient: IHttpClient
   ) {}
 
-  public async perform (token: string): Promise<workProps[][]> {
+  public async perform (token: string): Promise<workPropsDriver> {
     const httpResponse = await this.HttpGetClient.request({
       url: this.url,
       method: 'GET',
@@ -20,8 +20,7 @@ export class WorkInfo implements IWorkInfo {
       }
     })
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.ok: return [httpResponse.body as workProps[]]
-      case HttpStatusCode.noContent: return [[] as workProps[]]
+      case HttpStatusCode.ok: return httpResponse.body as workPropsDriver
       case HttpStatusCode.unathorized: throw new UnathorizedError()
       default: throw new UnexpectedError()
     }

@@ -1,5 +1,6 @@
-import { type workProps } from '../../../domain/entities/work'
+import { type workPropsDriver, type workProps } from '../../../domain/entities/work'
 import { type IWorkInfo } from '../../protocols/work.info.protocol'
+import { entityNamesMock } from './entity.names.mock'
 
 export const generateCommonProps = (): workProps => ({
   id: 'fake_id',
@@ -18,13 +19,14 @@ export const workPropsMock = (): workProps => generateCommonProps()
 
 export const makeWorkInfoMock = (): IWorkInfo => {
   class WorkInfoMock implements IWorkInfo {
-    public async perform (token: string): Promise<workProps[][]> {
+    public async perform (token: string): Promise<workPropsDriver> {
       const workOne = workPropsMock()
-      const workTwo = workPropsMock()
-      return [
-        [workOne],
-        [workTwo]
-      ]
+      const entityOne = entityNamesMock()
+      const entityTwo = entityNamesMock()
+      return {
+        works: [workOne],
+        entities: [entityOne, entityTwo]
+      }
     }
   }
   return new WorkInfoMock()

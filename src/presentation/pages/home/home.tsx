@@ -3,7 +3,7 @@ import { View, Text, Button, ScrollView, TextInput } from 'react-native'
 import { type IWorkInfo } from '../../../data/protocols/work.info.protocol'
 import { type IinsertKm } from '../../../data/protocols/insert.km.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
-import { type workProps } from '../../../domain/entities/work'
+import { type workPropsDriver } from '../../../domain/entities/work'
 import { type LinecheckOptions, type IUpdateLineCheck } from '../../../data/protocols/update.linecheck.protocol'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -24,7 +24,7 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
     resolver: yupResolver(FinalInsertKmValidationSchema)
   })
 
-  const [data, setData] = useState<workProps[]>()
+  const [data, setData] = useState<workPropsDriver>()
   const [errorSubmit, setErrorSubmit] = useState<string | null>(null)
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
       const token = await localStorage.obtain('token')
       if (token != null) {
         const httpRes = await getWorkInfo.perform(token)
-        setData(httpRes[0])
+        setData(httpRes)
       }
     }
     void getWorkDriverInfo()
@@ -85,7 +85,7 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
   return (
     <ScrollView>
       {(errorSubmit != null) && <Text testID='errorSubmit'>{errorSubmit}</Text>}
-      {data?.map(item => (
+      {data?.works.map(item => (
         <View testID='cardview' key={item.id} style={{ borderColor: 'red', borderWidth: 5 }}>
           <Text testID='driverField'>Motorista: {item.accountName}</Text>
           <Text testID='startJourneyField'>Inicio jornada: {item.startJourneyModel}</Text>
