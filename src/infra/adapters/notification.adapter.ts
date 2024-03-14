@@ -1,12 +1,6 @@
 import * as ExpoNotification from 'expo-notifications'
 import { type INotification } from '../protocols/notification.protocol'
-import { type IHttpClient } from '../protocols/http.post.client.protocol'
-
-interface message {
-  to: string
-  title: string
-  body: string
-}
+import { NotPermittedNotification } from '../../core/exceptions/not.permitted.notification.error'
 
 ExpoNotification.setNotificationHandler({
   handleNotification: async () => ({
@@ -18,39 +12,17 @@ ExpoNotification.setNotificationHandler({
 
 export class Notification implements INotification {
   constructor (
-    private readonly id: string,
-    private readonly url: string,
-    private readonly httpPostClient: IHttpClient
+    private readonly id: string
   ) {}
 
-  public async notify (title: string, body: string): Promise<void> {
-    const { status } = await ExpoNotification.getPermissionsAsync()
-    if (status !== 'granted') return
-    const token = await this.getToken()
-    const message = this.mountMessage(token, title, body)
-    await this.httpPostClient.request({
-      method: 'POST',
-      url: this.url,
-      body: message,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-  }
-
-  public async saveToken (accountId: string): Promise<void> {
-    const token = await this.getToken()
-    console.log(token, accountId)
-  }
-
-  private async getToken (): Promise<string> {
+  public async getToken (): Promise<string> {
+    await this.getPermission()
     const token = (await ExpoNotification.getExpoPushTokenAsync({ projectId: this.id })).data
     return token
   }
 
-  private mountMessage (token: string, title: string, body: string): message {
-    const message: message = { to: token, title, body }
-    return message
+  private async getPermission (): Promise<void> {
+    const { status } = await ExpoNotification.getPermissionsAsync()
+    if (status !== 'granted') throw new NotPermittedNotification()
   }
 }

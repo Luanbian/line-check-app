@@ -7,13 +7,11 @@ import { type IAuthentication } from '../../../data/protocols/authentication.pro
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
 import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { loginValidationSchema } from '../../../validation/login.validation'
-import { type INotification } from '../../../infra/protocols/notification.protocol'
 
 interface Props {
   authentication: IAuthentication
   decodeToken: IDecodeToken
   localStorage: ILocalStorage
-  notification: INotification
 }
 
 interface Inputs {
@@ -21,7 +19,7 @@ interface Inputs {
   password: string
 }
 
-export default function Login ({ authentication, decodeToken, localStorage, notification }: Props): React.JSX.Element {
+export default function Login ({ authentication, decodeToken, localStorage }: Props): React.JSX.Element {
   const navigation = useNavigation()
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(loginValidationSchema)
@@ -36,7 +34,6 @@ export default function Login ({ authentication, decodeToken, localStorage, noti
         localStorage.save('token', accessToken),
         localStorage.save('accountId', sub)
       ])
-      await notification.saveToken(sub)
       navigation.navigate(role as never)
     } catch (error) {
       if (error instanceof Error) {
