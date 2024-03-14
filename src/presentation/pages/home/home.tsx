@@ -8,15 +8,22 @@ import { type LinecheckOptions, type IUpdateLineCheck } from '../../../data/prot
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FinalInsertKmValidationSchema, InitInsertKmValidationSchema } from '../../../validation/insert.km.validation'
+import { type RouteProp, type ParamListBase } from '@react-navigation/native'
+
+export interface ParamList extends ParamListBase {
+  'DRIVER': { accountId: string, token: string }
+}
 
 interface Props {
   getWorkInfo: IWorkInfo
   localStorage: ILocalStorage
   updateLinecheck: IUpdateLineCheck
   insertKm: IinsertKm
+  route: RouteProp<ParamList, 'DRIVER'>
 }
 
-export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm }: Props): React.JSX.Element {
+export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm, route }: Props): React.JSX.Element {
+  const { accountId, token } = route.params
   const { setValue: setValueInit, handleSubmit: handleSubmitInit, formState: { errors: errInit } } = useForm({
     resolver: yupResolver(InitInsertKmValidationSchema)
   })
@@ -29,29 +36,20 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
 
   useEffect(() => {
     const getWorkDriverInfo = async (): Promise<void> => {
-      const token = await localStorage.obtain('token')
-      if (token != null) {
-        const httpRes = await getWorkInfo.perform(token)
-        setData(httpRes)
-      }
+      const httpRes = await getWorkInfo.perform(token)
+      setData(httpRes)
     }
     void getWorkDriverInfo()
   }, [])
 
   const updateDriverLinecheck = async (workId: string, marker: LinecheckOptions): Promise<void> => {
     try {
-      const [token, accountId] = await Promise.all([
-        localStorage.obtain('token'),
-        localStorage.obtain('accountId')
-      ])
-      if (token != null && accountId != null) {
-        await updateLinecheck.perform({
-          workId,
-          accountId,
-          marker,
-          token
-        })
-      }
+      await updateLinecheck.perform({
+        workId,
+        accountId,
+        marker,
+        token
+      })
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)
@@ -64,22 +62,16 @@ export default function Home ({ getWorkInfo, localStorage, updateLinecheck, inse
     await localStorage.save('initKm', String(value))
   }
   const handleEndLine = async (id: string, value: number): Promise<void> => {
-    const [initKm, accountId, token] = await Promise.all([
-      localStorage.obtain('initKm'),
-      localStorage.obtain('accountId'),
-      localStorage.obtain('token')
-    ])
+    const initKm = await localStorage.obtain('initKm')
     if (initKm === null) {
       setErrorSubmit('Você esqueceu de colocar a quilometragem inicial')
       return
     }
     await updateDriverLinecheck(id, 'ENDLINEREAL')
-    if (token != null && accountId != null) {
-      await insertKm.perform({
-        finalKm: value,
-        initialKm: Number(initKm)
-      }, id, accountId, token)
-    }
+    await insertKm.perform({
+      finalKm: value,
+      initialKm: Number(initKm)
+    }, id, accountId, token)
   }
 
   return (

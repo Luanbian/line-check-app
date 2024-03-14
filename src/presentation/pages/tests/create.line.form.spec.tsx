@@ -4,17 +4,14 @@ import '@testing-library/jest-native/extend-expect'
 import CreateLineForm, { type ParamList } from '../manager/create.line.form'
 import { type RouteProp } from '@react-navigation/native'
 import { entityNamesMock } from '../../../data/tests/mocks/entity.names.mock'
-import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
 import { makeCreateLineMock } from '../../../data/tests/mocks/create.line.mock'
 import { type ICreateLine } from '../../../data/protocols/create.line.protocol'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { makeUpdateLineMock } from '../../../data/tests/mocks/update.line.mock'
 
 interface SutTypes {
   sut: RenderResult
   routeMock: RouteProp<ParamList, 'CREATELINE'>
   createLineMock: ICreateLine
-  localStorageMock: ILocalStorage
 }
 
 const makeSut = (): SutTypes => {
@@ -29,22 +26,21 @@ const makeSut = (): SutTypes => {
         entityNamesMock('services'),
         entityNamesMock('vehicles')
       ],
-      id: undefined
+      id: undefined,
+      token: 'fake_token'
     }
   }
   const createLineMock = makeCreateLineMock()
-  const localStorageMock = makeLocalStorageMock()
   const updateLineMock = makeUpdateLineMock()
   const sut = render(
     <CreateLineForm
       route={routeMock}
       createLine={createLineMock}
-      localStorage={localStorageMock}
       updateLine={updateLineMock}
     />
   )
   return {
-    sut, routeMock, createLineMock, localStorageMock
+    sut, routeMock, createLineMock
   }
 }
 describe('CreateLineForm', () => {

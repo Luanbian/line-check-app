@@ -8,14 +8,11 @@ import { makeAuthenticationMock } from '../../../data/tests/mocks/authentication
 import { InvalidCredentialsError } from '../../../core/exceptions/invalid.credentials.error'
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
 import { makeDecodedTokenMock } from '../../../infra/tests/mocks/decoded.mock'
-import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 
 interface SutTypes {
   sut: RenderResult
   authenticationMock: IAuthentication
   decodedTokenMock: IDecodeToken
-  localStorageMock: ILocalStorage
 }
 
 jest.mock('@react-navigation/native', () => ({
@@ -26,16 +23,14 @@ jest.mock('@react-navigation/native', () => ({
 const makeSut = (): SutTypes => {
   const authenticationMock = makeAuthenticationMock()
   const decodedTokenMock = makeDecodedTokenMock()
-  const localStorageMock = makeLocalStorageMock()
   const sut = render(
     <Login
       authentication={authenticationMock}
       decodeToken={decodedTokenMock}
-      localStorage={localStorageMock}
     />
   )
   return {
-    sut, authenticationMock, decodedTokenMock, localStorageMock
+    sut, authenticationMock, decodedTokenMock
   }
 }
 
@@ -138,26 +133,6 @@ describe('login page', () => {
     fireEvent.press(submit)
     await waitFor(() => {
       expect(decodeSpy).toHaveBeenCalledWith(accessToken.accessToken)
-    })
-  })
-  test('should call localStorage with correct values', async () => {
-    const { sut, localStorageMock, authenticationMock, decodedTokenMock } = makeSut()
-    const accessToken = { accessToken: 'fake_token' }
-    jest.spyOn(authenticationMock, 'auth').mockResolvedValue(accessToken)
-    const decodeResponse = { role: 'DRIVER', sub: 'fake_account_id' }
-    jest.spyOn(decodedTokenMock, 'decode').mockResolvedValue(decodeResponse)
-    const localStorageSpy = jest.spyOn(localStorageMock, 'save')
-    const validEmail = faker.internet.email()
-    const email = sut.getByTestId('emailField')
-    fireEvent.changeText(email, validEmail)
-    const validPassword = faker.internet.password()
-    const password = sut.getByTestId('passwordField')
-    fireEvent.changeText(password, validPassword)
-    const submit = sut.getByTestId('submitButton')
-    fireEvent.press(submit)
-    await waitFor(() => {
-      expect(localStorageSpy).toHaveBeenCalledWith('token', accessToken.accessToken)
-      expect(localStorageSpy).toHaveBeenCalledWith('accountId', decodeResponse.sub)
     })
   })
 })

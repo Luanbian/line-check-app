@@ -5,13 +5,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { type IAuthentication } from '../../../data/protocols/authentication.protocol'
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { loginValidationSchema } from '../../../validation/login.validation'
+
+interface NavigationType {
+  navigate: (name: string, params?: { accountId: string, token: string }) => void
+}
 
 interface Props {
   authentication: IAuthentication
   decodeToken: IDecodeToken
-  localStorage: ILocalStorage
 }
 
 interface Inputs {
@@ -19,8 +21,8 @@ interface Inputs {
   password: string
 }
 
-export default function Login ({ authentication, decodeToken, localStorage }: Props): React.JSX.Element {
-  const navigation = useNavigation()
+export default function Login ({ authentication, decodeToken }: Props): React.JSX.Element {
+  const navigation = useNavigation<NavigationType>()
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(loginValidationSchema)
   })
@@ -30,11 +32,7 @@ export default function Login ({ authentication, decodeToken, localStorage }: Pr
     try {
       const { accessToken } = await authentication.auth(data)
       const { role, sub } = await decodeToken.decode(accessToken)
-      await Promise.all([
-        localStorage.save('token', accessToken),
-        localStorage.save('accountId', sub)
-      ])
-      navigation.navigate(role as never)
+      navigation.navigate(role.toUpperCase(), { accountId: sub, token: accessToken })
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)

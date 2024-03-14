@@ -6,7 +6,6 @@ import DropDownPicker from 'react-native-dropdown-picker'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type CreateLineCheckParams, type ICreateLine } from '../../../data/protocols/create.line.protocol'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import SelectInput from '../../components/input/select.input'
 import TimePicker from '../../components/input/time.input'
 import { createLineValidationSchema } from '../../../validation/create.line.validation'
@@ -14,13 +13,12 @@ import { type IUpdateLine } from '../../../data/protocols/update.line.protocol'
 import { type workPropsComplete } from '../../../domain/entities/work'
 
 export interface ParamList extends ParamListBase {
-  'CREATELINE': { data: EntityNames[], id?: string, values?: workPropsComplete }
+  'CREATELINE': { data: EntityNames[], id?: string, values?: workPropsComplete, token: string }
 }
 
 interface Props {
   route: RouteProp<ParamList, 'CREATELINE'>
   createLine: ICreateLine
-  localStorage: ILocalStorage
   updateLine: IUpdateLine
 }
 
@@ -35,8 +33,8 @@ export interface Inputs {
   endLine: string
 }
 
-export default function CreateLineForm ({ route, createLine, localStorage, updateLine }: Props): React.JSX.Element {
-  const { data, id, values } = route.params
+export default function CreateLineForm ({ route, createLine, updateLine }: Props): React.JSX.Element {
+  const { data, id, values, token } = route.params
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(createLineValidationSchema)
   })
@@ -50,8 +48,6 @@ export default function CreateLineForm ({ route, createLine, localStorage, updat
       setErrorSelectDay(true)
       return
     }
-    const token = await localStorage.obtain('token')
-    if (token == null) return
     const params: CreateLineCheckParams = {
       startJourneyModel: data.startJourney,
       startLineModel: data.startLine,

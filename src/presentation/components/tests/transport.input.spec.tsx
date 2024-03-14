@@ -6,12 +6,10 @@ import { makeCreateLogisticMock } from '../../../data/tests/mocks/create.logisti
 import { makeCreateManufactureMock } from '../../../data/tests/mocks/create.manufacture.mock'
 import { makeCreateServiceMock } from '../../../data/tests/mocks/create.service.mock'
 import { makeCreateVehicleMock } from '../../../data/tests/mocks/create.vehicle.mock'
-import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
 import { type ICreateLogistic } from '../../../data/protocols/logistic.protocol'
 import { type ICreateManufacture } from '../../../data/protocols/create.manufacture.protocol'
 import { type ICreateService } from '../../../data/protocols/create.service.protocol'
 import { type ICreateVehicle } from '../../../data/protocols/create.vehicle.protocol'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type transport } from '../../../domain/entities/transport'
 
 interface SutTypes {
@@ -20,8 +18,8 @@ interface SutTypes {
   createManufactureMock: ICreateManufacture
   createServiceMock: ICreateService
   createVehicleMock: ICreateVehicle
-  localStorageMock: ILocalStorage
   transpMock: transport
+  tokenMock: string
 }
 
 const makeSut = (): SutTypes => {
@@ -29,20 +27,26 @@ const makeSut = (): SutTypes => {
   const createManufactureMock = makeCreateManufactureMock()
   const createServiceMock = makeCreateServiceMock()
   const createVehicleMock = makeCreateVehicleMock()
-  const localStorageMock = makeLocalStorageMock()
   const transpMock = 'logistic'
+  const tokenMock = 'fake_token'
   const sut = render(
     <TransportInput
       createLogistic={createLogisticMock}
       createManufacture={createManufactureMock}
       createService={createServiceMock}
       createVehicle={createVehicleMock}
-      localStorage={localStorageMock}
       transp={transpMock}
+      token={tokenMock}
     />
   )
   return {
-    sut, createLogisticMock, createManufactureMock, createServiceMock, createVehicleMock, localStorageMock, transpMock
+    sut,
+    createLogisticMock,
+    createManufactureMock,
+    createServiceMock,
+    createVehicleMock,
+    transpMock,
+    tokenMock
   }
 }
 describe('TransportInput', () => {
@@ -57,23 +61,8 @@ describe('TransportInput', () => {
     const errorMessage = await sut.queryByTestId('error-message')
     expect(errorMessage).toBeNull()
   })
-  test('should call local storage correctly', async () => {
-    const { sut, localStorageMock } = makeSut()
-    const localStorageSpy = jest.spyOn(localStorageMock, 'obtain')
-    const valueInput = await sut.getByTestId('valueInput')
-    const submitBtn = await sut.getByTestId('submitBtn')
-    await waitFor(() => {
-      fireEvent.changeText(valueInput, 'any_value')
-      fireEvent.press(submitBtn)
-      expect(localStorageSpy).toHaveBeenCalledWith('token')
-    })
-  })
   test('should call create case based in field provided', async () => {
-    const { sut, localStorageMock, createLogisticMock } = makeSut()
-    const token = 'fake_token'
-    jest.spyOn(localStorageMock, 'obtain').mockImplementationOnce(async () => {
-      return token
-    })
+    const { sut, createLogisticMock, tokenMock } = makeSut()
     const create = jest.spyOn(createLogisticMock, 'perform')
     const valueInput = await sut.getByTestId('valueInput')
     const submitBtn = await sut.getByTestId('submitBtn')
@@ -81,7 +70,7 @@ describe('TransportInput', () => {
     await waitFor(() => {
       fireEvent.changeText(valueInput, value)
       fireEvent.press(submitBtn)
-      expect(create).toHaveBeenCalledWith({ logistic: value }, token)
+      expect(create).toHaveBeenCalledWith({ logistic: value }, tokenMock)
     })
   })
   test('should show error message if value is invalid', async () => {
@@ -94,21 +83,6 @@ describe('TransportInput', () => {
       fireEvent.changeText(valueInput, value)
       fireEvent.press(submitBtn)
       expect(errorMessage).toHaveTextContent('O valor é obrigatório')
-    })
-  })
-  test('should not call create if token is null', async () => {
-    const { sut, localStorageMock, createLogisticMock } = makeSut()
-    jest.spyOn(localStorageMock, 'obtain').mockImplementationOnce(async () => {
-      return null
-    })
-    const create = jest.spyOn(createLogisticMock, 'perform')
-    const valueInput = await sut.getByTestId('valueInput')
-    const submitBtn = await sut.getByTestId('submitBtn')
-    const value = 'any_value'
-    await waitFor(async () => {
-      fireEvent.changeText(valueInput, value)
-      fireEvent.press(submitBtn)
-      expect(create).toHaveBeenCalledTimes(0)
     })
   })
 })

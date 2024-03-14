@@ -6,17 +6,16 @@ import { type ICreateVehicle } from '../../../data/protocols/create.vehicle.prot
 import { type ICreateService } from '../../../data/protocols/create.service.protocol'
 import { type ICreateManufacture } from '../../../data/protocols/create.manufacture.protocol'
 import { type ICreateLogistic } from '../../../data/protocols/logistic.protocol'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { createTransportValidationSchema } from '../../../validation/create.transport.validation'
 
 interface Props {
   transp: transport
-  localStorage: ILocalStorage
   createVehicle: ICreateVehicle
   createService: ICreateService
   createManufacture: ICreateManufacture
   createLogistic: ICreateLogistic
+  token: string
 }
 
 interface Inputs {
@@ -25,7 +24,7 @@ interface Inputs {
 
 export default function TransportInput ({
   transp,
-  localStorage,
+  token,
   createVehicle,
   createService,
   createManufacture,
@@ -36,8 +35,6 @@ export default function TransportInput ({
   })
 
   const onSubmit = async (data: string, field: transport): Promise<void> => {
-    const token = await localStorage.obtain('token')
-    if (token === null) return
     switch (field) {
       case 'vehicle':
         await createVehicle.perform({ vehicle: data }, token)

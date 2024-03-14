@@ -1,17 +1,27 @@
 import React from 'react'
 import { type RenderResult, render, waitFor } from '@testing-library/react-native'
 import '@testing-library/jest-native/extend-expect'
-import Manager from '../manager/manager'
-import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
+import Manager, { type ParamList } from '../manager/manager'
 import { makeWorkInfoCompleteMock } from '../../../data/tests/mocks/work.info.complete.mock'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
 import { type IWorkInfoComplete } from '../../../data/protocols/work.info.protocol'
-import { faker } from '@faker-js/faker'
+import { type RouteProp } from '@react-navigation/native'
+import { makeCreateLogisticMock } from '../../../data/tests/mocks/create.logistic.mock'
+import { makeCreateManufactureMock } from '../../../data/tests/mocks/create.manufacture.mock'
+import { makeCreateServiceMock } from '../../../data/tests/mocks/create.service.mock'
+import { makeCreateVehicleMock } from '../../../data/tests/mocks/create.vehicle.mock'
+import { type ICreateLogistic } from '../../../data/protocols/logistic.protocol'
+import { type ICreateManufacture } from '../../../data/protocols/create.manufacture.protocol'
+import { type ICreateService } from '../../../data/protocols/create.service.protocol'
+import { type ICreateVehicle } from '../../../data/protocols/create.vehicle.protocol'
 
 interface SutTypes {
   sut: RenderResult
-  localStorageMock: ILocalStorage
   workInfoCompleteMock: IWorkInfoComplete
+  routeMock: RouteProp<ParamList, 'MANAGER'>
+  createLogisticMock: ICreateLogistic
+  createManufactureMock: ICreateManufacture
+  createServiceMock: ICreateService
+  createVehicleMock: ICreateVehicle
 }
 
 jest.mock('@react-navigation/native', () => ({
@@ -20,34 +30,63 @@ jest.mock('@react-navigation/native', () => ({
 }))
 
 const makeSut = (): SutTypes => {
-  const localStorageMock = makeLocalStorageMock()
   const workInfoCompleteMock = makeWorkInfoCompleteMock()
+  const createLogisticMock = makeCreateLogisticMock()
+  const createManufactureMock = makeCreateManufactureMock()
+  const createServiceMock = makeCreateServiceMock()
+  const createVehicleMock = makeCreateVehicleMock()
+  const routeMock: RouteProp<ParamList, 'MANAGER'> = {
+    key: 'any_unique_id',
+    name: 'MANAGER',
+    params: {
+      accountId: 'fake_account_id',
+      token: 'fake_token'
+    }
+  }
   const sut = render(
     <Manager
-      localStorage={localStorageMock}
       workInfoComplete={workInfoCompleteMock}
+      createLogistic={createLogisticMock}
+      createManufacture={createManufactureMock}
+      createService={createServiceMock}
+      createVehicle={createVehicleMock}
+      route={routeMock}
     />
   )
   return {
-    sut, localStorageMock, workInfoCompleteMock
+    sut,
+    workInfoCompleteMock,
+    routeMock,
+    createLogisticMock,
+    createManufactureMock,
+    createServiceMock,
+    createVehicleMock
   }
 }
 describe('manager page', () => {
   test('ensure the api are called when component is mounted', async () => {
-    const { localStorageMock, workInfoCompleteMock } = makeSut()
-    const fakeToken = faker.string.uuid()
-    const workPropsStub = makeWorkInfoCompleteMock().perform(fakeToken)
-    jest.spyOn(localStorageMock, 'obtain').mockResolvedValue(fakeToken)
-    jest.spyOn(workInfoCompleteMock, 'perform').mockResolvedValue(workPropsStub)
+    const {
+      createLogisticMock,
+      createManufactureMock,
+      createServiceMock,
+      createVehicleMock,
+      routeMock,
+      workInfoCompleteMock
+    } = makeSut()
+    const { token } = routeMock.params
+    const getWorkSpy = jest.spyOn(workInfoCompleteMock, 'perform')
     render(
       <Manager
-        localStorage={localStorageMock}
+        createLogistic={createLogisticMock}
+        createManufacture={createManufactureMock}
+        createService={createServiceMock}
+        createVehicle={createVehicleMock}
+        route={routeMock}
         workInfoComplete={workInfoCompleteMock}
       />
     )
     await waitFor(() => {
-      expect(localStorageMock.obtain).toHaveBeenCalledWith('token')
-      expect(workInfoCompleteMock.perform).toHaveBeenCalledWith(fakeToken)
+      expect(getWorkSpy).toHaveBeenCalledWith(token)
     })
   })
   test('first state of screen after get info from API', async () => {

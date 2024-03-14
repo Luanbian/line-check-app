@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { type ILocalStorage } from '../../../infra/protocols/local.storage.protocol'
+import { type ParamListBase, useNavigation, type RouteProp } from '@react-navigation/native'
 import { type IWorkInfoComplete } from '../../../data/protocols/work.info.protocol'
 import { type workPropsComplete, type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
@@ -13,46 +12,48 @@ import { type ICreateLogistic } from '../../../data/protocols/logistic.protocol'
 import TransportInput from '../../components/input/transport.input'
 
 interface NavigationType {
-  navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete }) => void
+  navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete, token: string }) => void
+}
+
+export interface ParamList extends ParamListBase {
+  'MANAGER': { accountId: string, token: string }
 }
 
 interface Props {
-  localStorage: ILocalStorage
   workInfoComplete: IWorkInfoComplete
   createVehicle: ICreateVehicle
   createService: ICreateService
   createManufacture: ICreateManufacture
   createLogistic: ICreateLogistic
+  route: RouteProp<ParamList, 'MANAGER'>
 }
 
 export default function Manager ({
-  localStorage,
   workInfoComplete,
   createVehicle,
   createService,
   createManufacture,
-  createLogistic
+  createLogistic,
+  route
 }: Props): React.JSX.Element {
+  const { token } = route.params
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
   const [transp, setTransp] = useState<transport | null>(null)
 
   useEffect(() => {
     const getWorkDriverCompleteInfo = async (): Promise<void> => {
-      const token = await localStorage.obtain('token')
-      if (token != null) {
-        const httpRes = await workInfoComplete.perform(token)
-        setData(httpRes)
-      }
+      const httpRes = await workInfoComplete.perform(token)
+      setData(httpRes)
     }
     void getWorkDriverCompleteInfo()
   }, [])
 
   const handleCreateLine = (): void => {
-    navigation.navigate('CREATELINE', { data: data?.entities })
+    navigation.navigate('CREATELINE', { data: data?.entities, token })
   }
   const handleUpdateLine = (item: workPropsComplete): void => {
-    navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item })
+    navigation.navigate('CREATELINE', { data: data?.entities, id: item.id, values: item, token })
   }
 
   return (
@@ -68,7 +69,7 @@ export default function Manager ({
           createManufacture={createManufacture}
           createService={createService}
           createVehicle={createVehicle}
-          localStorage={localStorage}
+          token={token}
           transp={transp}
         />
       )}
