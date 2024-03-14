@@ -39,8 +39,14 @@ export class Notification implements INotification {
     })
   }
 
+  public async saveToken (accountId: string): Promise<void> {
+    const token = await this.getToken()
+    console.log(token, accountId)
+  }
+
   private async getToken (): Promise<string> {
-    return (await ExpoNotification.getExpoPushTokenAsync({ projectId: this.id })).data
+    const token = (await ExpoNotification.getExpoPushTokenAsync({ projectId: this.id })).data
+    return token
   }
 
   private mountMessage (token: string, title: string, body: string): message {
