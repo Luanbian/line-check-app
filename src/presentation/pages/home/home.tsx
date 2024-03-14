@@ -8,15 +8,17 @@ import { type LinecheckOptions, type IUpdateLineCheck } from '../../../data/prot
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FinalInsertKmValidationSchema, InitInsertKmValidationSchema } from '../../../validation/insert.km.validation'
+import { type INotificationService } from '../../../data/protocols/notification.service.protocol'
 
 interface Props {
   getWorkInfo: IWorkInfo
   localStorage: ILocalStorage
   updateLinecheck: IUpdateLineCheck
   insertKm: IinsertKm
+  notification: INotificationService
 }
 
-export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm }: Props): React.JSX.Element {
+export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm, notification }: Props): React.JSX.Element {
   const { setValue: setValueInit, handleSubmit: handleSubmitInit, formState: { errors: errInit } } = useForm({
     resolver: yupResolver(InitInsertKmValidationSchema)
   })
