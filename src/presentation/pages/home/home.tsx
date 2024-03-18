@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, Button, ScrollView, TextInput } from 'react-native'
 import { type IWorkInfo } from '../../../data/protocols/work.info.protocol'
 import { type IinsertKm } from '../../../data/protocols/insert.km.protocol'
@@ -8,22 +8,20 @@ import { type LinecheckOptions, type IUpdateLineCheck } from '../../../data/prot
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FinalInsertKmValidationSchema, InitInsertKmValidationSchema } from '../../../validation/insert.km.validation'
-import { type RouteProp, type ParamListBase } from '@react-navigation/native'
-
-export interface ParamList extends ParamListBase {
-  'DRIVER': { accountId: string, token: string }
-}
+import { AuthContext } from '../../contexts/auth.context'
 
 interface Props {
   getWorkInfo: IWorkInfo
   localStorage: ILocalStorage
   updateLinecheck: IUpdateLineCheck
   insertKm: IinsertKm
-  route: RouteProp<ParamList, 'DRIVER'>
 }
 
-export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm, route }: Props): React.JSX.Element {
-  const { accountId, token } = route.params
+export default function Home ({ getWorkInfo, localStorage, updateLinecheck, insertKm }: Props): React.JSX.Element {
+  const { loggedUser } = useContext(AuthContext)
+  const token = (loggedUser != null) ? loggedUser.token : ''
+  const accountId = (loggedUser != null) ? loggedUser.accountId : ''
+
   const { setValue: setValueInit, handleSubmit: handleSubmitInit, formState: { errors: errInit } } = useForm({
     resolver: yupResolver(InitInsertKmValidationSchema)
   })

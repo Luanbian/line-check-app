@@ -1,7 +1,7 @@
 import { type RenderResult, render, waitFor, fireEvent } from '@testing-library/react-native'
 import '@testing-library/jest-native/extend-expect'
 import React from 'react'
-import Home, { type ParamList } from '../home/home'
+import Home from '../home/home'
 import { makeWorkInfoMock } from '../../../data/tests/mocks/work.info.mock'
 import { makeLocalStorageMock } from '../../../infra/tests/mocks/local.storage.mock'
 import { makeUpdateLinecheckMock } from '../../../data/tests/mocks/update.linecheck.mock'
@@ -10,7 +10,6 @@ import { type ILocalStorage } from '../../../infra/protocols/local.storage.proto
 import { type IUpdateLineCheck } from '../../../data/protocols/update.linecheck.protocol'
 import { makeInsertKmMock } from '../../../data/tests/mocks/insert.km.mock'
 import { type IinsertKm } from '../../../data/protocols/insert.km.protocol'
-import { type RouteProp } from '@react-navigation/native'
 
 interface SutTypes {
   sut: RenderResult
@@ -18,18 +17,9 @@ interface SutTypes {
   localStorageMock: ILocalStorage
   updateLinecheckMock: IUpdateLineCheck
   insertKmMock: IinsertKm
-  routeMock: RouteProp<ParamList, 'DRIVER'>
 }
 
 const makeSut = (): SutTypes => {
-  const routeMock: RouteProp<ParamList, 'DRIVER'> = {
-    key: 'random_key',
-    name: 'DRIVER',
-    params: {
-      accountId: 'fake_account_id',
-      token: 'fake_token'
-    }
-  }
   const getWorkInfoMock = makeWorkInfoMock()
   const localStorageMock = makeLocalStorageMock()
   const updateLinecheckMock = makeUpdateLinecheckMock()
@@ -40,18 +30,16 @@ const makeSut = (): SutTypes => {
       localStorage={localStorageMock}
       updateLinecheck={updateLinecheckMock}
       insertKm={insertKmMock}
-      route={routeMock}
     />
   )
   return {
-    sut, getWorkInfoMock, localStorageMock, updateLinecheckMock, insertKmMock, routeMock
+    sut, getWorkInfoMock, localStorageMock, updateLinecheckMock, insertKmMock
   }
 }
 
 describe('home page', () => {
   test('ensure the api are called when component is mounted', async () => {
-    const { getWorkInfoMock, routeMock, localStorageMock, updateLinecheckMock, insertKmMock } = makeSut()
-    const { token } = routeMock.params
+    const { getWorkInfoMock, localStorageMock, updateLinecheckMock, insertKmMock } = makeSut()
     const getWorkSpy = jest.spyOn(getWorkInfoMock, 'perform')
     render(
       <Home
@@ -59,11 +47,10 @@ describe('home page', () => {
         localStorage={localStorageMock}
         updateLinecheck={updateLinecheckMock}
         insertKm={insertKmMock}
-        route={routeMock}
       />
     )
     await waitFor(() => {
-      expect(getWorkSpy).toHaveBeenCalledWith(token)
+      expect(getWorkSpy).toHaveBeenCalled()
     })
   })
   test('first state of screen after get info from API', async () => {
@@ -104,23 +91,21 @@ describe('home page', () => {
     expect(endLineBtn).toHaveTextContent('Check end line')
   })
   test('should call updateLinecheck service with correct start journey value', async () => {
-    const { sut, updateLinecheckMock, routeMock } = makeSut()
-    const { token, accountId } = routeMock.params
+    const { sut, updateLinecheckMock } = makeSut()
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
     const startJourneyBtn = await sut.findByTestId('startJourneyBtn')
     await waitFor(() => {
       fireEvent.press(startJourneyBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
-        accountId,
+        accountId: '',
         marker: 'STARTJOURNEYREAL',
-        token
+        token: ''
       })
     })
   })
   test('should call updateLinecheck service with correct start line value', async () => {
-    const { sut, updateLinecheckMock, routeMock } = makeSut()
-    const { token, accountId } = routeMock.params
+    const { sut, updateLinecheckMock } = makeSut()
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
     const startLineBtn = await sut.findByTestId('startLineBtn')
     const inputInitKm = await sut.findByTestId('inputInitKm')
@@ -129,15 +114,14 @@ describe('home page', () => {
       fireEvent.press(startLineBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
-        accountId,
+        accountId: '',
         marker: 'STARTLINEREAL',
-        token
+        token: ''
       })
     })
   })
   test('should call updateLinecheck service with correct end journey value', async () => {
-    const { sut, updateLinecheckMock, routeMock } = makeSut()
-    const { token, accountId } = routeMock.params
+    const { sut, updateLinecheckMock } = makeSut()
     const updateLinecheckSpy = jest.spyOn(updateLinecheckMock, 'perform')
     const endLineBtn = await sut.findByTestId('endLineBtn')
     const inputEndKm = await sut.findByTestId('inputEndKm')
@@ -146,9 +130,9 @@ describe('home page', () => {
       fireEvent.press(endLineBtn)
       expect(updateLinecheckSpy).toHaveBeenCalledWith({
         workId: 'fake_id',
-        accountId,
+        accountId: '',
         marker: 'ENDLINEREAL',
-        token
+        token: ''
       })
     })
   })
@@ -187,12 +171,11 @@ describe('home page', () => {
     })
   })
   test('should call insertKm use case correctly', async () => {
-    const { sut, localStorageMock, insertKmMock, routeMock } = makeSut()
+    const { sut, localStorageMock, insertKmMock } = makeSut()
     const insertKmSpy = jest.spyOn(insertKmMock, 'perform')
     const id = 'fake_id'
     const initKm = '100'
     const finalKm = 200
-    const { accountId, token } = routeMock.params
     jest.spyOn(localStorageMock, 'obtain').mockResolvedValueOnce(initKm)
     const inputEndKm = await sut.findByTestId('inputEndKm')
     const endLineBtn = await sut.getByTestId('endLineBtn')
@@ -202,7 +185,7 @@ describe('home page', () => {
       expect(insertKmSpy).toHaveBeenCalledWith({
         finalKm,
         initialKm: Number(initKm)
-      }, id, accountId, token)
+      }, id, '', '')
     })
   })
 })

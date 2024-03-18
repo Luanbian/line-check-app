@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, ScrollView, Button } from 'react-native'
-import { type ParamListBase, useNavigation, type RouteProp } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { type IWorkInfoComplete } from '../../../data/protocols/work.info.protocol'
 import { type workPropsComplete, type workPropsManager } from '../../../domain/entities/work'
 import { type EntityNames } from '../../../domain/entities/entity.names'
@@ -9,14 +9,11 @@ import { type ICreateVehicle } from '../../../data/protocols/create.vehicle.prot
 import { type ICreateService } from '../../../data/protocols/create.service.protocol'
 import { type ICreateManufacture } from '../../../data/protocols/create.manufacture.protocol'
 import { type ICreateLogistic } from '../../../data/protocols/logistic.protocol'
+import { AuthContext } from '../../contexts/auth.context'
 import TransportInput from '../../components/input/transport.input'
 
 interface NavigationType {
   navigate: (name: string, params?: { data?: EntityNames[], id?: string, values?: workPropsComplete, token: string }) => void
-}
-
-export interface ParamList extends ParamListBase {
-  'MANAGER': { accountId: string, token: string }
 }
 
 interface Props {
@@ -25,7 +22,6 @@ interface Props {
   createService: ICreateService
   createManufacture: ICreateManufacture
   createLogistic: ICreateLogistic
-  route: RouteProp<ParamList, 'MANAGER'>
 }
 
 export default function Manager ({
@@ -33,10 +29,11 @@ export default function Manager ({
   createVehicle,
   createService,
   createManufacture,
-  createLogistic,
-  route
+  createLogistic
 }: Props): React.JSX.Element {
-  const { token } = route.params
+  const { loggedUser } = useContext(AuthContext)
+  const token = (loggedUser != null) ? loggedUser.token : ''
+
   const navigation = useNavigation<NavigationType>()
   const [data, setData] = useState<workPropsManager>()
   const [transp, setTransp] = useState<transport | null>(null)

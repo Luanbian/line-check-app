@@ -8,10 +8,6 @@ import { type IDecodeToken } from '../../../infra/protocols/decode.token.protoco
 import { loginValidationSchema } from '../../../validation/login.validation'
 import { AuthContext } from '../../contexts/auth.context'
 
-interface NavigationType {
-  navigate: (name: string, params?: { accountId: string, token: string }) => void
-}
-
 interface Props {
   authentication: IAuthentication
   decodeToken: IDecodeToken
@@ -24,7 +20,7 @@ interface Inputs {
 
 export default function Login ({ authentication, decodeToken }: Props): React.JSX.Element {
   const { getLoggedUserData } = useContext(AuthContext)
-  const navigation = useNavigation<NavigationType>()
+  const navigation = useNavigation()
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(loginValidationSchema)
   })
@@ -35,7 +31,7 @@ export default function Login ({ authentication, decodeToken }: Props): React.JS
       const { accessToken } = await authentication.auth(data)
       const { role, sub } = await decodeToken.decode(accessToken)
       getLoggedUserData(sub, accessToken)
-      navigation.navigate(role.toUpperCase(), { accountId: sub, token: accessToken })
+      navigation.navigate(role.toUpperCase() as never)
     } catch (error) {
       if (error instanceof Error) {
         setErrorSubmit(error.message)

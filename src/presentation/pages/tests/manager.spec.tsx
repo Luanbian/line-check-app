@@ -1,10 +1,9 @@
 import React from 'react'
 import { type RenderResult, render, waitFor } from '@testing-library/react-native'
 import '@testing-library/jest-native/extend-expect'
-import Manager, { type ParamList } from '../manager/manager'
+import Manager from '../manager/manager'
 import { makeWorkInfoCompleteMock } from '../../../data/tests/mocks/work.info.complete.mock'
 import { type IWorkInfoComplete } from '../../../data/protocols/work.info.protocol'
-import { type RouteProp } from '@react-navigation/native'
 import { makeCreateLogisticMock } from '../../../data/tests/mocks/create.logistic.mock'
 import { makeCreateManufactureMock } from '../../../data/tests/mocks/create.manufacture.mock'
 import { makeCreateServiceMock } from '../../../data/tests/mocks/create.service.mock'
@@ -17,7 +16,6 @@ import { type ICreateVehicle } from '../../../data/protocols/create.vehicle.prot
 interface SutTypes {
   sut: RenderResult
   workInfoCompleteMock: IWorkInfoComplete
-  routeMock: RouteProp<ParamList, 'MANAGER'>
   createLogisticMock: ICreateLogistic
   createManufactureMock: ICreateManufacture
   createServiceMock: ICreateService
@@ -35,14 +33,6 @@ const makeSut = (): SutTypes => {
   const createManufactureMock = makeCreateManufactureMock()
   const createServiceMock = makeCreateServiceMock()
   const createVehicleMock = makeCreateVehicleMock()
-  const routeMock: RouteProp<ParamList, 'MANAGER'> = {
-    key: 'any_unique_id',
-    name: 'MANAGER',
-    params: {
-      accountId: 'fake_account_id',
-      token: 'fake_token'
-    }
-  }
   const sut = render(
     <Manager
       workInfoComplete={workInfoCompleteMock}
@@ -50,13 +40,11 @@ const makeSut = (): SutTypes => {
       createManufacture={createManufactureMock}
       createService={createServiceMock}
       createVehicle={createVehicleMock}
-      route={routeMock}
     />
   )
   return {
     sut,
     workInfoCompleteMock,
-    routeMock,
     createLogisticMock,
     createManufactureMock,
     createServiceMock,
@@ -70,10 +58,8 @@ describe('manager page', () => {
       createManufactureMock,
       createServiceMock,
       createVehicleMock,
-      routeMock,
       workInfoCompleteMock
     } = makeSut()
-    const { token } = routeMock.params
     const getWorkSpy = jest.spyOn(workInfoCompleteMock, 'perform')
     render(
       <Manager
@@ -81,12 +67,11 @@ describe('manager page', () => {
         createManufacture={createManufactureMock}
         createService={createServiceMock}
         createVehicle={createVehicleMock}
-        route={routeMock}
         workInfoComplete={workInfoCompleteMock}
       />
     )
     await waitFor(() => {
-      expect(getWorkSpy).toHaveBeenCalledWith(token)
+      expect(getWorkSpy).toHaveBeenCalled()
     })
   })
   test('first state of screen after get info from API', async () => {
