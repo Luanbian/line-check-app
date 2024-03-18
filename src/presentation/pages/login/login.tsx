@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Text, View, TextInput, Button } from 'react-native'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { type IAuthentication } from '../../../data/protocols/authentication.protocol'
 import { type IDecodeToken } from '../../../infra/protocols/decode.token.protocol'
 import { loginValidationSchema } from '../../../validation/login.validation'
+import { AuthContext } from '../../contexts/auth.context'
 
 interface NavigationType {
   navigate: (name: string, params?: { accountId: string, token: string }) => void
@@ -22,6 +23,7 @@ interface Inputs {
 }
 
 export default function Login ({ authentication, decodeToken }: Props): React.JSX.Element {
+  const { getLoggedUserData } = useContext(AuthContext)
   const navigation = useNavigation<NavigationType>()
   const { setValue, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(loginValidationSchema)
@@ -32,6 +34,7 @@ export default function Login ({ authentication, decodeToken }: Props): React.JS
     try {
       const { accessToken } = await authentication.auth(data)
       const { role, sub } = await decodeToken.decode(accessToken)
+      getLoggedUserData(sub, accessToken)
       navigation.navigate(role.toUpperCase(), { accountId: sub, token: accessToken })
     } catch (error) {
       if (error instanceof Error) {
