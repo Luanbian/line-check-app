@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { type UseFormSetValue, type FieldErrors } from 'react-hook-form'
 import { Button, Text, View } from 'react-native'
 import DateTimePicker from 'react-native-modal-datetime-picker'
@@ -14,6 +14,13 @@ interface Props {
 export default function TimePicker ({ input, errors, setValue, values }: Props): React.JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
   const [inputHour, setInputHour] = useState('')
+
+  useEffect(() => {
+    const setDefaultDatePicker = (): void => {
+      if (typeof values === 'string') setValue(input, values)
+    }
+    setDefaultDatePicker()
+  }, [])
 
   const handleConfirmHours = (date: Date): void => {
     const newInputHour = date.toISOString().substring(11, 19)
