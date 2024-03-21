@@ -8,15 +8,12 @@ interface AuthContextType {
   getLoggedUserData: (accountId: string, token: string) => void
   loggedUser?: userData
 }
-interface AuthProviderProps {
-  children: ReactNode
-}
 
 export const AuthContext = createContext<AuthContextType>({
   getLoggedUserData: (accountId: string, token: string) => {}
 })
 
-export default function AuthProvider ({ children }: AuthProviderProps): React.JSX.Element {
+export default function AuthProvider (children: ReactNode): React.JSX.Element {
   const [loggedUser, setLoggedUser] = useState<userData>()
 
   const getLoggedUserData = (accountId: string, token: string): void => {
