@@ -5,5 +5,5 @@ export interface authSituation {
 }
 
 export interface ILocalAuth {
-  perform: () => Promise<authSituation>
+  authenticate: () => Promise<authSituation>
 }

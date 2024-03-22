@@ -4,7 +4,7 @@ import { BiometricNotEnrolled } from '../../core/exceptions/biometric.not.enroll
 import { type authSituation, type ILocalAuth } from '../protocols/local.auth.protocol'
 
 export class LocalAuthentication implements ILocalAuth {
-  public async perform (): Promise<authSituation> {
+  public async authenticate (): Promise<authSituation> {
     await this.hasHardware()
     await this.hasBiometricEnrolled()
     const auth = await authenticateAsync({
